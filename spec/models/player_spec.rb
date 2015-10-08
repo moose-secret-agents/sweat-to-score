@@ -15,4 +15,8 @@ RSpec.describe Player, type: :model do
   it 'should belong to a Team' do
     expect(player.team).to be_nil
   end
+
+  it 'should raise error if talent out of range' do
+    expect(Player.create(name: 'Test', talent: 101)).to_not be_valid
+  end
 end
