@@ -46,6 +46,7 @@
 ## Plugin-specific files:
 
 # IntelliJ
+/log
 /out/
 
 # mpeltonen/sbt-idea plugin
