@@ -1291,3 +1291,170 @@ ORDER BY c.conname
   [1m[36m (1.5ms)[0m  [1mCOMMIT[0m
   [1m[35mUser Load (1.2ms)[0m  SELECT "users".* FROM "users" INNER JOIN "partnerships" ON "users"."id" = "partnerships"."partner_id" WHERE "partnerships"."user_id" = $1  [["user_id", 19]]
   [1m[36mUser Load (1.4ms)[0m  [1mSELECT "users".* FROM "users" INNER JOIN "partnerships" ON "users"."id" = "partnerships"."partner_id" WHERE "partnerships"."user_id" = $1[0m  [["user_id", 20]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.7ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to AddTeamableReferenceToUsersAndPartnerships (20151008151004)
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36m (1.3ms)[0m  [1mALTER TABLE "teams" ADD "teamable_id" integer[0m
+  [1m[35m (0.4ms)[0m  ALTER TABLE "teams" ADD "teamable_type" character varying
+  [1m[36mSQL (1.7ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20151008151004"]]
+  [1m[35m (1.5ms)[0m  COMMIT
+  [1m[36mActiveRecord::SchemaMigration Load (0.6ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (5.5ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'leagues'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (6.7ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'partnerships'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (5.1ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'players'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (4.5ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'teams'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (4.3ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'users'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (1.4ms)[0m  INSERT INTO "users" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"  [["created_at", "2015-10-08 15:12:46.436124"], ["updated_at", "2015-10-08 15:12:46.436124"]]
+  [1m[36m (0.7ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36mSQL (2.3ms)[0m  [1mINSERT INTO "teams" ("name", "teamable_id", "teamable_type", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "User team"], ["teamable_id", 21], ["teamable_type", "User"], ["created_at", "2015-10-08 15:13:06.102605"], ["updated_at", "2015-10-08 15:13:06.102605"]]
+  [1m[35mSQL (2.3ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 0"], ["talent", 14], ["team_id", 1], ["created_at", "2015-10-08 15:13:06.122760"], ["updated_at", "2015-10-08 15:13:06.122760"]]
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 1"], ["talent", 48], ["team_id", 1], ["created_at", "2015-10-08 15:13:06.129040"], ["updated_at", "2015-10-08 15:13:06.129040"]]
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 2"], ["talent", 24], ["team_id", 1], ["created_at", "2015-10-08 15:13:06.131568"], ["updated_at", "2015-10-08 15:13:06.131568"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 3"], ["talent", 71], ["team_id", 1], ["created_at", "2015-10-08 15:13:06.133923"], ["updated_at", "2015-10-08 15:13:06.133923"]]
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 4"], ["talent", 69], ["team_id", 1], ["created_at", "2015-10-08 15:13:06.136141"], ["updated_at", "2015-10-08 15:13:06.136141"]]
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 5"], ["talent", 22], ["team_id", 1], ["created_at", "2015-10-08 15:13:06.138331"], ["updated_at", "2015-10-08 15:13:06.138331"]]
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 6"], ["talent", 53], ["team_id", 1], ["created_at", "2015-10-08 15:13:06.140836"], ["updated_at", "2015-10-08 15:13:06.140836"]]
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 7"], ["talent", 16], ["team_id", 1], ["created_at", "2015-10-08 15:13:06.142990"], ["updated_at", "2015-10-08 15:13:06.142990"]]
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 8"], ["talent", 85], ["team_id", 1], ["created_at", "2015-10-08 15:13:06.145513"], ["updated_at", "2015-10-08 15:13:06.145513"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 9"], ["talent", 33], ["team_id", 1], ["created_at", "2015-10-08 15:13:06.147684"], ["updated_at", "2015-10-08 15:13:06.147684"]]
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 10"], ["talent", 63], ["team_id", 1], ["created_at", "2015-10-08 15:13:06.149900"], ["updated_at", "2015-10-08 15:13:06.149900"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 11"], ["talent", 19], ["team_id", 1], ["created_at", "2015-10-08 15:13:06.152461"], ["updated_at", "2015-10-08 15:13:06.152461"]]
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 12"], ["talent", 51], ["team_id", 1], ["created_at", "2015-10-08 15:13:06.154867"], ["updated_at", "2015-10-08 15:13:06.154867"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 13"], ["talent", 35], ["team_id", 1], ["created_at", "2015-10-08 15:13:06.157133"], ["updated_at", "2015-10-08 15:13:06.157133"]]
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 14"], ["talent", 66], ["team_id", 1], ["created_at", "2015-10-08 15:13:06.159292"], ["updated_at", "2015-10-08 15:13:06.159292"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 15"], ["talent", 97], ["team_id", 1], ["created_at", "2015-10-08 15:13:06.161438"], ["updated_at", "2015-10-08 15:13:06.161438"]]
+  [1m[35m (0.5ms)[0m  COMMIT
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "users" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"  [["created_at", "2015-10-08 15:14:19.854271"], ["updated_at", "2015-10-08 15:14:19.854271"]]
+  [1m[36m (0.7ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "teams" ("name", "teamable_id", "teamable_type", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "User team"], ["teamable_id", 22], ["teamable_type", "User"], ["created_at", "2015-10-08 15:14:21.914725"], ["updated_at", "2015-10-08 15:14:21.914725"]]
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 0"], ["talent", 11], ["team_id", 2], ["created_at", "2015-10-08 15:14:21.938601"], ["updated_at", "2015-10-08 15:14:21.938601"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 1"], ["talent", 29], ["team_id", 2], ["created_at", "2015-10-08 15:14:21.941462"], ["updated_at", "2015-10-08 15:14:21.941462"]]
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 2"], ["talent", 97], ["team_id", 2], ["created_at", "2015-10-08 15:14:21.944348"], ["updated_at", "2015-10-08 15:14:21.944348"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 3"], ["talent", 7], ["team_id", 2], ["created_at", "2015-10-08 15:14:21.947160"], ["updated_at", "2015-10-08 15:14:21.947160"]]
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 4"], ["talent", 84], ["team_id", 2], ["created_at", "2015-10-08 15:14:21.949481"], ["updated_at", "2015-10-08 15:14:21.949481"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 5"], ["talent", 80], ["team_id", 2], ["created_at", "2015-10-08 15:14:21.951749"], ["updated_at", "2015-10-08 15:14:21.951749"]]
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 6"], ["talent", 54], ["team_id", 2], ["created_at", "2015-10-08 15:14:21.954104"], ["updated_at", "2015-10-08 15:14:21.954104"]]
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 7"], ["talent", 80], ["team_id", 2], ["created_at", "2015-10-08 15:14:21.956615"], ["updated_at", "2015-10-08 15:14:21.956615"]]
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 8"], ["talent", 43], ["team_id", 2], ["created_at", "2015-10-08 15:14:21.958779"], ["updated_at", "2015-10-08 15:14:21.958779"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 9"], ["talent", 89], ["team_id", 2], ["created_at", "2015-10-08 15:14:21.961453"], ["updated_at", "2015-10-08 15:14:21.961453"]]
+  [1m[35mSQL (0.6ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 10"], ["talent", 92], ["team_id", 2], ["created_at", "2015-10-08 15:14:21.964515"], ["updated_at", "2015-10-08 15:14:21.964515"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 11"], ["talent", 51], ["team_id", 2], ["created_at", "2015-10-08 15:14:21.968134"], ["updated_at", "2015-10-08 15:14:21.968134"]]
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 12"], ["talent", 46], ["team_id", 2], ["created_at", "2015-10-08 15:14:21.970606"], ["updated_at", "2015-10-08 15:14:21.970606"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 13"], ["talent", 16], ["team_id", 2], ["created_at", "2015-10-08 15:14:21.972889"], ["updated_at", "2015-10-08 15:14:21.972889"]]
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 14"], ["talent", 92], ["team_id", 2], ["created_at", "2015-10-08 15:14:21.975012"], ["updated_at", "2015-10-08 15:14:21.975012"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 15"], ["talent", 35], ["team_id", 2], ["created_at", "2015-10-08 15:14:21.977141"], ["updated_at", "2015-10-08 15:14:21.977141"]]
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 16"], ["talent", 61], ["team_id", 2], ["created_at", "2015-10-08 15:14:21.979312"], ["updated_at", "2015-10-08 15:14:21.979312"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 17"], ["talent", 72], ["team_id", 2], ["created_at", "2015-10-08 15:14:21.981822"], ["updated_at", "2015-10-08 15:14:21.981822"]]
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 18"], ["talent", 17], ["team_id", 2], ["created_at", "2015-10-08 15:14:21.983957"], ["updated_at", "2015-10-08 15:14:21.983957"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 19"], ["talent", 82], ["team_id", 2], ["created_at", "2015-10-08 15:14:21.986451"], ["updated_at", "2015-10-08 15:14:21.986451"]]
+  [1m[35m (0.5ms)[0m  COMMIT
+  [1m[36m (0.4ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (1.5ms)[0m  INSERT INTO "users" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"  [["created_at", "2015-10-08 15:14:51.859399"], ["updated_at", "2015-10-08 15:14:51.859399"]]
+  [1m[36m (0.7ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mSQL (0.7ms)[0m  [1mINSERT INTO "teams" ("name", "teamable_id", "teamable_type", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "User team"], ["teamable_id", 23], ["teamable_type", "User"], ["created_at", "2015-10-08 15:14:59.769435"], ["updated_at", "2015-10-08 15:14:59.769435"]]
+  [1m[35mSQL (1.2ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 0"], ["talent", 80], ["team_id", 3], ["created_at", "2015-10-08 15:14:59.787530"], ["updated_at", "2015-10-08 15:14:59.787530"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 1"], ["talent", 91], ["team_id", 3], ["created_at", "2015-10-08 15:14:59.791355"], ["updated_at", "2015-10-08 15:14:59.791355"]]
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 2"], ["talent", 51], ["team_id", 3], ["created_at", "2015-10-08 15:14:59.793674"], ["updated_at", "2015-10-08 15:14:59.793674"]]
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 3"], ["talent", 42], ["team_id", 3], ["created_at", "2015-10-08 15:14:59.796486"], ["updated_at", "2015-10-08 15:14:59.796486"]]
+  [1m[35mSQL (0.6ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 4"], ["talent", 78], ["team_id", 3], ["created_at", "2015-10-08 15:14:59.799743"], ["updated_at", "2015-10-08 15:14:59.799743"]]
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 5"], ["talent", 65], ["team_id", 3], ["created_at", "2015-10-08 15:14:59.803276"], ["updated_at", "2015-10-08 15:14:59.803276"]]
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 6"], ["talent", 5], ["team_id", 3], ["created_at", "2015-10-08 15:14:59.806699"], ["updated_at", "2015-10-08 15:14:59.806699"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 7"], ["talent", 44], ["team_id", 3], ["created_at", "2015-10-08 15:14:59.809454"], ["updated_at", "2015-10-08 15:14:59.809454"]]
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 8"], ["talent", 74], ["team_id", 3], ["created_at", "2015-10-08 15:14:59.811798"], ["updated_at", "2015-10-08 15:14:59.811798"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 9"], ["talent", 92], ["team_id", 3], ["created_at", "2015-10-08 15:14:59.814801"], ["updated_at", "2015-10-08 15:14:59.814801"]]
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 10"], ["talent", 22], ["team_id", 3], ["created_at", "2015-10-08 15:14:59.817553"], ["updated_at", "2015-10-08 15:14:59.817553"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 11"], ["talent", 86], ["team_id", 3], ["created_at", "2015-10-08 15:14:59.819782"], ["updated_at", "2015-10-08 15:14:59.819782"]]
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 12"], ["talent", 59], ["team_id", 3], ["created_at", "2015-10-08 15:14:59.821995"], ["updated_at", "2015-10-08 15:14:59.821995"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 13"], ["talent", 29], ["team_id", 3], ["created_at", "2015-10-08 15:14:59.824177"], ["updated_at", "2015-10-08 15:14:59.824177"]]
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 14"], ["talent", 26], ["team_id", 3], ["created_at", "2015-10-08 15:14:59.826332"], ["updated_at", "2015-10-08 15:14:59.826332"]]
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 15"], ["talent", 63], ["team_id", 3], ["created_at", "2015-10-08 15:14:59.828851"], ["updated_at", "2015-10-08 15:14:59.828851"]]
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 16"], ["talent", 49], ["team_id", 3], ["created_at", "2015-10-08 15:14:59.831620"], ["updated_at", "2015-10-08 15:14:59.831620"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 17"], ["talent", 20], ["team_id", 3], ["created_at", "2015-10-08 15:14:59.834660"], ["updated_at", "2015-10-08 15:14:59.834660"]]
+  [1m[35m (0.6ms)[0m  COMMIT
+  [1m[36mUser Load (0.7ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", 23]]
+  [1m[35mPartnership Load (1.5ms)[0m  SELECT  "partnerships".* FROM "partnerships"  ORDER BY "partnerships"."id" ASC LIMIT 1
+  [1m[36mPartnership Load (0.6ms)[0m  [1mSELECT  "partnerships".* FROM "partnerships"  ORDER BY "partnerships"."id" ASC LIMIT 1[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36m (0.4ms)[0m  [1mROLLBACK[0m
+  [1m[35mPartnership Load (1.0ms)[0m  SELECT  "partnerships".* FROM "partnerships"  ORDER BY "partnerships"."id" ASC LIMIT 1
+  [1m[36m (0.4ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "teams" ("name", "teamable_id", "teamable_type", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Partnership Team"], ["teamable_id", 1], ["teamable_type", "Partnership"], ["created_at", "2015-10-08 15:17:27.833215"], ["updated_at", "2015-10-08 15:17:27.833215"]]
+  [1m[36mSQL (0.8ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 0"], ["talent", 93], ["team_id", 4], ["created_at", "2015-10-08 15:17:27.852431"], ["updated_at", "2015-10-08 15:17:27.852431"]]
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 1"], ["talent", 37], ["team_id", 4], ["created_at", "2015-10-08 15:17:27.855893"], ["updated_at", "2015-10-08 15:17:27.855893"]]
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 2"], ["talent", 84], ["team_id", 4], ["created_at", "2015-10-08 15:17:27.857982"], ["updated_at", "2015-10-08 15:17:27.857982"]]
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 3"], ["talent", 28], ["team_id", 4], ["created_at", "2015-10-08 15:17:27.859968"], ["updated_at", "2015-10-08 15:17:27.859968"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 4"], ["talent", 68], ["team_id", 4], ["created_at", "2015-10-08 15:17:27.862045"], ["updated_at", "2015-10-08 15:17:27.862045"]]
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 5"], ["talent", 17], ["team_id", 4], ["created_at", "2015-10-08 15:17:27.864202"], ["updated_at", "2015-10-08 15:17:27.864202"]]
+  [1m[36mSQL (0.7ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 6"], ["talent", 8], ["team_id", 4], ["created_at", "2015-10-08 15:17:27.867954"], ["updated_at", "2015-10-08 15:17:27.867954"]]
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 7"], ["talent", 14], ["team_id", 4], ["created_at", "2015-10-08 15:17:27.872010"], ["updated_at", "2015-10-08 15:17:27.872010"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 8"], ["talent", 94], ["team_id", 4], ["created_at", "2015-10-08 15:17:27.874866"], ["updated_at", "2015-10-08 15:17:27.874866"]]
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 9"], ["talent", 41], ["team_id", 4], ["created_at", "2015-10-08 15:17:27.877141"], ["updated_at", "2015-10-08 15:17:27.877141"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 10"], ["talent", 47], ["team_id", 4], ["created_at", "2015-10-08 15:17:27.879705"], ["updated_at", "2015-10-08 15:17:27.879705"]]
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 11"], ["talent", 37], ["team_id", 4], ["created_at", "2015-10-08 15:17:27.882213"], ["updated_at", "2015-10-08 15:17:27.882213"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 12"], ["talent", 37], ["team_id", 4], ["created_at", "2015-10-08 15:17:27.884500"], ["updated_at", "2015-10-08 15:17:27.884500"]]
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 13"], ["talent", 10], ["team_id", 4], ["created_at", "2015-10-08 15:17:27.886778"], ["updated_at", "2015-10-08 15:17:27.886778"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 14"], ["talent", 77], ["team_id", 4], ["created_at", "2015-10-08 15:17:27.889899"], ["updated_at", "2015-10-08 15:17:27.889899"]]
+  [1m[35mSQL (0.7ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 15"], ["talent", 78], ["team_id", 4], ["created_at", "2015-10-08 15:17:27.892669"], ["updated_at", "2015-10-08 15:17:27.892669"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Player 16"], ["talent", 74], ["team_id", 4], ["created_at", "2015-10-08 15:17:27.903334"], ["updated_at", "2015-10-08 15:17:27.903334"]]
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "players" ("name", "talent", "team_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Player 17"], ["talent", 5], ["team_id", 4], ["created_at", "2015-10-08 15:17:27.905698"], ["updated_at", "2015-10-08 15:17:27.905698"]]
+  [1m[36m (0.7ms)[0m  [1mCOMMIT[0m

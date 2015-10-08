@@ -6,8 +6,10 @@ class Team < ActiveRecord::Base
   after_create :assign_players
 
   def assign_players
-    (11 + rand(14)).times do |i|
-      players.create!(name: "Player #{i}", talent: rand(100))
+    ActiveRecord::Base.transaction do
+      (11 + rand(14)).times do |i|
+        players.create!(name: "Player #{i}", talent: rand(100))
+      end
     end
   end
 end
