@@ -1,5 +1,32 @@
 require 'rails_helper'
 
 RSpec.describe Partnership, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  before(:all) do
+    @user1 = User.create(name: 'User1')
+    @user2 = User.create(name: 'User 2')
+  end
+
+  before(:each) do
+    Partnership.delete_all
+    @partnership = Partnership.create(user: @user1, partner: @user2)
+  end
+
+  it 'should have status proposed when created' do
+    expect(@partnership.status).to eq('proposed')
+  end
+
+  it 'should be proposed by user' do
+    expect(@partnership.user).to be(@user1)
+    expect(@partnership.partner).to be(@user2)
+  end
+
+  it 'should change its status when accepted' do
+    @partnership.accept
+    expect(@partnership.status).to eq('accepted')
+  end
+
+  it 'should change its status when refused' do
+    @partnership.refuse
+    expect(@partnership.status).to eq('refused')
+  end
 end

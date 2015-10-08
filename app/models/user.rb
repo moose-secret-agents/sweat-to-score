@@ -11,18 +11,26 @@ class User < ActiveRecord::Base
   end
 
   def propose_partnership(partner)
-    self.partnerships.create(partner: partner)
+    own_proposal = partnerships.find_by(user: self, partner: partner)
+    his_proposal = partner.partnerships.find_by(user: partner, partner: self)
+
+    if own_proposal
+      return own_proposal
+    elsif his_proposal
+      accept_partnership partner
+      return his_proposal
+    else
+      self.partnerships.create(partner: partner)
+    end
   end
 
   def accept_partnership(from_user)
     proposal = from_user.partnerships.find_by(partner: self)
     proposal.accept
-    proposal
   end
 
   def refuse_partnership(from_user)
     proposal = from_user.partnerships.find_by(partner: self)
     proposal.refuse
-    proposal
   end
 end
