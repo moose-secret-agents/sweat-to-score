@@ -1,0 +1,21 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  host : localhost #else rake db:setup wont work
+  pool: 5
+  username: postgres
+  password: postgres
+
+development:
+  <<: *default
+  database: sweat-to-score_development
+
+test:
+  <<: *default
+  database: sweat-to-score_test
+
+production:
+  <<: *default
+  database: sweat-to-score_production
+  username: sweat-to-score
+  password: <%= ENV['sweat-to-score_DATABASE_PASSWORD'] %>
