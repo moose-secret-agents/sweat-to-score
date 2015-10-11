@@ -4,7 +4,7 @@ RSpec.describe League, type: :model do
 
   before(:all) do
     @league = League.create!(name: 'LoserLeague', level: 3)
-    @team = @league.teams.create!(name: 'Test Team', strength: 55)
+    @team = @league.teams.create!(name: 'Test Team', strength: 55, teamable: User.create(name: 'Owner'))
   end
 
   it 'should have a name' do

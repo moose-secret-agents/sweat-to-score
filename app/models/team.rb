@@ -2,7 +2,9 @@ class Team < ActiveRecord::Base
   has_many :players
   belongs_to :league
   belongs_to :teamable, polymorphic: true
+
   validates_presence_of :league, :teamable, :name
+
   after_create :assign_players
 
   def assign_players
