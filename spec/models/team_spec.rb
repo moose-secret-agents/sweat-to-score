@@ -5,7 +5,7 @@ RSpec.describe Team, type: :model do
   before(:all) do
     User.delete_all
     Team.delete_all
-    @user = User.create!(name: 'User')
+    @user = User.create!(name: 'User', email: 'user@gmail.com', password: 'pw' )
     @league = League.create!(level: 2)
     @team = Team.create!(name: 'Transis', strength: 50, league: @league, teamable: @user)
 

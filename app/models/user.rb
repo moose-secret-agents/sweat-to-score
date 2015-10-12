@@ -2,6 +2,8 @@ class User < ActiveRecord::Base
   has_many :teams, as: :teamable
 
   has_many :partnerships
+
+  validates_presence_of :name, :email, :password
   # has_many :partners, through: :partnerships
   # has_many :partners, class_name: 'Partnership', foreign_key: 'user_id'
   # has_many :partners, class_name: 'Partnership'

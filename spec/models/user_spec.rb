@@ -4,8 +4,8 @@ RSpec.describe User, type: :model do
 
   before(:each) do
     User.delete_all
-    @user1 = User.create(name: 'User1')
-    @user2 = User.create(name: 'User2')
+    @user1 = User.create(name: 'User1', email: 'user1@gmail.com', password: 'pw1')
+    @user2 = User.create(name: 'User2', email: 'user2@gmail.com', password: 'pw2')
 
     Partnership.delete_all
   end
