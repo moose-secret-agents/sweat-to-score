@@ -22,4 +22,17 @@ RSpec.describe League, type: :model do
   it 'should have players through team' do
     expect(@league.players.count).to be > 0
   end
+
+  it 'can schedule a match between two teamables' do
+    user1 = User.create(name:'User 1')
+    user2 = User.create(name: 'User 2')
+
+    team1 = user1.teams.create(name: 'Team 1')
+    team2 = user2.teams.create(name: 'Team 2')
+
+    match = @league.schedule_match(team1, team2, 1.days.from_now)
+    expect(match.teamA).to eq(team1)
+    expect(match.teamB).to eq(team2)
+    expect(match.status).to eq('scheduled')
+  end
 end

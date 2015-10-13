@@ -7,6 +7,10 @@ class Team < ActiveRecord::Base
 
   after_create :assign_players
 
+  def matches
+    Match.where('"teamA_id" = ? or "teamB_id" = ?', id, id)
+  end
+
   def assign_players
     ActiveRecord::Base.transaction do
       (11 + rand(14)).times do |i|

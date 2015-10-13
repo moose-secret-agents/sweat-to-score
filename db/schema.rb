@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151008154011) do
+ActiveRecord::Schema.define(version: 20151011222834) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,20 @@ ActiveRecord::Schema.define(version: 20151008154011) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "matches", force: :cascade do |t|
+    t.integer  "status",     default: 0
+    t.datetime "starts_at"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.integer  "league_id"
+    t.integer  "teamA_id"
+    t.integer  "teamB_id"
+  end
+
+  add_index "matches", ["league_id"], name: "index_matches_on_league_id", using: :btree
+  add_index "matches", ["teamA_id"], name: "index_matches_on_teamA_id", using: :btree
+  add_index "matches", ["teamB_id"], name: "index_matches_on_teamB_id", using: :btree
 
   create_table "partnerships", force: :cascade do |t|
     t.datetime "created_at",             null: false

@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  has_many :teams, as: :teamable
+  include Teamable
 
   has_many :partnerships
 
