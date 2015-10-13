@@ -24,8 +24,8 @@ RSpec.describe League, type: :model do
   end
 
   it 'can schedule a match between two teamables' do
-    user1 = User.create(name:'User 1')
-    user2 = User.create(name: 'User 2')
+    user1 = Fabricate(:user, name:'User 1')
+    user2 = Fabricate(:user, name: 'User 2')
 
     team1 = user1.teams.create(name: 'Team 1')
     team2 = user2.teams.create(name: 'Team 2')
