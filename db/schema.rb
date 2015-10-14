@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151011222834) do
+ActiveRecord::Schema.define(version: 20151014194142) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,7 +21,10 @@ ActiveRecord::Schema.define(version: 20151011222834) do
     t.integer  "level"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "owner_id"
   end
+
+  add_index "leagues", ["owner_id"], name: "index_leagues_on_owner_id", using: :btree
 
   create_table "matches", force: :cascade do |t|
     t.integer  "status",     default: 0
@@ -74,11 +77,8 @@ ActiveRecord::Schema.define(version: 20151011222834) do
     t.string   "name"
     t.string   "email"
     t.string   "password"
-    t.integer  "partnerships_id"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
-
-  add_index "users", ["partnerships_id"], name: "index_users_on_partnerships_id", using: :btree
 
 end

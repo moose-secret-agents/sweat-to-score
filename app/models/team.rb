@@ -12,9 +12,11 @@ class Team < ActiveRecord::Base
   end
 
   def assign_players
+    return if players.count > 0
+
     ActiveRecord::Base.transaction do
-      (11 + rand(14)).times do |i|
-        players.create!(name: "Player #{i}", talent: rand(100))
+      (11 + rand(14)).times do
+        Fabricate(:player, team: self)
       end
     end
   end

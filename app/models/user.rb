@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
   include Teamable
 
   has_many :partnerships
+  has_many :leagues, foreign_key: 'owner_id'
 
   validates_presence_of :name, :email, :password
   # has_many :partners, through: :partnerships

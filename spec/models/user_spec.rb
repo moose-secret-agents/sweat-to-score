@@ -47,4 +47,12 @@ RSpec.describe User, type: :model do
     expect(ps1).to eq(ps2)
     expect(ps1.status).to eq('accepted')
   end
+
+  it 'has list of created leagues' do
+    expect {@user1.leagues}.to_not raise_error
+  end
+
+  it 'can create leagues' do
+    expect {@user1.leagues.create(name: 'Hello', level: 2)}.to change{@user1.leagues.count}.by(1)
+  end
 end

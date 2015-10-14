@@ -1,6 +1,7 @@
 User.delete_all
 League.delete_all
 Team.delete_all
+Player.delete_all
 
 # Seed data
 
@@ -8,7 +9,8 @@ Team.delete_all
   Fabricate(:user)
 end
 
-league = Fabricate(:league)
+owner = User.first
+league = Fabricate(:league, owner: owner)
 
 User.all.each do |u|
   Fabricate(:team, teamable: u, league: league)
