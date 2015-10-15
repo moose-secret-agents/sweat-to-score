@@ -1,10 +1,8 @@
 Rails.application.routes.draw do
+  get 'news/index' => 'news#index', as: 'news'
 
   get 'teams/index'
-
   get 'teams/show'
-
-  get 'news/index' => 'news#index', as: 'news'
 
   resources :users do
     resources :teams, shallow: true
