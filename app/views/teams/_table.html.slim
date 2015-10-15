@@ -1,0 +1,23 @@
+table class="table table-hover"
+  thead
+    tr
+      th= Team.human_attribute_name(:id)
+      th= Team.human_attribute_name(:name)
+      th= 'belongs to ' + Team.human_attribute_name(:league_id)
+      th= Team.human_attribute_name(:strength)
+      th= Team.human_attribute_name(:created_at)
+      -if (@user.id==current_user.id)
+        th=t '.actions', :default => t("helpers.actions")
+  tbody
+    - @teams.each do |team|
+      tr
+        td= team.id
+        td= link_to team.name, team_path(team)
+        td= link_to team.league.name, league_path(team.league)
+        td= team.strength
+        td= (time_ago_in_words team.created_at) + ' ago'
+        -if (@user.id==current_user.id)
+          td
+            = link_to t('.edit', :default => t("helpers.links.edit")), edit_team_path(team), :class => 'btn btn-default btn-xs'
+            '
+            = link_to t('.destroy', :default => t("helpers.links.destroy")), team_path(team), :method => :delete, :data => {:confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?'))}, :class => 'btn btn-xs btn-danger'
