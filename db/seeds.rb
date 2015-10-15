@@ -9,12 +9,19 @@ Player.delete_all
   Fabricate(:user)
 end
 
-owner = User.first
-league = Fabricate(:league, owner: owner)
+3.times do |i|
+  owner = if i == 0
+            User.first
+          else
+            User.all.sample
+          end
+  league = Fabricate(:league, owner: owner)
 
-User.all.each do |u|
-  Fabricate(:team, teamable: u, league: league)
+  User.all.each do |u|
+    Fabricate(:team, teamable: u, league: league)
+  end
 end
+
 
 
 

@@ -13,11 +13,14 @@ html lang="en"
   body
     = nav_bar fixed: :static, brand: 'Sweat to Score', responsive: true do
       = menu_group do
-        = menu_item 'Home', root_path
-        = menu_item 'News', '#TODO'
+        = menu_item 'News', news_path
         = menu_item 'Leagues', leagues_path
+        = drop_down 'Manage' do
+          = menu_item 'My Teams', user_teams_path(current_user)
+          = menu_item 'My Leagues', user_leagues_path(current_user)
       = menu_group pull: :right do
-        = menu_item 'Profile', '#TODO'
+        = menu_text 'Logged in as:'
+        = menu_item current_user.name, user_path(current_user)
         = menu_item 'Login', '#TODO'
 
     .container
