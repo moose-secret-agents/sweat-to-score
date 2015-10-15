@@ -1,15 +1,15 @@
 class LeaguesController < ApplicationController
+  before_action :set_user, only: [:new, :create]
+
   def index
     @leagues = League.all
   end
 
   def new
-    @user = current_user
     @league = @user.leagues.build
   end
 
   def create
-    @user = current_user
     @league = @user.leagues.create(league_params)
 
     if @league.save
@@ -31,5 +31,9 @@ class LeaguesController < ApplicationController
   private
     def league_params
       params.require(:league).permit(:name, :level)
+    end
+
+    def set_user
+      @user = current_user
     end
 end
