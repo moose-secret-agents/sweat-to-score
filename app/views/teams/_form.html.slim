@@ -1,0 +1,7 @@
+= bootstrap_form_for [@user, @team] do |f|
+  = f.text_field :name
+  = f.number_field :strength
+
+  = f.collection_select(:league_id, League.all, :id, :name)
+
+  = f.submit
