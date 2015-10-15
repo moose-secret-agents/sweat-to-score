@@ -1,0 +1,35 @@
+doctype html
+html lang="en"
+  head
+    meta charset="utf-8"
+    meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
+    title= content_for?(:title) ? yield(:title) : 'Sweat to Score'
+    = csrf_meta_tags
+    = stylesheet_link_tag 'application', :media => 'all'
+    = favicon_link_tag 'favicon.ico', :rel => 'shortcut icon'
+    = javascript_include_tag 'application'
+
+  body
+    = nav_bar fixed: :static, brand: 'Sweat to Score', responsive: true do
+      = menu_group do
+        = menu_item 'Home', root_path
+        = menu_item 'News', '#TODO'
+        = menu_item 'Leagues', leagues_path
+      = menu_group pull: :right do
+        = menu_item 'Profile', '#TODO'
+        = menu_item 'Login', '#TODO'
+
+    .container
+      .row
+        .col-lg-9
+          = bootstrap_flash
+          = yield
+        .col-lg-3
+          .well.sidebar-nav
+            h3 Sidebar
+            ul.nav.nav-list
+              li.nav-header Sidebar
+              li= link_to "Link 1", "/path1"
+              li= link_to "Link 2", "/path2"
+              li= link_to "Link 3", "/path3"
