@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 
+  get 'teams/index'
+
+  get 'teams/show'
+
   get 'news/index' => 'news#index', as: 'news'
 
   resources :users do
