@@ -12,11 +12,11 @@ table class="table table-striped"
   tbody
     - @leagues.each do |league|
       tr
-        td= link_to league.id, league_path(league)
-        td= league.name
+        td= league.id
+        td= link_to league.name, league_path(league)
         td= league.level
-        td= league.owner_id
-        td=l league.created_at
+        td= league.owner.name
+        td= (time_ago_in_words league.created_at) + ' ago'
         td
           = link_to t('.edit', :default => t("helpers.links.edit")), edit_league_path(league), :class => 'btn btn-default btn-xs'
           '
