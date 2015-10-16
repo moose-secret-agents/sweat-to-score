@@ -17,7 +17,7 @@ p
 p
   strong= model_class.human_attribute_name(:Joined) + ':'
   br
-  = @user.created_at
+  = (time_ago_in_words @user.created_at) + ' ago'
 p
   == render '/teams/table'
 
