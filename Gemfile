@@ -60,3 +60,6 @@ gem 'font-awesome-rails'
 gem 'twitter-bootstrap-rails'
 gem 'bootstrap-sass'
 gem 'bootstrap_form'
+
+# Gem for http requests
+gem 'httparty'
