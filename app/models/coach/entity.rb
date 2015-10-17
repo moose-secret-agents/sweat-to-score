@@ -1,11 +1,17 @@
 require 'ostruct'
 
 module Coach
-  class Entity < OpenStruct # < ActiveRestClient::Base
+  class Entity < Hashie::Dash
+    include Hashie::Extensions::IndifferentAccess
     include HTTParty
 
+    property :uri
+    property :id
+    property :datecreated
+    property :publicvisible
+
     headers  'Accept' => 'application/json'
-    debug_output $stdout
+    debug_output $stdout if Rails.env == 'development'
     base_uri 'http://diufvm31.unifr.ch:8090/CyberCoachServer/resources'
 
     # Fetch an entity based on its uri
@@ -15,11 +21,10 @@ module Coach
       raise 'Entity has not been loaded yet and does not have "uri" property' if self.uri.blank?
 
       response = Entity.get clean_uri
-      instance = self.class.new(JSON.parse(response.body))
+      update_attributes! JSON.parse(response.body)
 
       @fetched = true
-
-      instance
+      self
     end
 
     def clean_uri

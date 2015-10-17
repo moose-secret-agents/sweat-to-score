@@ -1,9 +1,21 @@
 module Coach
   class User < Coach::Entity
 
+    property :username
+    property :password
+    property :realname
+    property :email
+    property :partnerships
+    property :subscriptions
+
+    alias_method :real_name, :realname
+    alias_method :old_partnerships, :partnerships
+    alias_method :old_subscriptions, :subscriptions
+
     # Find all users on server. Set eager to true if you want all user attributes to be fetched from the beginning (slow)
-    def self.all(eager=false)
-      response = get '/users'
+    def self.all(options={})
+      eager, search = options.values_at(:eager, :search)
+      response = get '/users', query: { searchCriteria: search }
       JSON.parse(response.body)['users'].map { |u| eager ? Coach::User.new(u).fetch : Coach::User.new(u) }
     end
 
@@ -34,6 +46,14 @@ module Coach
     def self.delete(username, password)
       auth = { username: username, password: password }
       HTTParty::delete "/users/#{username}", basic_auth: auth
+    end
+
+    def partnerships
+      old_partnerships.map { |p| Coach::Partnership.new(p).fetch }
+    end
+
+    def subscriptions
+      old_subscriptions.map { |p| Coach::Subscription.new(p).fetch }
     end
   end
 end

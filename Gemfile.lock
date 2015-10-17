@@ -65,6 +65,7 @@ GEM
       railties (>= 3.2, < 5.0)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
+    hashie (3.4.2)
     httparty (0.13.7)
       json (~> 1.8)
       multi_xml (>= 0.5.2)
@@ -194,6 +195,7 @@ DEPENDENCIES
   fabrication
   faker
   font-awesome-rails
+  hashie
   httparty
   jquery-rails
   pg
