@@ -47,6 +47,9 @@ end
 
 gem 'rspec-rails', group: [:test, :development]
 
+# For Heroku
+gem 'rails_12factor', group: :production
+
 # Seed gems
 gem 'faker'
 gem 'fabrication'
