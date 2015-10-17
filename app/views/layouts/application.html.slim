@@ -6,22 +6,24 @@ html lang="en"
     meta name="viewport" content="width=device-width, initial-scale=1.0"
     title= content_for?(:title) ? yield(:title) : 'Sweat to Score'
     = csrf_meta_tags
+    = stylesheet_link_tag 'https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css', media: 'all'
+    = stylesheet_link_tag '//cdnjs.cloudflare.com/ajax/libs/bootcards/1.0.0/css/bootcards-desktop.min.css', media: 'all'
     = stylesheet_link_tag 'application', :media => 'all'
     = favicon_link_tag 'favicon.ico', :rel => 'shortcut icon'
     = javascript_include_tag 'application'
 
   body
-    = nav_bar fixed: :static, brand: 'Sweat to Score', responsive: true do
+    = nav_bar fixed: :static, brand: fa_icon('soccer-ball-o', text: 'Sweat to Score'), responsive: true do
       = menu_group do
-        = menu_item 'News', news_path
-        = menu_item 'Leagues', leagues_path
-        = drop_down 'Manage' do
+        = menu_item fa_icon('newspaper-o', text: 'News'), news_path
+        = menu_item fa_icon('gamepad', text: 'Leagues'), leagues_path
+        = drop_down fa_icon(:wrench, text: 'Manage') do
           = menu_item 'My Teams', user_teams_path(current_user)
           = menu_item 'My Leagues', user_leagues_path(current_user)
       = menu_group pull: :right do
         = menu_text 'Logged in as:'
-        = menu_item current_user.name, user_path(current_user)
-        = menu_item 'Login', '#TODO'
+        = menu_item fa_icon(:user, text: current_user.name), user_path(current_user)
+        = menu_item fa_icon('sign-out', text: 'Login'), '#TODO'
 
     .container
       .row
@@ -29,10 +31,11 @@ html lang="en"
           = bootstrap_flash
           = yield
         .col-lg-3
-          .well.sidebar-nav
-            h3 Sidebar
-            ul.nav.nav-list
-              li.nav-header Sidebar
-              li= link_to "Link 1", "/path1"
-              li= link_to "Link 2", "/path2"
-              li= link_to "Link 3", "/path3"
+          = bs_panel do |p|
+            = p.header do
+              .text-center Actions
+            = p.body do
+              = link_to 'Hello', '#', class: 'btn btn-default btn-block'
+              = link_to 'Hello', '#', class: 'btn btn-default btn-block'
+              = link_to 'Hello', '#', class: 'btn btn-default btn-block'
+            = p.footer do

@@ -1,5 +1,8 @@
-= bootstrap_form_for @league do |f|
+= bootstrap_form_for @league, layout: :horizontal do |f|
   = f.text_field :name
   = f.number_field :level
-  = f.primary
-  = link_to t('.cancel', :default => t("helpers.links.cancel")), new_league_path, :class => 'btn'
+
+  .pull-right
+    = link_to t('.cancel', :default => t("helpers.links.cancel")), new_league_path, :class => 'btn btn-default'
+    '
+    = f.primary

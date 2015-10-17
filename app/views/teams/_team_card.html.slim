@@ -1,0 +1,39 @@
+= bs_panel context: :primary, class: 'team-card' do |p|
+
+  = p.header do
+    h3.panel-title.row
+      .col-md-8
+        = link_to team.name, team_path(team)
+      .col-md-4
+        .pull-right= badge("#{team.players.count} players", :info)
+
+  = p.body do
+    .stat
+      strong.stat-label G:
+      .stat-value
+        = bs_progress Faker::Number.between(0, 100)
+    .stat
+      strong.stat-label D:
+      .stat-value
+        = bs_progress Faker::Number.between(0, 100)
+    .stat
+      strong.stat-label M:
+      .stat-value
+        = bs_progress Faker::Number.between(0, 100)
+    .stat
+      strong.stat-label O:
+      .stat-value
+        = bs_progress Faker::Number.between(0, 100)
+    hr
+
+    .team-score
+      span Overall score
+      span.pull-right
+        = tag_label("#{team.strength}%", :default)
+
+  = p.footer do
+    small.pull-left= "managed by #{team.teamable.name}"
+    .pull-right
+      = link_to 'Edit', edit_team_path(team), class: 'btn btn-default btn-xs'
+      '
+      = link_to fa_icon(:trash), team_path(team), class: 'btn btn-default btn-danger btn-xs', method: :delete

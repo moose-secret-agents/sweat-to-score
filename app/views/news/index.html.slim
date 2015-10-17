@@ -1,2 +1,37 @@
 h1 News
-p Show some news about things that are going on, e.g. recent results, new leagues...
+hr
+.row
+  .col-sm-4
+    = bs_panel do |p|
+      = p.header do
+        'Recent Matches
+        = link_to 'Show me', '#', class: 'btn btn-default btn-xs pull-right'
+      = p.body do
+        p Some Sample Text
+  .col-sm-4
+    = bs_panel do |p|
+      = p.header heading: 'Recent Signups'
+      = p.body do
+        p Some Sample Text
+  .col-sm-4
+    = bs_panel do |p|
+      = p.header heading: 'Twitter'
+      = p.body do
+        p Some Sample Text
+.row
+  .col-sm-6
+    = bs_panel do |p|
+      = p.header  do
+        = link_to 'hello', '#'
+      = p.body do
+        = link_to 'Body', '#'
+      = p.footer do
+        = link_to 'Footer', '#'
+  .col-sm-6
+    = bs_panel do |p|
+      = p.header do
+        = link_to 'hello', '#'
+      = p.body do
+        = link_to 'Body', '#'
+      = p.footer do
+        = link_to 'Footer', '#'
