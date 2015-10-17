@@ -48,11 +48,11 @@ module Coach
     end
 
     def partnerships
-      old_partnerships.map { |p| Coach::Partnership.new(p)}
+      old_partnerships.map { |p| Coach::Partnership.new(p).fetch }
     end
 
     def subscriptions
-      old_subscriptions.map { |p| Coach::Subscription.new(p)}
+      old_subscriptions.map { |p| Coach::Subscription.new(p).fetch }
     end
   end
 end

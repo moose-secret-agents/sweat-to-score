@@ -8,7 +8,7 @@ module Coach
     alias_method :old_user, :user
 
     def user
-      Coach::User.new(old_user)
+      Coach::User.new(old_user).fetch
     end
   end
 end
