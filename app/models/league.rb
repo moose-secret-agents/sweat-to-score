@@ -10,4 +10,11 @@ class League < ActiveRecord::Base
   def schedule_match(team_a, team_b, time=1.day.from_now)
     self.matches.create(teamA: team_a, teamB: team_b, starts_at: time)
   end
+
+  def destroy
+    self.teams.each do |team|
+      team.destroy
+    end
+    super
+  end
 end
