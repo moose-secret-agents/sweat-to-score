@@ -11,6 +11,14 @@ RSpec.describe 'CoachAPI', type: :model do
       expect(Coach::User.find('newuser1')).to be_truthy
     end
 
+    it 'can search for usernames' do
+      results = Coach::User.all(search: 'newuser1')
+
+      expect(results).to be_truthy
+      expect(results.count).to be > 0
+      expect(results.map(&:fetch)).to include Coach::User.find('newuser1')
+    end
+
     it 'should have accessible partnerships' do
       user = Coach::User.all.first.fetch
       expect { user.partnerships }.to_not raise_error
@@ -39,7 +47,8 @@ RSpec.describe 'CoachAPI', type: :model do
     it 'should equal one user of its partnership' do
       user = Coach::User.all.first.fetch
       partnership = user.partnerships.first
-      expect([partnership.user1, partnership.user2]).to include user
+
+      expect(partnership.users).to include user
     end
 
   end

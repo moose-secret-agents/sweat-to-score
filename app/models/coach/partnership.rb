@@ -15,5 +15,9 @@ module Coach
     def user2
       User.new(old_user2).fetch
     end
+
+    def users
+      [user1, user2]
+    end
   end
 end

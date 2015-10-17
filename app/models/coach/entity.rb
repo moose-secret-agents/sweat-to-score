@@ -11,7 +11,7 @@ module Coach
     property :publicvisible
 
     headers  'Accept' => 'application/json'
-    debug_output $stdout if Rails.env == :development
+    debug_output $stdout if Rails.env == 'development'
     base_uri 'http://diufvm31.unifr.ch:8090/CyberCoachServer/resources'
 
     # Fetch an entity based on its uri

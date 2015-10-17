@@ -13,8 +13,9 @@ module Coach
     alias_method :old_subscriptions, :subscriptions
 
     # Find all users on server. Set eager to true if you want all user attributes to be fetched from the beginning (slow)
-    def self.all(eager=false)
-      response = get '/users'
+    def self.all(options={})
+      eager, search = options.values_at(:eager, :search)
+      response = get '/users', query: { searchCriteria: search }
       JSON.parse(response.body)['users'].map { |u| eager ? Coach::User.new(u).fetch : Coach::User.new(u) }
     end
 
