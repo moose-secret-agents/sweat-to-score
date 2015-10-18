@@ -1,7 +1,7 @@
 module Coach
   class Partnership < Coach::Entity
-    property :userconfirmed1
-    property :userconfirmed2
+    property :confirmed_by_user1, from: :userconfirmed1
+    property :confirmed_by_user2, from: :userconfirmed2
     property :user1
     property :user2
 
