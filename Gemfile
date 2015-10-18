@@ -64,3 +64,7 @@ gem 'bootstrap_form'
 # Gem for http requests
 gem 'httparty'
 gem 'hashie'
+
+# Authentication gems
+gem 'sorcery'
+gem 'pundit'
