@@ -20,4 +20,11 @@ class Team < ActiveRecord::Base
       end
     end
   end
+
+  def destroy
+    self.players.each do |player|
+      player.destroy
+    end
+    super
+  end
 end

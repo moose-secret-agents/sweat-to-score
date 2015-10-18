@@ -36,4 +36,17 @@ class User < ActiveRecord::Base
     proposal = from_user.partnerships.find_by(partner: self)
     proposal.refuse
   end
+
+  def destroy
+    self.teams.each do |team|
+      team.destroy
+    end
+    self.leagues.each do |league|
+      league.destroy
+    end
+    (Partnership.where(user: self) | Partnership.where(partner: self)).each do |partnership|
+      partnership.destroy
+    end
+    super
+  end
 end

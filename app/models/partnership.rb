@@ -13,4 +13,11 @@ class Partnership < ActiveRecord::Base
   def refuse
     refused!
   end
+
+  def destroy
+    self.teams.each do |team|
+      team.destroy
+    end
+    super
+  end
 end
