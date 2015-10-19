@@ -233,6 +233,10 @@ Rails.application.config.sorcery.configure do |config|
     # Default: `nil`
     #
     # user.custom_encryption_provider =
+    # Speed up tests by not encrypting passwords
+    if Rails.env.test?
+      user.custom_encryption_provider = nil
+    end
 
 
     # encryption algorithm name. See 'encryption_algorithm=' for available options.

@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Partnership, type: :model do
   before(:all) do
-    @user1 = User.create(name: 'User1')
-    @user2 = User.create(name: 'User 2')
+    @user1 = Fabricate(:user, username: 'User1')
+    @user2 = Fabricate(:user, username: 'User2')
   end
 
   before(:each) do
