@@ -6,12 +6,9 @@ class User < ActiveRecord::Base
   has_many :partnerships
   has_many :leagues, foreign_key: 'owner_id'
 
-  validates :password, length: { minimum: 3 }, if: -> { new_record? || changes["password"] }
-  validates :password, confirmation: true, if: -> { new_record? || changes["password"] }
-  validates :password_confirmation, presence: true, if: -> { new_record? || changes["password"] }
-  # has_many :partners, through: :partnerships
-  # has_many :partners, class_name: 'Partnership', foreign_key: 'user_id'
-  # has_many :partners, class_name: 'Partnership'
+  validates :password, length: { minimum: 3 }, if: -> { new_record? || changes['password'] }
+  validates :password, confirmation: true, if: -> { new_record? || changes['password'] }
+  validates :password_confirmation, presence: true, if: -> { new_record? || changes['password'] }
 
   def partners
     Partnership.accepted.where(user: self).map(&:partner) | Partnership.accepted.where(partner: self).map(&:user)

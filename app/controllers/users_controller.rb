@@ -10,6 +10,7 @@ class UsersController < ApplicationController
     @user = User.create(user_params)
 
     if @user.save
+      auto_login(@user, true)
       redirect_to @user, notice: 'User profile created'
     else
       flash[:error] = 'Could not create profile'
