@@ -5,6 +5,6 @@ class ApplicationController < ActionController::Base
 
   private
     def not_authenticated
-      redirect_to login_path, :alert => 'Login required!'
+      redirect_to show_login_path, :alert => 'Login required!'
     end
 end

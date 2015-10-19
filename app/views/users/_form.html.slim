@@ -1,4 +1,4 @@
-= bootstrap_form_for @user do |f|
+= bootstrap_form_for @user, layout: :horizontal do |f|
   = f.text_field :username
   = f.password_field :password
   = f.password_field :password_confirmation
@@ -7,4 +7,4 @@
 
   = f.primary
   '
-  = link_to t('.back', :default => t("helpers.links.cancel")), user_path,:user_id => @user.id, :class => 'btn btn-default'
+  = link_to 'Back', :back, :class => 'btn btn-default'

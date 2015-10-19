@@ -17,13 +17,17 @@ html lang="en"
       = menu_group do
         = menu_item fa_icon('newspaper-o', text: 'News'), news_path
         = menu_item fa_icon('gamepad', text: 'Leagues'), leagues_path
-        = drop_down fa_icon(:wrench, text: 'Manage') do
-          = menu_item 'My Teams', user_teams_path(current_user)
-          = menu_item 'My Leagues', user_leagues_path(current_user)
+        - if logged_in?
+          = drop_down fa_icon(:wrench, text: 'Manage') do
+            = menu_item 'My Teams', user_teams_path(current_user)
+            = menu_item 'My Leagues', user_leagues_path(current_user)
       = menu_group pull: :right do
-        = menu_text 'Logged in as:'
-        = menu_item fa_icon(:user, text: current_user.name), user_path(current_user)
-        = menu_item fa_icon('sign-out', text: 'Login'), '#TODO'
+        - if logged_in?
+          = menu_text 'Logged in as:'
+          = menu_item fa_icon(:user, text: current_user.name), user_path(current_user)
+          = menu_item fa_icon('sign-out', text: 'Logout'), logout_path
+        - else
+          = menu_item fa_icon('sign-in', text: 'Login'), show_login_path
 
     .container
       .row

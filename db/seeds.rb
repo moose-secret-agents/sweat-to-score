@@ -6,7 +6,7 @@ Player.delete_all
 # Seed data
 
 4.times do
-  Fabricate(:user)
+  Fabricate(:user, password: 'pass', password_confirmation: 'pass')
 end
 
 3.times do |i|

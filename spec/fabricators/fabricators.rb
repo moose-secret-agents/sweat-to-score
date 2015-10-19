@@ -1,7 +1,9 @@
 Fabricator(:user) do
+  username { Faker::Internet.user_name }
   name { Faker::Name.name }
   email { Faker::Internet.email }
-  password { Faker::Internet.password }
+  pw = password { Faker::Internet.password }
+  password_confirmation { pw }
 end
 
 Fabricator(:league) do
