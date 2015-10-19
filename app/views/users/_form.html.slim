@@ -1,7 +1,10 @@
 = bootstrap_form_for @user do |f|
-  = f.text_field :name
+  = f.text_field :username
   = f.password_field :password
+  = f.password_field :password_confirmation
+  = f.text_field :name
   = f.email_field :email
+
   = f.primary
   '
   = link_to t('.back', :default => t("helpers.links.cancel")), user_path,:user_id => @user.id, :class => 'btn btn-default'

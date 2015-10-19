@@ -1,7 +1,10 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
-  def current_user
-    User.first
-  end
+  before_filter :require_login, except: [:not_authenticated]
+
+  private
+    def not_authenticated
+      redirect_to login_path, :alert => 'Login required!'
+    end
 end
