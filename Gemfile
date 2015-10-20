@@ -62,7 +62,7 @@ gem 'bootstrap-sass'
 gem 'bootstrap_form'
 
 # Gem to interface with cybercoach
-gem 'coachassist'
+gem 'coach_assist'
 
 # Authentication gems
 gem 'sorcery'

@@ -48,7 +48,7 @@ GEM
       sass (>= 3.3.0)
     bootstrap_form (2.3.0)
     builder (3.2.2)
-    coachassist (0.1.0)
+    coach_assist (0.1.0)
       activesupport
       hashie
       httparty
@@ -214,7 +214,7 @@ PLATFORMS
 DEPENDENCIES
   bootstrap-sass
   bootstrap_form
-  coachassist
+  coach_assist
   coffee-rails (~> 4.1.0)
   fabrication
   faker
