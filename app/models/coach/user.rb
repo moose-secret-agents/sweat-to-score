@@ -31,6 +31,13 @@ module Coach
         !!find(username)
       end
 
+      def authenticated?(username, password)
+        authenticated(username, password) do
+          response = get '/authenticateduser', basic_auth: @auth
+          response.code == 200 ? Coach::User.new(JSON.parse(response.body)) : nil
+        end
+      end
+
       # Create new user
       def create(username, attributes={})
         response = put "/users/#{username}", body: attributes
