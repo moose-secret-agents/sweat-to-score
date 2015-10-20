@@ -48,7 +48,7 @@ GEM
       sass (>= 3.3.0)
     bootstrap_form (2.3.0)
     builder (3.2.2)
-    coach_assist (0.1.0)
+    coach_assist (0.1.1)
       activesupport
       hashie
       httparty
