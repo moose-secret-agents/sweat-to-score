@@ -61,9 +61,8 @@ gem 'twitter-bootstrap-rails'
 gem 'bootstrap-sass'
 gem 'bootstrap_form'
 
-# Gem for http requests
-gem 'httparty'
-gem 'hashie'
+# Gem to interface with cybercoach
+gem 'coachassist'
 
 # Authentication gems
 gem 'sorcery'

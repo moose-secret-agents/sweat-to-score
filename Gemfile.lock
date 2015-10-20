@@ -48,6 +48,10 @@ GEM
       sass (>= 3.3.0)
     bootstrap_form (2.3.0)
     builder (3.2.2)
+    coachassist (0.1.0)
+      activesupport
+      hashie
+      httparty
     coffee-rails (4.1.0)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0, < 5.0)
@@ -210,12 +214,11 @@ PLATFORMS
 DEPENDENCIES
   bootstrap-sass
   bootstrap_form
+  coachassist
   coffee-rails (~> 4.1.0)
   fabrication
   faker
   font-awesome-rails
-  hashie
-  httparty
   jquery-rails
   pg
   pundit
