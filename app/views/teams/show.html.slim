@@ -17,7 +17,7 @@ div.player-table class="col-md-6"
           td.col-md-2= player.name
           td.col-md-2= bs_progress(player.talent)
           td.col-md-2
-            .box.avatar-image id="image1#{index}"
+            .box.avatar-image id="image1#{index}" data-talent="#{player.talent}"
 
 div.player-table class="col-md-6"
   table class="table table-hover table-condensed"
@@ -32,4 +32,4 @@ div.player-table class="col-md-6"
           td.col-md-2= player.name
           td.col-md-2= bs_progress(player.talent)
           td.col-md-2
-            .box.avatar-image id="image2#{index}"
+            .box.avatar-image id="image2#{index}" data-talent="#{player.talent}"
