@@ -14,7 +14,9 @@ p
   strong= 'Teams:'
   br
   - @league.teams.each do |team|
-    p= team.name
+    = link_to team.name, team_path(team)
+    br
+
 
 = link_to t('.back', :default => t("helpers.links.back")), leagues_path, :class => 'btn btn-default'
 '
