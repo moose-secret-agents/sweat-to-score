@@ -1,21 +1,33 @@
 - model_class = League
 div class="page-header"
-  h1= "#{@league.name}"
-
-p
-  strong= model_class.human_attribute_name(:level) + ':'
-  br
-  = @league.level
-p
-  strong= model_class.human_attribute_name(:owner_id) + ':'
-  br
-  = @league.owner_id
-p
-  strong= 'Teams:'
-  br
-  - @league.teams.each do |team|
-    = link_to team.name, team_path(team)
+  h1
+    | #{@league.name}
     br
+    small Owner: #{@league.owner.name}
+    br
+    small Level: #{@league.level}
+
+
+table class="table table-hover"
+  thead
+    tr
+      th.text-center= 'Rank'
+      th.text-center= 'Points'
+      th= 'Team Name'
+      th.text-center= '#Players'
+  tbody
+    - points_array=[]
+    - sorted_teams = @league.teams.sort_by {|team| team.points}
+    - sorted_teams.each do |team|
+      - points_array.append(team.points)
+    - sorted_points = points_array.sort.uniq.reverse
+    - array_mapping = points_array.map{|i| sorted_points.index(i) + 1}.reverse
+    - sorted_teams.reverse.each_with_index do |team, index|
+      tr
+        td.text-center= array_mapping[index]
+        td.text-center= team.points
+        td= link_to team.name, team_path(team)
+        td.text-center= team.players.count
 
 
 = link_to t('.back', :default => t("helpers.links.back")), leagues_path, :class => 'btn btn-default'
