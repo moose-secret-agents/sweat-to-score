@@ -4,8 +4,8 @@ table class="table table-hover"
   thead
     tr
       th= League.human_attribute_name(:name)
-      th= League.human_attribute_name(:level)
-      th= '#Teams'
+      th.text-center= League.human_attribute_name(:level)
+      th.text-center= '#Teams'
       th= League.human_attribute_name(:owner_id)
       th= League.human_attribute_name(:created_at)
       th=t '.actions', :default => t("helpers.actions")
@@ -13,8 +13,8 @@ table class="table table-hover"
     - @leagues.each do |league|
       tr
         td= link_to league.name, league_path(league)
-        td= league.level
-        td= league.teams.count
+        td.text-center= league.level
+        td.text-center= league.teams.count
         td= league.owner.name
         td= (time_ago_in_words league.created_at) + ' ago'
         td
