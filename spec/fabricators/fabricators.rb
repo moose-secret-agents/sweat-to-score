@@ -20,6 +20,7 @@ end
 Fabricator(:team) do
   name { Faker::Team.name }
   strength { Faker::Number.between(0, 100) }
+  points { Faker::Number.between(0, 100) }
   teamable(fabricator: :user)
   league
   players { (11..25).to_a.sample.times.map { Fabricate(:player) } }
