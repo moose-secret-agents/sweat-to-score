@@ -16,15 +16,10 @@ div class="col-md-12"
         th.col-md-3= 'Team Name'
         th.text-center.col-md-3= '#Players'
     tbody
-      - points_array=[]
-      - sorted_teams = @league.teams.sort_by {|team| team.points}
-      - sorted_teams.each do |team|
-        - points_array.append(team.points)
-      - sorted_points = points_array.sort.uniq.reverse
-      - array_mapping = points_array.map{|i| sorted_points.index(i) + 1}.reverse
-      - sorted_teams.reverse.each_with_index do |team, index|
+      - sorted, mapped = @rank_teams
+      - sorted.reverse.each_with_index do |team, index|
         tr
-          td.ranking= array_mapping[index]
+          td.ranking= mapped[index]
           td.text-center= team.points
           td= link_to team.name, team_path(team)
           td.text-center= team.players.count
