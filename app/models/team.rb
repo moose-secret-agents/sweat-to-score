@@ -1,5 +1,5 @@
 class Team < ActiveRecord::Base
-  has_many :players
+  has_many :players, dependent: :destroy
   belongs_to :league
   belongs_to :teamable, polymorphic: true
 
@@ -23,12 +23,5 @@ class Team < ActiveRecord::Base
         Fabricate(:player, team: self)
       end
     end
-  end
-
-  def destroy
-    self.players.each do |player|
-      player.destroy
-    end
-    super
   end
 end

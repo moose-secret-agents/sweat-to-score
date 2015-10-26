@@ -14,10 +14,4 @@ class Partnership < ActiveRecord::Base
     refused!
   end
 
-  def destroy
-    self.teams.each do |team|
-      team.destroy
-    end
-    super
-  end
 end

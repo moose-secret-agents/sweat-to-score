@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   include Teamable
 
   has_many :partnerships
-  has_many :leagues, foreign_key: 'owner_id'
+  has_many :leagues, foreign_key: 'owner_id', dependent: :destroy
 
   validates :username, uniqueness: true, presence: true
   validates :password, length: { minimum: 3 }, if: -> { new_record? || changes['password'] }
@@ -37,18 +37,5 @@ class User < ActiveRecord::Base
   def refuse_partnership(from_user)
     proposal = from_user.partnerships.find_by(partner: self)
     proposal.refuse
-  end
-
-  def destroy
-    self.teams.each do |team|
-      team.destroy
-    end
-    self.leagues.each do |league|
-      league.destroy
-    end
-    (Partnership.where(user: self) | Partnership.where(partner: self)).each do |partnership|
-      partnership.destroy
-    end
-    super
   end
 end

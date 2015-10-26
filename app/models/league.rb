@@ -1,5 +1,5 @@
 class League < ActiveRecord::Base
-  has_many :teams
+  has_many :teams, dependent: :destroy
   has_many :players, through: :teams
   has_many :matches
 
@@ -10,11 +10,5 @@ class League < ActiveRecord::Base
   def schedule_match(team_a, team_b, time=1.day.from_now)
     self.matches.create(teamA: team_a, teamB: team_b, starts_at: time)
   end
-
-  def destroy
-    self.teams.each do |team|
-      team.destroy
-    end
-    super
-  end
+  
 end
