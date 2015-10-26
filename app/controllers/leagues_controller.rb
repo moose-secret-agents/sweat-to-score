@@ -21,7 +21,7 @@ class LeaguesController < ApplicationController
 
   def show
     @league = League.find(params[:id])
-    @rank_teams = rank_teams
+    @teams = @league.teams.sort_by(&:rank_in_league)
   end
 
   def user_index
@@ -37,19 +37,5 @@ class LeaguesController < ApplicationController
 
     def set_user
       @user = current_user
-    end
-
-    def rank_teams
-      sorted_teams = @league.teams.sort_by {|team| team.points}
-
-      points_array=[]
-      sorted_teams.each do |team|
-        points_array.append(team.points)
-      end
-
-      sorted_points = points_array.sort.uniq.reverse
-      array_mapping = points_array.map{|i| sorted_points.index(i) + 1}.reverse
-
-      [sorted_teams, array_mapping]
     end
 end

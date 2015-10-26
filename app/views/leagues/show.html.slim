@@ -16,10 +16,9 @@ div class="col-md-12"
         th.col-md-3= 'Team Name'
         th.text-center.col-md-3= '#Players'
     tbody
-      - sorted, mapped = @rank_teams
-      - sorted.reverse.each_with_index do |team, index|
+      - @teams.each do |team|
         tr
-          td.ranking= mapped[index]
+          td.ranking= team.rank_in_league
           td.text-center= team.points
           td= link_to team.name, team_path(team)
           td.text-center= team.players.count

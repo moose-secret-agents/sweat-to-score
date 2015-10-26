@@ -11,6 +11,10 @@ class Team < ActiveRecord::Base
     Match.where('"teamA_id" = ? or "teamB_id" = ?', id, id)
   end
 
+  def rank_in_league
+    league.teams.where('points > ?', self.points).count + 1
+  end
+
   def assign_players
     return if players.count > 0
 

@@ -214,7 +214,7 @@ PLATFORMS
 DEPENDENCIES
   bootstrap-sass
   bootstrap_form
-  coach_assist
+  coach_assist (~> 0.1.1)
   coffee-rails (~> 4.1.0)
   fabrication
   faker
