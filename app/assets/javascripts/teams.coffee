@@ -5,7 +5,7 @@
 ready = ->
   $(".avatar-image").each (index, element) ->
     id = $(element).attr('id')
-    face = faces.generate()
+    face = $(element).data('face')
     talent = $(element).data('talent')
     face.fatness = talent
 #    face.color = 'blue'
