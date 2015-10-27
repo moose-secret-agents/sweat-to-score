@@ -28,6 +28,10 @@ class LeaguesController < ApplicationController
     render :index
   end
 
+  def edit
+    SchedulerDoubleRR.new.schedule_season(League.find(params[:id]).teams)
+  end
+
   private
     def league_params
       params.require(:league).permit(:name, :level)
