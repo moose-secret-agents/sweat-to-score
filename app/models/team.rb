@@ -27,4 +27,13 @@ class Team < ActiveRecord::Base
     end
     super
   end
+
+  def inspect
+    self.name
+  end
+
+  def to_s
+    self.name
+  end
+
 end
