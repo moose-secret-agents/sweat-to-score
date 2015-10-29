@@ -84,4 +84,29 @@ RSpec.describe SchedulerDoubleRR, type: :model do
     schedule=@scheduler.schedule_season(@league)
     expect(@league.matches.length).to eq(@league.teams.length*(@league.teams.length-1))
   end
+
+  it 'can schedule 8 teams' do
+    (1..8).each do
+      add_team_to_league
+    end
+    schedule=@scheduler.schedule_season(@league)
+    expect(@league.matches.length).to eq(@league.teams.length*(@league.teams.length-1))
+  end
+
+  it 'should schedule matches on league activation' do
+    (1..4).each do
+      add_team_to_league
+    end
+    @league.start
+    expect(@league.matches.length).to eq(@league.teams.length*(@league.teams.length-1))
+  end
+
+  it 'should delete not played matches on league stop' do
+    (1..4).each do
+      add_team_to_league
+    end
+    @league.start
+    @league.end
+    expect(@league.matches.length).to eq(0)
+  end
 end
