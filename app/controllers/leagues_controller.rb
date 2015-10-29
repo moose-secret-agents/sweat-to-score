@@ -23,6 +23,18 @@ class LeaguesController < ApplicationController
     @league = League.find(params[:id])
   end
 
+  def update
+    @league = League.find(params[:id])
+    if params[:status]==League.statuses[:active].to_s&&League.statuses[@league.status]==League.statuses[:inactive]
+      @league.start
+      redirect_to @league, notice: 'League activated'
+    elsif params[:status]==League.statuses[:inactive].to_s&&League.statuses[@league.status]==League.statuses[:active]
+      @league.end
+      redirect_to @league, notice: 'League couldnt be activated'
+    end
+
+  end
+
   def user_index
     @leagues = current_user.leagues
     render :index

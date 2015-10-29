@@ -10,10 +10,12 @@ class League < ActiveRecord::Base
   enum status: { inactive: 0, active: 1 }
 
   def start
+    SchedulerDoubleRR.new.schedule_season(self)
     active!
   end
 
   def end
+    Match.destroy_all(:status=> Match.statuses[:scheduled],:league=>self)
     inactive!
   end
 
