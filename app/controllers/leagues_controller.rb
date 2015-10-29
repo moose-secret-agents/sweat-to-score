@@ -29,7 +29,7 @@ class LeaguesController < ApplicationController
   end
 
   def edit
-    SchedulerDoubleRR.new.schedule_season(League.find(params[:id]).teams)
+    SchedulerDoubleRR.new.schedule_season(League.find(params[:id]))
   end
 
   private

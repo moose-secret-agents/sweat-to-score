@@ -1,28 +1,34 @@
 class SchedulerDoubleRR
-  def schedule_season(teams)
+  def schedule_season(league)
     puts 'scheduled'
     #puts Date.beginning_of_week
-
+    teams=league.teams
     season_start=1.week.from_now.beginning_of_week+20.hour
     season_length=decide_on_season_length(teams.size)
+    schedule=assign_matches(teams,season_length)
 
-    #puts match_pairings(teams)
-    #days=assign_parings_to_days(match_pairings(teams),season_length)
-    days=assign_matches(teams,season_length)
     for i in 0..season_length-1
-      puts season_start+i.day
-      puts days[i]
-      puts "\n"
+      date=season_start+i.day
+      schedule[i].each do |match|
+        league.schedule_match(match.teams[0],match.teams[1],date)
+      end
     end
-
-    #puts teams
+    schedule
   end
 
   private
     #error with only two teams, only one match is scheduled, error with 0 or 1 teams
     def assign_matches(t, season_length)
+
+
       schedule=Array.new(season_length){[]}
-      teams=Array(t)
+      teams=t.inject([]){|teams,team| teams<<team}
+
+      if(teams.length==2)
+        schedule[0]<<Pairing.new(teams[0],teams[1])
+        schedule[0]<<Pairing.new(teams[1],teams[0])
+        return schedule
+      end
 
       if (teams.length%2!=0)
         teams.push(nil)
@@ -93,51 +99,12 @@ class SchedulerDoubleRR
       bottom.delete_at(0)
     end
 
-
-    def assign_parings_to_days(parings,season_length)
-      days=Array.new(season_length){[]}
-
-      i=0
-      tries=0
-      while(parings.size!=0)
-        twoMatchesPerDay=false
-        days[i].each do |match|
-          if(match.contains_same_team(parings.last))
-            twoMatchesPerDay=true
-          end
-        end
-        if(!twoMatchesPerDay)
-          days[i] << parings.pop
-          tries=0
-        else
-          tries=tries+1
-        end
-        if(tries==season_length)
-          puts "no free days"
-        end
-        i=(i+1)%season_length
-      end
-      days
-    end
-
-    def match_pairings(teams)
-      pairings=[]
-
-      teams.each do |a|
-        teams.each do |b|
-          pairings << Pairing.new(a,b) unless a == b
-        end
-      end
-
-      pairings
-    end
-
     def decide_on_season_length(number_of_teams)
-      best=-1 #problem if no better lenght is found (e.g. n_o_t=0||1) this stays
+      best=0 #problem if no better lenght is found (e.g. n_o_t=0||1) this stays
       matches=number_of_matches(number_of_teams)
       opt=optimal_matches_per_day(number_of_teams)
       [7,14].each do |i|
-        if (matches/i-opt).abs<(matches/best-opt).abs
+        if best==0||(matches/i-opt).abs<(matches/best-opt).abs
           best=i
         end
       end
