@@ -21,17 +21,28 @@ class LeaguesController < ApplicationController
 
   def show
     @league = League.find(params[:id])
+    matches=Hash.new{|h, k| h[k] = []}
+    @league.matches.each{|match| matches[match.starts_at]<<match}
+
+    @matches = matches.values
   end
 
   def update
     @league = League.find(params[:id])
-    if params[:status]==League.statuses[:active].to_s&&League.statuses[@league.status]==League.statuses[:inactive]
-      @league.start
-      redirect_to @league, notice: 'League activated'
-    elsif params[:status]==League.statuses[:inactive].to_s&&League.statuses[@league.status]==League.statuses[:active]
-      @league.end
-      redirect_to @league, notice: 'League couldnt be activated'
+    if params[:status]!=nil
+      if params[:status]==League.statuses[:active].to_s&&League.statuses[@league.status]==League.statuses[:inactive]
+        @league.start
+        redirect_to @league, notice: 'League started'
+      elsif params[:status]==League.statuses[:inactive].to_s&&League.statuses[@league.status]==League.statuses[:active]
+        @league.end
+        redirect_to @league, notice: 'League ended'
+      else
+        flash[:error] = "League is already {@league.status}"
+        #redirect_to @league, notice: 'League is already #{@league.status}'
+        redirect_to @league
+      end
     end
+
 
   end
 
@@ -41,7 +52,7 @@ class LeaguesController < ApplicationController
   end
 
   def edit
-    SchedulerDoubleRR.new.schedule_season(League.find(params[:id]))
+
   end
 
   private

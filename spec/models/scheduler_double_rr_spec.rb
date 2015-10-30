@@ -107,6 +107,6 @@ RSpec.describe SchedulerDoubleRR, type: :model do
     end
     @league.start
     @league.end
-    expect(@league.matches.length).to eq(0)
+    expect(@league.reload.matches.length).to eq(0)
   end
 end

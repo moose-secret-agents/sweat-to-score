@@ -9,6 +9,10 @@ class TeamsController < ApplicationController
 
   def show
     @team = Team.find(params[:id])
+
+    #matches=Hash.new{|h, k| h[k] = []}
+    #@team.matches.each{|match| matches[match.starts_at]<<match}
+    @matches = @team.matches
   end
 
   def new
