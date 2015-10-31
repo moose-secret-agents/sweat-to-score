@@ -8,10 +8,18 @@ ready = ->
     face = $(element).data('face')
     talent = $(element).data('talent')
     face.fatness = talent
-#    face.color = 'blue'
+
+    if(talent < 20)
+      face.mouth.id = 1
+    else if(talent < 40)
+      face.mouth.id = 2
+    else if(talent < 60)
+      face.mouth.id = 3
+    else if(talent < 80)
+      face.mouth.id = 4
+    else face.mouth.id = 5
 
     faces.display(id, face)
-
 
 $(document).ready(ready)
 $(document).on('page:load', ready)
