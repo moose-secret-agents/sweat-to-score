@@ -56,7 +56,7 @@
     // Defines the range of fat/skinny, relative to the original width of the default head.
     function fatScale(fatness) {
         //return 0.75 + 0.25 * fatness;
-        return (1-fatness/100)*0.6 + 0.4;
+        return (1-fatness/100)*0.5 + 0.6;
     }
 
     head.push(function (paper, fatness, color) {
@@ -188,12 +188,23 @@
     });
 
     mouth.push(function (paper, cx, cy) {
-        // Thin smile
+        // Thin smile - default mouth
         var e, x = cx - 75, y = cy - 15;
 
         e = newPath(paper);
         e.setAttribute("d", "M " + x + "," + y +
             "c 0,0 75,60 150,0");
+        e.setAttribute("stroke", "#000");
+        e.setAttribute("stroke-width", "8");
+        e.setAttribute("fill", "none");
+    });
+    mouth.push(function (paper, cx, cy) {
+        // unhappy
+        var e, x = cx - 75, y = cy - 0;
+
+        e = newPath(paper);
+        e.setAttribute("d", "M " + x + "," + y +
+            "c 0,0 75,-60 150,0");
         e.setAttribute("stroke", "#000");
         e.setAttribute("stroke-width", "8");
         e.setAttribute("fill", "none");
@@ -208,23 +219,6 @@
         e.setAttribute("stroke", "#000");
         e.setAttribute("stroke-width", "8");
         e.setAttribute("fill", "none");
-    });
-    mouth.push(function (paper, cx, cy) {
-        // Open-mouthed smile, top teeth
-        var e, x = cx - 75, y = cy - 15;
-
-        e = newPath(paper);
-        e.setAttribute("d", "M " + x + "," + y +
-            "c 0,0 75,100 150,0" +
-            "h -150");
-
-        e = newPath(paper);
-        e.setAttribute("d", "M " + (x + 16) + "," + (y + 8) +
-            "l 16,16" +
-            "h 86" +
-            "l 16,-16" +
-            "h -118");
-        e.setAttribute("fill", "#f0f0f0");
     });
     mouth.push(function (paper, cx, cy) {
         // Generic open mouth
@@ -260,7 +254,27 @@
         e.setAttribute("stroke-width", "8");
         e.setAttribute("fill", "none");
     });
+    mouth.push(function (paper, cx, cy) {
+        // Open-mouthed smile, top teeth
+        var e, x = cx - 75, y = cy - 15;
 
+        e = newPath(paper);
+        e.setAttribute("d", "M " + x + "," + y +
+            "c 0,0 75,100 150,0" +
+            "h -150");
+
+        e = newPath(paper);
+        e.setAttribute("d", "M " + (x + 16) + "," + (y + 8) +
+            "l 16,16" +
+            "h 86" +
+            "l 16,-16" +
+            "h -118");
+        e.setAttribute("fill", "#f0f0f0");
+    });
+
+    hair.push(function () {
+        // Intentionally left blank (bald)
+    });
     hair.push(function (paper, fatness) {
         // Normal short
         var e;
@@ -270,6 +284,7 @@
             "c 0,0 180,-10 176,150" +
             "c 0,0 -180,-150 -352,0" +
             "c 0,0 0,-160 176,-150");
+        //e.setAttribute("fill", 'colorname');
         scaleCentered(e, fatScale(fatness), 1);
     });
     hair.push(function (paper, fatness) {
@@ -282,6 +297,7 @@
             "v 190" +
             "c 0,0 -180,-150 -352,0" +
             "v -190");
+        //e.setAttribute("fill", 'colorname');
         scaleCentered(e, fatScale(fatness), 1);
     });
     hair.push(function (paper, fatness) {
@@ -292,6 +308,7 @@
         e.setAttribute("d", "M 25,250" +
             "a 210,150 0 1 1 352,0" +
             "c 0,0 -180,-150 -352,0");
+        //e.setAttribute("fill", 'colorname');
         scaleCentered(e, fatScale(fatness), 1);
     });
     hair.push(function (paper, fatness) {
@@ -318,10 +335,8 @@
         e.setAttribute("stroke", "#000");
         e.setAttribute("stroke-linecap", "round");
         e.setAttribute("stroke-width", "22");
+        //e.setAttribute("fill", 'colorname');
         scaleCentered(e, fatScale(fatness), 1);
-    });
-    hair.push(function () {
-        // Intentionally left blank (bald)
     });
 
     function getId(array) {
