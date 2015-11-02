@@ -24,4 +24,9 @@ class Team < ActiveRecord::Base
       end
     end
   end
+
+  def to_s
+    self.name
+  end
+
 end

@@ -21,7 +21,31 @@ class LeaguesController < ApplicationController
 
   def show
     @league = League.find(params[:id])
-    @teams = @league.teams.sort_by(&:rank_in_league)
+	@teams = @league.teams.sort_by(&:rank_in_league)
+
+    matches=Hash.new{|h, k| h[k] = []}
+    @league.matches.each{|match| matches[match.starts_at]<<match}
+
+    @matches = matches.values
+  end
+
+  def update
+    @league = League.find(params[:id])
+    if params[:status]!=nil
+      if params[:status]==League.statuses[:active].to_s&&League.statuses[@league.status]==League.statuses[:inactive]
+        @league.start
+        redirect_to @league, notice: 'League started'
+      elsif params[:status]==League.statuses[:inactive].to_s&&League.statuses[@league.status]==League.statuses[:active]
+        @league.end
+        redirect_to @league, notice: 'League ended'
+      else
+        flash[:error] = "League is already {@league.status}"
+        #redirect_to @league, notice: 'League is already #{@league.status}'
+        redirect_to @league
+      end
+    end
+
+
   end
 
   def user_index
@@ -29,7 +53,10 @@ class LeaguesController < ApplicationController
     render :index
   end
 
-  
+  def edit
+
+  end
+
   private
     def league_params
       params.require(:league).permit(:name, :level)

@@ -19,6 +19,17 @@ RSpec.describe League, type: :model do
     expect(@league.teams.count).to be > 0
   end
 
+  it 'should be inactive as default' do
+    league=League.create!(name:'inac League', level:2)
+    expect(league.status).to eq ('inactive')
+  end
+
+  it 'can be set active' do
+    league=League.create!(name:'inac League', level:2)
+    league.start
+    expect(league.status).to eq ('active')
+  end
+
   it 'should have players through team' do
     expect(@league.players.count).to be > 0
   end
