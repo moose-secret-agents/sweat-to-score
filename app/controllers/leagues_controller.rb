@@ -21,7 +21,7 @@ class LeaguesController < ApplicationController
 
   def show
     @league = League.find(params[:id])
-	@teams = @league.teams.sort_by(&:rank_in_league)
+	  @teams = @league.teams.sort_by(&:rank_in_league)
 
     matches=Hash.new{|h, k| h[k] = []}
     @league.matches.each{|match| matches[match.starts_at]<<match}

@@ -9,6 +9,9 @@ Player.delete_all
   Fabricate(:user, password: 'pass', password_confirmation: 'pass')
 end
 
+# Seed standard user
+Fabricate(:user, username: 'test', password: 'test', password_confirmation: 'test', name: 'Test User')
+
 3.times do |i|
   owner = if i == 0
             User.first
