@@ -7,4 +7,8 @@ class ApplicationController < ActionController::Base
     def not_authenticated
       redirect_to show_login_path, :alert => 'Login required!'
     end
+
+    def coach_client
+      @coach_client || (@coach_client = Coach::Client.new)
+    end
 end
