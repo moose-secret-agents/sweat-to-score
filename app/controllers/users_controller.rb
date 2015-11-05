@@ -34,7 +34,11 @@ class UsersController < ApplicationController
 
   def update
     if @user.update(user_params)
-      coach_client.authenticated(@user.username, session[:password]) { @user.coach_user.update(user_attrs_to_coach(user_params)) }
+
+      coach_client.authenticated(@user.username, session[:password]) do
+        @user.coach_user.set_client coach_client
+        @user.coach_user.update(user_attrs_to_coach(user_params))
+      end
       redirect_to @user, notice: 'User profile was successfully updated.'
     else
       render :edit
@@ -43,7 +47,11 @@ class UsersController < ApplicationController
 
   def destroy
     @user.destroy
-    coach_client.authenticated(@user.username, session[:password]) { @user.coach_user.destroy }
+
+    coach_client.authenticated(@user.username, session[:password]) do
+      @user.coach_user.set_client coach_client
+      @user.coach_user.destroy
+    end
 
     redirect_to show_login_path, notice: 'Profile was successfully deleted.'
   end
@@ -51,7 +59,6 @@ class UsersController < ApplicationController
   private
     def set_user
       @user = User.find(params[:id])
-      @user.coach_user = coach_client.users.find(@user.username) if @user.coach_user.nil?
     end
 
     def user_params
@@ -59,8 +66,17 @@ class UsersController < ApplicationController
     end
 
     def create_cybercoach_user(username, attributes={})
+      return nil if coach_client.users.exists? username
       # Create CyCo user unless already exists
-      coach_client.users.create(username, user_attrs_to_coach(attributes)) unless coach_client.users.exists? username
+      cyco_user = coach_client.users.create(username, user_attrs_to_coach(attributes))
+
+      # Subscribe to running and cycling
+      coach_client.authenticated(username, session[:password]) do
+        cyco_user.subscribe_to :cycling
+        cyco_user.subscribe_to :running
+      end
+
+      cyco_user
     end
 
     def user_attrs_to_coach(attributes)

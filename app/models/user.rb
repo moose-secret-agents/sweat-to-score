@@ -15,6 +15,12 @@ class User < ActiveRecord::Base
   attr_accessor :email, :real_name, :coach_user
 
   delegate :real_name, :email, to: :coach_user, allow_nil: true
+  alias_method :name, :real_name
+
+  def coach_user
+    return nil if new_record?
+    @coach_user || (@coach_user = Coach::Client.new.users.find(self.username))
+  end
 
   def partners
     Partnership.accepted.where(user: self).map(&:partner) | Partnership.accepted.where(partner: self).map(&:user)
