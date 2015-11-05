@@ -34,6 +34,7 @@ class UsersController < ApplicationController
 
   def update
     if @user.update(user_params)
+      coach_client.authenticated(@user.username, session[:password]) { @user.coach_user.update(user_attrs_to_coach(user_params)) }
       redirect_to @user, notice: 'User profile was successfully updated.'
     else
       render :edit
@@ -58,10 +59,12 @@ class UsersController < ApplicationController
     end
 
     def create_cybercoach_user(username, attributes={})
-      cyco_attributes = attributes.slice(:username, :password, :email)
-      cyco_attributes.merge!(realname: attributes[:real_name], publicvisible: 2)
-
       # Create CyCo user unless already exists
-      coach_client.users.create(username, cyco_attributes) unless coach_client.users.exists? username
+      coach_client.users.create(username, user_attrs_to_coach(attributes)) unless coach_client.users.exists? username
+    end
+
+    def user_attrs_to_coach(attributes)
+      cyco_attributes = attributes.slice(:username, :password, :email)
+      cyco_attributes.merge(realname: attributes[:real_name], publicvisible: 2)
     end
 end
