@@ -62,3 +62,5 @@ crashlytics-build.properties
 
 # This is for Mac Users
 .DS_Store
+
+*.png

@@ -67,3 +67,6 @@ gem 'coach_assist', '~> 0.1.1'
 # Authentication gems
 gem 'sorcery'
 gem 'pundit'
+
+#for images
+gem 'chunky_png'
