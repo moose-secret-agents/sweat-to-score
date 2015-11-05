@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
 
   skip_before_action :require_login, only: [:new, :create]
+  before_action :set_user, only: [:show, :edit, :update, :destroy]
 
   def new
     @user = User.new
@@ -10,6 +11,8 @@ class UsersController < ApplicationController
     @user = User.create(user_params)
 
     if @user.save
+      @coach_user = create_cybercoach_user(@user.username, user_params)
+
       auto_login(@user, true)
       redirect_to @user, notice: 'User profile created'
     else
@@ -19,20 +22,17 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user=User.find(params[:id])
-    @teams=@user.teams
+    @teams = @user.teams
   end
 
   def index
-    @users=User.all
+    @users = User.all
   end
 
   def edit
-    @user=User.find(params[:id])
   end
 
   def update
-    @user=User.find(params[:id])
     if @user.update(user_params)
       redirect_to @user, notice: 'User profile was successfully updated.'
     else
@@ -41,13 +41,27 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    @user=User.find(params[:id])
     @user.destroy
-    redirect_to root_path, notice: 'Profile was successfully deleted.'
+    coach_client.authenticated(@user.username, session[:password]) { @user.coach_user.destroy }
+
+    redirect_to show_login_path, notice: 'Profile was successfully deleted.'
   end
 
   private
+    def set_user
+      @user = User.find(params[:id])
+      @user.coach_user = coach_client.users.find(@user.username) if @user.coach_user.nil?
+    end
+
     def user_params
-      params.require(:user).permit(:username, :password, :password_confirmation, :name, :email)
+      params.require(:user).permit(:username, :password, :password_confirmation, :real_name, :email)
+    end
+
+    def create_cybercoach_user(username, attributes={})
+      cyco_attributes = attributes.slice(:username, :password, :email)
+      cyco_attributes.merge!(realname: attributes[:real_name], publicvisible: 2)
+
+      # Create CyCo user unless already exists
+      coach_client.users.create(username, cyco_attributes) unless coach_client.users.exists? username
     end
 end

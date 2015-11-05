@@ -10,7 +10,7 @@ Player.delete_all
 end
 
 # Seed standard user
-Fabricate(:user, username: 'test', password: 'test', password_confirmation: 'test', name: 'Test User')
+Fabricate(:user, username: 'test', password: 'test', password_confirmation: 'test', real_name: 'Test User')
 
 3.times do |i|
   owner = if i == 0

@@ -1,8 +1,9 @@
 = bootstrap_form_for @user, layout: :horizontal do |f|
-  = f.text_field :username
+
+  = f.text_field :username, disabled: !@user.new_record?
   = f.password_field :password
   = f.password_field :password_confirmation
-  = f.text_field :name
+  = f.text_field :real_name
   = f.email_field :email
 
   = f.primary
