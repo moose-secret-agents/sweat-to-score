@@ -11,6 +11,7 @@ Rails.application.routes.draw do
 
   resources :users do
     resources :teams, shallow: true
+    resources :tokens, only: [:index]
     get 'leagues' => 'leagues#user_index', as: 'leagues'
   end
 

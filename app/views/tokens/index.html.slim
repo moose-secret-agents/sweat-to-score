@@ -1,0 +1,19 @@
+h1 Available Training Tokens
+hr
+
+- if @tokens.any?
+  table.table.table-striped.table-bordered
+    thead
+      tr
+        th Distance
+        th Points
+        th Actions
+
+    tbody
+      - @tokens.each do |token|
+        tr
+          td = token.distance
+          td = token.rounds
+          td= link_to 'Spend', '#' , class: 'btn btn-xs btn-default'
+- else
+  p No tokens available. You fat prick! You should exercise more!

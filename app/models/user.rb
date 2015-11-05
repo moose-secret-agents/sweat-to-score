@@ -49,4 +49,8 @@ class User < ActiveRecord::Base
     proposal = from_user.partnerships.find_by(partner: self)
     proposal.refuse
   end
+
+  def available_tokens
+    self.coach_user.subscriptions.flat_map(&:entries).map(&:rounds).sum
+  end
 end
