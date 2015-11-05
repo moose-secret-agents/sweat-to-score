@@ -4,58 +4,21 @@ div class="page-header"
 
 br
 
-.row
-  div.player-table class="col-md-6"
-    table class="table table-hover table-condensed"
-      thead
-        tr
-          th.col-md-2= 'Player Name'
-          th.col-md-2= 'Talent'
-          th.col-md-2= 'Avatar'
-      tbody
-        - @team.players[0..(@team.players.count/2-1).ceil].each_with_index do |player, index|
-          tr
-            td.col-md-2= player.name
-            td.col-md-2= bs_progress(player.talent)
-            td.col-md-2
-              .box.avatar-image id="image1#{index}" data-talent="#{player.talent}" data-face="#{player.face.to_json}"
+ul.nav.nav-tabs
+  li.active
+    a data-toggle="tab" href="#players-tab" Players
+  li
+    a data-toggle="tab" href="#matches-tab" Matches
 
-  div.player-table class="col-md-6"
-    table class="table table-hover table-condensed"
-      thead
-        tr
-          th.col-md-2= 'Player Name'
-          th.col-md-2= 'Talent'
-          th.col-md-2= 'Avatar'
-      tbody
-        - @team.players[(@team.players.count/2)..-1].each_with_index do |player, index|
-          tr
-            td.col-md-2= player.name
-            td.col-md-2= bs_progress(player.talent)
-            td.col-md-2
-              .box.avatar-image id="image2#{index}" data-talent="#{player.talent}" data-face="#{player.face.to_json}"
+.tab-content
+  #players-tab.tab-pane.fade.in.active
+    - if @team.players.any?
+      == render 'playersTable'
+    - else
+      h1 No players in this team!
 
-- if @matches.any?
-  .row
-    .col-md-12
-      div class="panel panel-primary"
-        div class="panel-heading"
-          h4 class="panel-title"
-          /a data-toggle="collapse" data-parent="#accordion" href="#accordionOne" Collapsible Accordion 1
-          a data-toggle="collapse" href="#accordion" Matches
-          div id="accordion" class="panel-collapse collapse"
-            div class="panel-body"
-              table class="table table-default"
-                thead
-                  tr
-                    th= Match.human_attribute_name(:starts_at)
-                    th= Match.human_attribute_name(:Home)
-                    th= Match.human_attribute_name(:Guest)
-                    th= Match.human_attribute_name(:status)
-                tbody
-                  - @matches.each do |match|
-                    tr
-                      td= match.starts_at
-                      td= match.teamA.name
-                      td= match.teamB.name
-                      td= match.status
+  #matches-tab.tab-pane.fade
+    - if @matches.any?
+      == render 'matchTables'
+    - else
+      h1 No matches available!
