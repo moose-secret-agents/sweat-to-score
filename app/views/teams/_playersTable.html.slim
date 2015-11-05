@@ -1,0 +1,33 @@
+br
+br
+
+.row
+  div.player-table class="col-md-6"
+    table class="table table-hover table-condensed"
+      thead
+        tr
+          th.col-md-2= 'Player Name'
+          th.col-md-2= 'Talent'
+          th.col-md-2= 'Avatar'
+      tbody
+        - @team.players[0..(@team.players.count/2-1).ceil].each_with_index do |player, index|
+          tr
+            td.col-md-2= player.name
+            td.col-md-2= bs_progress(player.talent)
+            td.col-md-2
+              .box.avatar-image id="image1#{index}" data-talent="#{player.talent}" data-face="#{player.face.to_json}"
+
+  div.player-table class="col-md-6"
+    table class="table table-hover table-condensed"
+      thead
+        tr
+          th.col-md-2= 'Player Name'
+          th.col-md-2= 'Talent'
+          th.col-md-2= 'Avatar'
+      tbody
+        - @team.players[(@team.players.count/2)..-1].each_with_index do |player, index|
+          tr
+            td.col-md-2= player.name
+            td.col-md-2= bs_progress(player.talent)
+            td.col-md-2
+              .box.avatar-image id="image2#{index}" data-talent="#{player.talent}" data-face="#{player.face.to_json}"
