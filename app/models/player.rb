@@ -2,12 +2,72 @@ class Player < ActiveRecord::Base
   belongs_to :team
   validates_inclusion_of :talent, in: 0..100
   after_create :generate_face
+  attr_accessor :position
+  attr_accessor :is_goalie
+  attr_accessor :rand
 
   def generate_face
     self.face = Face.new.generate
     self.save
   end
 
+  def set_position(x,y)
+    @position = Vector[x,y]
+  end
+
+  def move(ball)
+    return if(@position[0] < 0) or is_goalie
+
+    ball_direction = ball.position - @position
+    home_direction = Vector[self.fieldX,self.fieldY] - @position
+
+    heading = home_direction
+    heading = ball_direction if ball_direction.r<Match::MAX_PLAYER_TO_BALL_DIST
+    heading = home_direction if home_direction.r>Match::MAX_PLAYER_TO_HOME_DIST
+
+    heading *= (1/heading.r*1) if heading.r>0
+
+    @position += heading
+  end
+
+  def perform_action(action_symbol, ball, play_direction, rand)
+    @rand = rand
+    method(action_symbol).call(ball, play_direction)
+  end
+
+  #best method name ever... open for suggestions
+  def try_something(ball)
+    dist = (ball.position - @position).r
+    if ball.carrier == self
+      return Action.new(self,:kick_forward)
+    elsif dist<3
+      return Action.new(self, :tackle)
+    end
+    return nil
+  end
+
+  def kick_forward(ball, play_direction)
+    puts "kicked"
+    ball.roll_dir = (play_direction + (@rand.rand(2.0)-1)*Vector[0,1]).normalize * 4
+    ball.carrier = nil
+  end
+
+  def tackle(ball, play_direction)
+    puts "trying tackle"
+    randval = @rand.rand(1.0)
+    minval = ball.carrier.nil? ? 0.1 : 0.9
+    return :failed if(randval<minval)
+    ball.carrier = self
+  end
+
+  class Action
+    attr_accessor :player
+    attr_accessor :action
+    def initialize(player, action)
+      @player = player
+      @action = action
+    end
+  end
   class Face
     COUNT = { head: 1, eyebrow: 1, eye: 4, nose: 3, mouth: 5, hair: 5 }
 
@@ -46,6 +106,7 @@ class Player < ActiveRecord::Base
           hair: {id: hair_id}
       }
     end
+
   end
 
 end

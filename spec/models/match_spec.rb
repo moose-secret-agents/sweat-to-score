@@ -6,7 +6,6 @@ RSpec.describe Match, type: :model do
     @match.save
     playersA = @match.teamA.players
     playersB = @match.teamB.players
-
     i = 0
     playersA.each do |player|
       i+=1
@@ -22,6 +21,7 @@ RSpec.describe Match, type: :model do
       elsif i==11
         player.fieldY = 30
         player.fieldX = 5
+        player.is_goalie = true
       else
         player.fieldX = -1
         player.fieldY = -1
@@ -42,6 +42,7 @@ RSpec.describe Match, type: :model do
       elsif i==11
         player.fieldY = 30
         player.fieldX = 5
+        player.is_goalie = true
       else
         player.fieldX = -1
         player.fieldY = -1
