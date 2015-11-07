@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151105141302) do
+ActiveRecord::Schema.define(version: 20151107144350) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,12 +55,20 @@ ActiveRecord::Schema.define(version: 20151105141302) do
   create_table "players", force: :cascade do |t|
     t.string   "name"
     t.integer  "talent"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
     t.integer  "team_id"
     t.json     "face"
     t.integer  "fieldX"
     t.integer  "fieldY"
+    t.decimal  "speed",      default: 10.0
+    t.decimal  "stamina",    default: 10.0
+    t.decimal  "fitness",    default: 10.0
+    t.decimal  "goalkeep",   default: 10.0
+    t.decimal  "defense",    default: 10.0
+    t.decimal  "midfield",   default: 10.0
+    t.decimal  "attack",     default: 10.0
+    t.decimal  "strength",   default: 10.0
   end
 
   add_index "players", ["team_id"], name: "index_players_on_team_id", using: :btree

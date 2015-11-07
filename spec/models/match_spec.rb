@@ -9,6 +9,7 @@ RSpec.describe Match, type: :model do
     i = 0
     playersA.each do |player|
       i+=1
+      player.speed = 70
       if i<=4
         player.fieldX = 20
         player.fieldY = 12*i
@@ -30,6 +31,7 @@ RSpec.describe Match, type: :model do
     i = 0
     playersB.each do |player|
       i+=1
+      player.speed = 50
       if i<=4
         player.fieldX = 20
         player.fieldY = 12*i

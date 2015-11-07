@@ -2,7 +2,7 @@
 require 'matrix'
 class Match < ActiveRecord::Base
   MAX_PLAYER_TO_BALL_DIST = 15
-  MAX_PLAYER_TO_HOME_DIST = 20
+  MAX_PLAYER_TO_HOME_DIST = 35
   TEAM_A_DIR = Vector[1,0]
   TEAM_B_DIR = Vector[-1,0]
   belongs_to :league
@@ -21,19 +21,21 @@ class Match < ActiveRecord::Base
   def simulate
     raise BadStateException if self.status != "scheduled"
     @actions = []
-    @ball = Ball.new
     @img_counter = 0
     flip_team_B
     @rand = Random.new() if @rand.nil?
+    @ball = Ball.new(self)
 
     @playersA = []
     @playersB = []
     teamA.players.each do |player|
-      player.set_position(player.fieldX,player.fieldY)
+      player.rand = @rand
+      player.set_position(player.fieldX,player.fieldY,TEAM_A_DIR)
       @playersA<<player unless player.position[0] == -1
     end
     teamB.players.each do |player|
-      player.set_position(player.fieldX,player.fieldY)
+      player.rand = @rand
+      player.set_position(player.fieldX,player.fieldY,TEAM_B_DIR)
       @playersB<<player unless player.position[0] == -1
     end
 
@@ -42,12 +44,12 @@ class Match < ActiveRecord::Base
     100.times do |i|
       @actions = []
       @playersA.each do |player|
-        player.move(@ball)
+        player.move(@ball,TEAM_A_DIR)
         action = player.try_something(@ball)
         @actions << action unless action.nil?
       end
       @playersB.each do |player|
-        player.move(@ball)
+        player.move(@ball,TEAM_B_DIR)
         action = player.try_something(@ball)
         @actions << action unless action.nil?
       end
@@ -57,9 +59,10 @@ class Match < ActiveRecord::Base
       @actions.shuffle!
       unless act.nil?
         play_dir = @playersA.include?(act.player) ? TEAM_A_DIR : TEAM_B_DIR
-        if act.player.perform_action(act.action,ball,play_dir,@rand) == :failed and !@ball.carrier.nil?
+        if act.player.perform_action(act.action,ball,play_dir) == :failed and !@ball.carrier.nil?
           play_dir = @playersA.include?(@ball.carrier) ? TEAM_A_DIR : TEAM_B_DIR
-          @ball.carrier.perform_action(@ball.carrier.try_something(@ball).action, @ball, play_dir,@rand)
+          action = @ball.carrier.try_something(@ball)
+          @ball.carrier.perform_action(action.action, @ball, play_dir) unless action.nil?
         end
       end
       if @ball.carrier.nil?
@@ -68,6 +71,7 @@ class Match < ActiveRecord::Base
       end
       if !is_in_bounds?(@ball.position[0],@ball.position[1])
         ball.position = Vector[50,30]
+        ball.roll_dir = Vector[0,0]
       end
       drawPitch
     end
@@ -114,17 +118,46 @@ class Match < ActiveRecord::Base
   end
 
   class Ball
-    attr_accessor :carrier, :position, :roll_dir
+    attr_accessor :carrier, :position, :roll_dir, :match
+    attr_accessor :count_no_touch
 
-    def initialize
+    def initialize(match)
+      @match = match
       @position = Vector[50,30]
       @roll_dir = Vector[0,0]
       @carrier = nil
+      @count_no_touch = 0
     end
+
+    def try_take(player, rand_val)
+      return_sym = :taken_from_player
+      minval = @carrier.nil? ? 0.1 : 0.9
+      return_sym = :taken_from_noone if @carrier.nil?
+      return :failed if(rand_val<minval)
+      self.carrier = player
+      @count_no_touch = 0
+      return_sym
+    end
+
+    def kick(direction)
+      @roll_dir = direction
+      @position +=direction
+      @carrier = nil
+      @count_no_touch = 0
+    end
+
     def roll
+      @count_no_touch += 1
       @position += @roll_dir
       @roll_dir*=0.9
+      @roll_dir = 0.2*@roll_dir.normalize if @roll_dir.r<0.2 and @roll_dir.r >0
+      if @count_no_touch > 50
+        self.roll_dir = Vector[@match.rand.rand(2.0)-1,@match.rand.rand(2.0)-1] * 8
+        puts "no touch for a while, moving ball"
+        @count_no_touch = 0
+      end
     end
+
   end
 
 end

@@ -2,7 +2,7 @@ class Player < ActiveRecord::Base
   belongs_to :team
   validates_inclusion_of :talent, in: 0..100
   after_create :generate_face
-  attr_accessor :position
+  attr_accessor :position, :play_direction
   attr_accessor :is_goalie
   attr_accessor :rand
 
@@ -11,27 +11,41 @@ class Player < ActiveRecord::Base
     self.save
   end
 
-  def set_position(x,y)
+  def set_position(x,y, play_dir)
     @position = Vector[x,y]
+    @play_direction = play_dir
   end
 
-  def move(ball)
+  def move(ball, play_direction)
     return if(@position[0] < 0) or is_goalie
+
+    real_speed = 1 - (1-self.speed/100.0)**2.5
 
     ball_direction = ball.position - @position
     home_direction = Vector[self.fieldX,self.fieldY] - @position
+    goal_direction = play_direction
+    goal_direction = Vector[play_direction[0]*100,30] - @position if @position[0] * @play_direction[0] >75
 
     heading = home_direction
     heading = ball_direction if ball_direction.r<Match::MAX_PLAYER_TO_BALL_DIST
-    heading = home_direction if home_direction.r>Match::MAX_PLAYER_TO_HOME_DIST
 
-    heading *= (1/heading.r*1) if heading.r>0
+    unless ball.carrier.nil?
+      heading = (ball_direction + home_direction) * 0.5 if ball.carrier.team == self.team
+    end
+    heading = home_direction if home_direction.r > Match::MAX_PLAYER_TO_HOME_DIST
+
+    heading = goal_direction if ball.carrier == self
+
+    heading = heading.normalize if heading.r>0
+
+    heading*=real_speed
 
     @position += heading
+    ball.position = @position if ball.carrier == self
+    puts "walking with ball" if ball.carrier == self
   end
 
-  def perform_action(action_symbol, ball, play_direction, rand)
-    @rand = rand
+  def perform_action(action_symbol, ball, play_direction)
     method(action_symbol).call(ball, play_direction)
   end
 
@@ -39,25 +53,34 @@ class Player < ActiveRecord::Base
   def try_something(ball)
     dist = (ball.position - @position).r
     if ball.carrier == self
-      return Action.new(self,:kick_forward)
-    elsif dist<3
-      return Action.new(self, :tackle)
+      return Action.new(self,:kick_forward) if @rand.rand(1.0)>0.95
+      return Action.new(self,:shoot_at_goal) if @rand.rand(1.0)>0.75 and (Vector[@play_direction[0]*100,30] - @position).r<30
+      return nil
+    elsif dist<1.5
+      if ball.carrier.nil?
+        return Action.new(self, :tackle)
+      else
+        return Action.new(self, :tackle) unless ball.carrier.team == self.team
+      end
     end
     return nil
   end
 
   def kick_forward(ball, play_direction)
     puts "kicked"
-    ball.roll_dir = (play_direction + (@rand.rand(2.0)-1)*Vector[0,1]).normalize * 4
-    ball.carrier = nil
+    ball.kick((@play_direction + (@rand.rand(2.0)-1)*Vector[0,1]).normalize * 2)
+  end
+
+  def shoot_at_goal(ball, play_direction)
+    puts "shooting at goal"
+    goal_direction = Vector[play_direction[0]*100,30] - @position
+    ball.kick(goal_direction.normalize * 3)
   end
 
   def tackle(ball, play_direction)
     puts "trying tackle"
     randval = @rand.rand(1.0)
-    minval = ball.carrier.nil? ? 0.1 : 0.9
-    return :failed if(randval<minval)
-    ball.carrier = self
+    kick_forward(ball,play_direction) if ball.try_take(self, randval) == :taken_from_player
   end
 
   class Action
