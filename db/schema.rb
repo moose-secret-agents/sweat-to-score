@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151027130547) do
+ActiveRecord::Schema.define(version: 20151107181213) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,10 +19,13 @@ ActiveRecord::Schema.define(version: 20151027130547) do
   create_table "leagues", force: :cascade do |t|
     t.string   "name"
     t.integer  "level"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
     t.integer  "owner_id"
-    t.integer  "status",     default: 0
+    t.integer  "status",        default: 0
+    t.datetime "starts_at"
+    t.integer  "league_length"
+    t.integer  "pause_length"
   end
 
   add_index "leagues", ["owner_id"], name: "index_leagues_on_owner_id", using: :btree

@@ -2,6 +2,12 @@
   = f.text_field :name
   = f.number_field :level
 
+  = f.number_field :league_length
+  = f.number_field :pause_length
+
+  div class="form-inline"
+    = f.datetime_select :starts_at, order: [:day, :month, :year], layout: :inline
+
   .pull-right
     = link_to t('.cancel', :default => t("helpers.links.cancel")), new_league_path, :class => 'btn btn-default'
     '

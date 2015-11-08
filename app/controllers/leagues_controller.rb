@@ -43,8 +43,13 @@ class LeaguesController < ApplicationController
         #redirect_to @league, notice: 'League is already #{@league.status}'
         redirect_to @league
       end
+    else
+      if @league.update(league_params)
+        redirect_to @league, notice: 'League was successfully updated.'
+      else
+        render :edit
+      end
     end
-
 
   end
 
@@ -54,12 +59,12 @@ class LeaguesController < ApplicationController
   end
 
   def edit
-
+    @league = League.find(params[:id])
   end
 
   private
     def league_params
-      params.require(:league).permit(:name, :level)
+      params.require(:league).permit(:name, :level, :starts_at, :league_length, :pause_length)
     end
 
     def set_user
