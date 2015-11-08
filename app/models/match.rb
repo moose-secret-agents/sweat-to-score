@@ -1,6 +1,7 @@
 
 require 'matrix'
 class Match < ActiveRecord::Base
+  PLAY_TIME_SCALE = 2
   MAX_PLAYER_TO_BALL_DIST = 15
   MAX_PLAYER_TO_HOME_DIST = 35
   TEAM_A_DIR = Vector[1,0]
@@ -33,6 +34,7 @@ class Match < ActiveRecord::Base
       player.set_position(player.fieldX,player.fieldY,TEAM_A_DIR)
       @playersA<<player unless player.position[0] == -1
     end
+    
     teamB.players.each do |player|
       player.rand = @rand
       player.set_position(player.fieldX,player.fieldY,TEAM_B_DIR)
@@ -41,8 +43,10 @@ class Match < ActiveRecord::Base
 
     puts @playersA.count
 
-    100.times do |i|
-      @actions = []
+    @actions = []
+
+    500.times do |i|
+      @actions.clear
       @playersA.each do |player|
         player.move(@ball,TEAM_A_DIR)
         action = player.try_something(@ball)
@@ -53,10 +57,12 @@ class Match < ActiveRecord::Base
         action = player.try_something(@ball)
         @actions << action unless action.nil?
       end
-      drawPitch
-      act = @actions.first
-      puts @actions.count
+      puts i
+      #drawPitch
       @actions.shuffle!
+      act = @actions.first
+      #puts @actions.count
+
       unless act.nil?
         play_dir = @playersA.include?(act.player) ? TEAM_A_DIR : TEAM_B_DIR
         if act.player.perform_action(act.action,ball,play_dir) == :failed and !@ball.carrier.nil?
@@ -93,13 +99,19 @@ class Match < ActiveRecord::Base
     @png = ChunkyPNG::Image.new(101, 61, ChunkyPNG::Color::WHITE)
     @playersA.each do |player|
       #puts "Team A: X: #{player.fieldX}, Y: #{player.fieldY}"
-      @png[player.position[0].round,player.position[1].round] = ChunkyPNG::Color('red') if(is_in_bounds?(player.fieldX, player.fieldY))
+      if(is_in_bounds?(player.position[0].round,player.position[1].round))
+        @png[player.position[0].round,player.position[1].round] = ChunkyPNG::Color('red') if(is_in_bounds?(player.fieldX, player.fieldY))
+      end
     end
+
 
     playersB.each do |player|
       #puts "Team B: X: #{player.fieldX}, Y: #{player.fieldY}"
+      if(is_in_bounds?(player.position[0].round,player.position[1].round))
       @png[player.position[0].round,player.position[1].round] = ChunkyPNG::Color('blue') if(is_in_bounds?(player.fieldX, player.fieldY))
+      end
     end
+
     @png[ball.position[0].round,ball.position[1].round] = ChunkyPNG::Color('green')
     @png.save("OutputImgs/pitch#{@img_counter}.png", :interlace => true) unless Rails.env.production?
     @img_counter+=1
@@ -141,7 +153,7 @@ class Match < ActiveRecord::Base
 
     def kick(direction)
       @roll_dir = direction
-      @position +=direction
+      #@position +=direction
       @carrier = nil
       @count_no_touch = 0
     end

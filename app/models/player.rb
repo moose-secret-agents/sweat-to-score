@@ -19,7 +19,7 @@ class Player < ActiveRecord::Base
   def move(ball, play_direction)
     return if(@position[0] < 0) or is_goalie
 
-    real_speed = 1 - (1-self.speed/100.0)**2.5
+    real_speed = (1 - (1-self.speed/100.0)**2.5) * Match::PLAY_TIME_SCALE
 
     ball_direction = ball.position - @position
     home_direction = Vector[self.fieldX,self.fieldY] - @position
@@ -52,6 +52,9 @@ class Player < ActiveRecord::Base
   #best method name ever... open for suggestions
   def try_something(ball)
     dist = (ball.position - @position).r
+    if self.is_goalie and dist < 6
+      puts "trying save"
+    end
     if ball.carrier == self
       return Action.new(self,:kick_forward) if @rand.rand(1.0)>0.95
       return Action.new(self,:shoot_at_goal) if @rand.rand(1.0)>0.75 and (Vector[@play_direction[0]*100,30] - @position).r<30
@@ -68,19 +71,19 @@ class Player < ActiveRecord::Base
 
   def kick_forward(ball, play_direction)
     puts "kicked"
-    ball.kick((@play_direction + (@rand.rand(2.0)-1)*Vector[0,1]).normalize * 2)
+    ball.kick((@play_direction + (@rand.rand(6.0)-3)*Vector[0,1]).normalize * 2 * Match::PLAY_TIME_SCALE)
   end
 
   def shoot_at_goal(ball, play_direction)
     puts "shooting at goal"
     goal_direction = Vector[play_direction[0]*100,30] - @position
-    ball.kick(goal_direction.normalize * 3)
+    ball.kick(goal_direction.normalize * 3 * Match::PLAY_TIME_SCALE)
   end
 
   def tackle(ball, play_direction)
     puts "trying tackle"
     randval = @rand.rand(1.0)
-    kick_forward(ball,play_direction) if ball.try_take(self, randval) == :taken_from_player
+    kick_forward(ball,play_direction) if ball.try_take(self, randval) == :taken_from_player and randval>0.6
   end
 
   class Action

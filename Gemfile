@@ -70,3 +70,8 @@ gem 'pundit'
 
 #for images
 gem 'chunky_png'
+
+#profiling
+group :test do
+  gem 'rspec-prof'
+end

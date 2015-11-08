@@ -1,5 +1,6 @@
 require 'rails_helper'
 
+
 RSpec.describe Match, type: :model do
   before(:each) do
     @match = Fabricate(:match)
@@ -57,8 +58,10 @@ RSpec.describe Match, type: :model do
   end
   it "simulates match if match is scheduled" do
     @match.status = :scheduled
+    RubyProf.start
     expect{@match.simulate}.to_not raise_error
+    result = RubyProf.stop
+    printer = RubyProf::FlatPrinter.new(result)
+    printer.print(STDOUT)
   end
-
-
 end
