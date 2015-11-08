@@ -13,13 +13,15 @@ class Match < ActiveRecord::Base
 
   enum status: { scheduled: 0, started: 1, ended: 2, cancelled: 3 }
 
-  attr_accessor :png, :ball, :playersA, :playersB, :img_counter
+  attr_accessor :png, :ball, :playersA, :playersB, :img_counter, :goalieA, :goalieB
   attr_accessor :actions
   attr_accessor :rand
 
   FIELD_DIMS = [100,60]
 
   def simulate
+    self.scoreA = 0
+    self.scoreB = 0
     raise BadStateException if self.status != "scheduled"
     @actions = []
     @img_counter = 0
@@ -33,20 +35,32 @@ class Match < ActiveRecord::Base
       player.rand = @rand
       player.set_position(player.fieldX,player.fieldY,TEAM_A_DIR)
       @playersA<<player unless player.position[0] == -1
+      player.is_goalie = false
     end
+
+    @playersA.sort!{|a,b| a.fieldX <=> b.fieldX}
     
     teamB.players.each do |player|
       player.rand = @rand
       player.set_position(player.fieldX,player.fieldY,TEAM_B_DIR)
       @playersB<<player unless player.position[0] == -1
+      player.is_goalie = false
     end
 
-    puts @playersA.count
+    @playersB.sort!{|a,b| -a.fieldX <=> -b.fieldX}
+
+    @goalieA = @playersA[0]
+    @goalieB = @playersB[0]
+
+    @goalieA.is_goalie = true
+    @goalieB.is_goalie = true
 
     @actions = []
 
     500.times do |i|
       @actions.clear
+      @goalieA.try_save(@ball)
+      @goalieB.try_save(@ball)
       @playersA.each do |player|
         player.move(@ball,TEAM_A_DIR)
         action = player.try_something(@ball)
@@ -57,12 +71,11 @@ class Match < ActiveRecord::Base
         action = player.try_something(@ball)
         @actions << action unless action.nil?
       end
-      puts i
+      #puts i
       #drawPitch
       @actions.shuffle!
       act = @actions.first
       #puts @actions.count
-
       unless act.nil?
         play_dir = @playersA.include?(act.player) ? TEAM_A_DIR : TEAM_B_DIR
         if act.player.perform_action(act.action,ball,play_dir) == :failed and !@ball.carrier.nil?
@@ -72,18 +85,33 @@ class Match < ActiveRecord::Base
         end
       end
       if @ball.carrier.nil?
-        puts"ball is rolling #{@ball.roll_dir}"
+        #puts"ball is rolling #{@ball.roll_dir}"
         @ball.roll
       end
       if !is_in_bounds?(@ball.position[0],@ball.position[1])
+        check_goal(@ball.position[0],@ball.position[1])
         ball.position = Vector[50,30]
         ball.roll_dir = Vector[0,0]
       end
       drawPitch
     end
+    puts "result: #{self.scoreA}-#{self.scoreB}"
 
     flip_team_B
 
+  end
+
+  def check_goal(x,y)
+    if y < 36 and y > 24
+      if x < 0
+        self.scoreB += 1
+        puts "B scored"
+      end
+      if x > 100
+        self.scoreA += 1
+        puts "A scored"
+      end
+    end
   end
 
   def flip_team_B
@@ -163,7 +191,7 @@ class Match < ActiveRecord::Base
       @position += @roll_dir
       @roll_dir*=0.9
       @roll_dir = 0.2*@roll_dir.normalize if @roll_dir.r<0.2 and @roll_dir.r >0
-      if @count_no_touch > 50
+      if @count_no_touch > 40
         self.roll_dir = Vector[@match.rand.rand(2.0)-1,@match.rand.rand(2.0)-1] * 8
         puts "no touch for a while, moving ball"
         @count_no_touch = 0
