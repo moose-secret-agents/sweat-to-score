@@ -1,7 +1,7 @@
 
 require 'matrix'
 class Match < ActiveRecord::Base
-  PLAY_TIME_SCALE = 2
+  PLAY_TIME_SCALE = 3
   MAX_PLAYER_TO_BALL_DIST = 15
   MAX_PLAYER_TO_HOME_DIST = 35
   TEAM_A_DIR = Vector[1,0]
@@ -73,7 +73,7 @@ class Match < ActiveRecord::Base
       end
       #puts i
       #drawPitch
-      @actions.shuffle!
+      @actions.shuffle!(random: @rand)
       act = @actions.first
       #puts @actions.count
       unless act.nil?
@@ -89,9 +89,10 @@ class Match < ActiveRecord::Base
         @ball.roll
       end
       if !is_in_bounds?(@ball.position[0],@ball.position[1])
-        check_goal(@ball.position[0],@ball.position[1])
-        ball.position = Vector[50,30]
-        ball.roll_dir = Vector[0,0]
+        check_goal(@ball.position[0],@ball.position[1],i)
+        @ball.position = Vector[50,30]
+        @ball.roll_dir = Vector[0,0]
+        @ball.carrier = nil
       end
       drawPitch
     end
@@ -101,15 +102,15 @@ class Match < ActiveRecord::Base
 
   end
 
-  def check_goal(x,y)
+  def check_goal(x,y,i)
     if y < 36 and y > 24
-      if x < 0
+      if x < 0.0
         self.scoreB += 1
-        puts "B scored"
+        puts "#{i}: B scored: #{@ball.position}"
       end
-      if x > 100
+      if x > 100.0
         self.scoreA += 1
-        puts "A scored"
+        puts "#{i}: A scored: #{@ball.position}"
       end
     end
   end
@@ -171,10 +172,11 @@ class Match < ActiveRecord::Base
 
     def try_take(player, rand_val)
       return_sym = :taken_from_player
-      minval = @carrier.nil? ? 0.1 : 0.9
+      minval = @carrier.nil? ? 0.1 : 0.8
       return_sym = :taken_from_noone if @carrier.nil?
       return :failed if(rand_val<minval)
-      self.carrier = player
+      #puts "tackled #{return_sym}"
+      @carrier = player
       @count_no_touch = 0
       return_sym
     end
@@ -196,6 +198,7 @@ class Match < ActiveRecord::Base
         puts "no touch for a while, moving ball"
         @count_no_touch = 0
       end
+      @carrier = nil
     end
 
   end

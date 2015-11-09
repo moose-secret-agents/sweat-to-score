@@ -33,5 +33,5 @@ Fabricator(:match) do
   teamA(fabricator: :team)
   teamB(fabricator: :team)
   status {Match.statuses[:scheduled]}
-  rand {Random.new(115032730400174366788466674494640623225)}
+
 end

@@ -17,9 +17,9 @@ class Player < ActiveRecord::Base
   end
 
   def move(ball, play_direction)
-    return if(@position[0] < 0) or is_goalie
+    return if is_goalie
 
-    real_speed = (1 - (1-self.speed/100.0)**2.5) * Match::PLAY_TIME_SCALE
+    real_speed = scale_with_time( scale(self.speed)  )
 
     ball_direction = ball.position - @position
     home_direction = Vector[self.fieldX,self.fieldY] - @position
@@ -36,7 +36,10 @@ class Player < ActiveRecord::Base
 
     heading = goal_direction if ball.carrier == self
 
-    heading = heading.normalize if heading.r>0
+    heading = heading.normalize if heading.r>1
+
+    self.stamina -= (heading.r / Match::PLAY_TIME_SCALE) * scale(self.stamina) * 0.4 * (1 - scale(self.fitness))
+    #puts self.stamina
 
     heading*=real_speed
 
@@ -49,14 +52,15 @@ class Player < ActiveRecord::Base
     dist = (ball.position - @position).r
     return if dist > 6
     randval = @rand.rand(1.0)
-    if randval > 1.0
-      puts "saved ball"
+    if randval > 0.5
+      #puts "saved ball"
       ball.kick(@play_direction * 5)
     end
   end
 
   def perform_action(action_symbol, ball, play_direction)
     method(action_symbol).call(ball, play_direction)
+    self.stamina -= scale(self.stamina) * 2 * (1 - scale(self.fitness))
   end
 
   #best method name ever... open for suggestions
@@ -78,20 +82,29 @@ class Player < ActiveRecord::Base
   end
 
   def kick_forward(ball, play_direction)
-    #puts "kicked"
-    ball.kick((@play_direction + (@rand.rand(6.0)-3)*Vector[0,1]).normalize * 2 * Match::PLAY_TIME_SCALE)
+    dir = (@play_direction + (@rand.rand(6.0)-3)*Vector[0,1]).normalize * 2 * Match::PLAY_TIME_SCALE
+    ball.kick(dir)
+    #puts "kicked #{@play_direction}, #{dir}"
   end
 
   def shoot_at_goal(ball, play_direction)
     #puts "shooting at goal"
     goal_direction = Vector[play_direction[0]*100,30] - @position
-    ball.kick(goal_direction.normalize * 3 * Match::PLAY_TIME_SCALE)
+    ball.kick(goal_direction.normalize * 3 * scale(self.stamina) * Match::PLAY_TIME_SCALE)
   end
 
   def tackle(ball, play_direction)
     #puts "trying tackle"
-    randval = @rand.rand(1.0)
+    randval = @rand.rand(1.0) * scale(stamina)
     kick_forward(ball,play_direction) if ball.try_take(self, randval) == :taken_from_player and randval>0.6
+  end
+
+  def scale(param)
+    (1 - (1-param/100.0)**2.5) * (1 - (1-self.stamina/100.0)**2.5)
+  end
+
+  def scale_with_time (param)
+    param * Match::PLAY_TIME_SCALE
   end
 
   class Action
