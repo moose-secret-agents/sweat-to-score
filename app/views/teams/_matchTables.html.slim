@@ -1,18 +1,59 @@
 br
 br
 
-div class="col-md-12"
-  table class="table table-hover"
-    thead
-      tr
-        th= Match.human_attribute_name(:Home)
-        th= Match.human_attribute_name(:Guest)
-        th= Match.human_attribute_name(:status)
-        th= "start date"
-    tbody
-      - @matches.each do |match|
-        tr
-          td= match.teamA.name
-          td= match.teamB.name
-          td= match.status
-          td= match.starts_at
+div class="container"
+  ul.timeline
+    - count = 0
+    - @matches.each do |match|
+      - count = count+1
+      - if count % 2 != 0
+        li
+          .timeline-badge class="#{match.status}"
+            i.glyphicon class="#{match.glyphicon}"
+          .timeline-panel
+            .timeline-heading
+              h4.timeline-title #{match.starts_at.strftime("%A %b %d %Y at %H:%M")}
+              p
+                small.text-muted
+                  i.glyphicon.glyphicon-time
+                    - time_left = match.getTimeDifference(match.starts_at)
+                    |  #{time_left[0]}d #{time_left[1]}h #{time_left[2]}m
+                    br
+                    i.glyphicon.glyphicon-info-sign
+                    |  #{match.status}
+            .timeline-body
+              table class="table table-hover"
+                thead
+                  tr
+                    th.timeline-table-head= Match.human_attribute_name(:Home)
+                    th.timeline-table-head= Match.human_attribute_name(:Guest)
+                tbody
+                  tr
+                    td.timeline-table-body= match.teamA.name
+                    td.timeline-table-body= match.teamB.name
+      - else
+        li
+          li.timeline-inverted
+            .timeline-badge class="#{match.status}"
+              i.glyphicon class="#{match.glyphicon}"
+            .timeline-panel
+              .timeline-heading
+                h4.timeline-title #{match.starts_at.strftime("%A %b %d %Y at %H:%M")}
+                p
+                  small.text-muted
+                    i.glyphicon.glyphicon-time
+                      - time_left = match.getTimeDifference(match.starts_at)
+                      |  #{time_left[0]}d #{time_left[1]}h #{time_left[2]}m
+                      br
+                      i.glyphicon.glyphicon-info-sign
+                      |  #{match.status}
+              .timeline-body
+                table class="table table-hover"
+                  thead
+                    tr
+                      th.timeline-table-head= Match.human_attribute_name(:Home)
+                      th.timeline-table-head= Match.human_attribute_name(:Guest)
+                  tbody
+                    tr
+                      td.timeline-table-body= match.teamA.name
+                      td.timeline-table-body= match.teamB.name
