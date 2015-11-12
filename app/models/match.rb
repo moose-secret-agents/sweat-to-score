@@ -19,15 +19,14 @@ class Match < ActiveRecord::Base
     end
   end
 
-  def getTimeDifference(time)
-    delta = time - Time.now
-    t = %w[days hours minutes]
 
-    t.collect do |step|
-      seconds = 1.send(step)
-      (delta / seconds).to_i.tap do
-        delta %= seconds
-      end
-    end
+  def getTimeDifference(time)
+    delta = (time - Time.now).abs
+
+    minutes = (delta / 60) % 60
+    hours = (delta / (60 * 60)) % 24
+    days = (delta / (60 * 60 * 24))
+
+    time > Time.now ? format("%dd %dh %dm", days, hours, minutes) : format("-(%dd %dh %dm)", days, hours, minutes)
   end
 end
