@@ -7,11 +7,14 @@ class League < ActiveRecord::Base
 
   validates_inclusion_of :level, in: 1..3
 
+  scope :overdue, -> { where('starts_at < ?', Time.now) }
+
   enum status: { inactive: 0, active: 1 }
 
   def start
     SchedulerDoubleRR.new.schedule_season(self)
     active!
+    update! starts_at: starts_at+league_length.days+pause_length.days
   end
 
   def end
