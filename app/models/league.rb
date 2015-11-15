@@ -8,7 +8,7 @@ class League < ActiveRecord::Base
   validates_inclusion_of :level, in: 1..3
 
   scope :overdue, -> { where('starts_at < ?', Time.now) }
-
+  scope :should_finish, -> {League.active-League.active.includes(:matches).where.not(:matches=>{status: [Match.statuses[:running], Match.statuses[:scheduled]]})}
   enum status: { inactive: 0, active: 1 }
 
   def start
