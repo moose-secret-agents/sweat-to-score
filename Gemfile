@@ -69,7 +69,9 @@ gem 'sorcery'
 gem 'pundit'
 
 #for images
-gem 'chunky_png'
+#gem 'chunky_png'
+gem 'rmagick'
+gem 'imgur-api', require: 'imgur'
 
 #profiling
 group :test do

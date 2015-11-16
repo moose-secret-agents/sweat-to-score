@@ -26,13 +26,13 @@ class Player < ActiveRecord::Base
     goal_direction = @play_direction
     goal_direction = Vector[play_direction[0]*100,30] - @position if @position[0] * @play_direction[0] >75
 
-    heading = home_direction
+    heading = home_direction*(home_direction.r/100)
     heading = ball_direction if ball_direction.r<Match::MAX_PLAYER_TO_BALL_DIST
 
     unless ball.carrier.nil?
       heading = (ball_direction + home_direction) * 0.5 if ball.carrier.team == self.team
     end
-    heading = home_direction if home_direction.r > Match::MAX_PLAYER_TO_HOME_DIST
+    heading = home_direction*(home_direction.r/100) if home_direction.r > Match::MAX_PLAYER_TO_HOME_DIST
 
     heading = goal_direction if ball.carrier == self
 

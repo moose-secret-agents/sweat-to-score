@@ -16,14 +16,16 @@ class Match < ActiveRecord::Base
   attr_accessor :png, :ball, :playersA, :playersB, :img_counter, :goalieA, :goalieB
   attr_accessor :all_players
   attr_accessor :actions
-  attr_accessor :rand
+  attr_accessor :rand, :gif
 
   FIELD_DIMS = [100,60]
 
   def simulate
+    raise BadStateException if self.status != "scheduled"
+    self.status = "started"
+    @gif = Magick::ImageList.new
     self.scoreA = 0
     self.scoreB = 0
-    raise BadStateException if self.status != "scheduled"
     @actions = []
     @img_counter = 0
     flip_team_B
@@ -124,7 +126,9 @@ class Match < ActiveRecord::Base
       drawPitch
     end
     puts "result: #{self.scoreA}-#{self.scoreB}"
-
+    self.imgurLink = storeGif
+    puts self.imgurLink
+    self.status = "ended"
     flip_team_B
 
   end
@@ -151,12 +155,20 @@ class Match < ActiveRecord::Base
     end
   end
 
+  def storeGif
+    uploader = ImageUploader.new()
+    @gif.write("OutputImgs/GIF.gif")
+    uploader.upload("OutputImgs/GIF.gif")
+  end
+
   def drawPitch
-    @png = ChunkyPNG::Image.new(101, 61, ChunkyPNG::Color::WHITE)
+    #@png = ChunkyPNG::Image.new(101, 61, ChunkyPNG::Color::WHITE)
+    png = Magick::Image.new(101,61)
     @playersA.each do |player|
       #puts "Team A: X: #{player.fieldX}, Y: #{player.fieldY}"
       if(is_in_bounds?(player.position[0].round,player.position[1].round))
-        @png[player.position[0].round,player.position[1].round] = ChunkyPNG::Color('red') if(is_in_bounds?(player.fieldX, player.fieldY))
+        #@png[player.position[0].round,player.position[1].round] = ChunkyPNG::Color('red') if(is_in_bounds?(player.fieldX, player.fieldY))
+        png.pixel_color(player.position[0].round,player.position[1].round, 'red') if(is_in_bounds?(player.fieldX, player.fieldY))
       end
     end
 
@@ -164,12 +176,13 @@ class Match < ActiveRecord::Base
     playersB.each do |player|
       #puts "Team B: X: #{player.fieldX}, Y: #{player.fieldY}"
       if(is_in_bounds?(player.position[0].round,player.position[1].round))
-      @png[player.position[0].round,player.position[1].round] = ChunkyPNG::Color('blue') if(is_in_bounds?(player.fieldX, player.fieldY))
+      png.pixel_color(player.position[0].round,player.position[1].round,'blue') if(is_in_bounds?(player.fieldX, player.fieldY))
       end
     end
 
-    @png[ball.position[0].round,ball.position[1].round] = ChunkyPNG::Color('green')
-    @png.save("OutputImgs/pitch#{@img_counter}.png", :interlace => true) unless Rails.env.production?
+    png.pixel_color(ball.position[0].round,ball.position[1].round,'green')
+    @gif<<png
+    png.write("OutputImgs/pitch#{@img_counter}.png") unless Rails.env.production?
     @img_counter+=1
   end
 
