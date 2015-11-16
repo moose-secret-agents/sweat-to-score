@@ -7,6 +7,7 @@ class LeaguesController < ApplicationController
 
   def new
     @league = @user.leagues.build
+    @min_length=@league.min_length
   end
 
   def create
@@ -44,6 +45,8 @@ class LeaguesController < ApplicationController
         redirect_to @league
       end
     else
+      @league.update_attribute :starts_at, params[:league][:starts_at]
+
       if @league.update(league_params)
         redirect_to @league, notice: 'League was successfully updated.'
       else
@@ -60,11 +63,12 @@ class LeaguesController < ApplicationController
 
   def edit
     @league = League.find(params[:id])
+    @min_length=@league.min_length
   end
 
   private
     def league_params
-      params.require(:league).permit(:name, :level, :starts_at, :league_length, :pause_length)
+      params.require(:league).permit(:name, :level, :league_length, :pause_length, :starts_at)
     end
 
     def set_user

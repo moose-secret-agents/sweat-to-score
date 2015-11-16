@@ -26,6 +26,9 @@ RSpec.describe League, type: :model do
 
   it 'can be set active' do
     league=League.create!(name:'inac League', level:2)
+    league.update_attribute(:starts_at, Time.now)
+    league.update_attribute(:league_length, 1)
+    league.update_attribute(:pause_length, 1)
     league.start
     expect(league.status).to eq ('active')
   end

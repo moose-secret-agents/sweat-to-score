@@ -1,10 +1,12 @@
 class SchedulerDoubleRR
   def schedule_season(league)
-    puts 'scheduled'
+    #puts 'scheduled'
     #puts Date.beginning_of_week
     teams=league.teams
-    season_start=1.week.from_now.beginning_of_week+20.hour
-    season_length=decide_on_season_length(teams.size)
+    #season_start=1.week.from_now.beginning_of_week+20.hour
+    season_start=league.starts_at
+    #season_length=decide_on_season_length(teams.size)
+    season_length=actual_league_length(league)
     schedule=assign_matches(teams,season_length)
 
     for i in 0..season_length-1
@@ -14,6 +16,14 @@ class SchedulerDoubleRR
       end
     end
     schedule
+  end
+
+  def actual_league_length(league)
+    [league.league_length!=nil ? league.league_length : 0, min_league_length(league)].max
+  end
+
+  def min_league_length(league)
+    2*(league.teams.length%2+league.teams.length-1)
   end
 
   private
@@ -84,6 +94,10 @@ class SchedulerDoubleRR
     end
 
     def is_badly_distributed(schedule)
+      if schedule.length==0
+        return false
+      end
+
       max=schedule.max_by {|element| element.length}.length
       min=schedule.min_by {|element| element.length}.length
       if(max-min>=2)
