@@ -1,0 +1,16 @@
+#notification
+  h4 Tokens
+
+  span.strong Available Tokens:
+  p.pull-right= badge(current_user.remote_tokens)
+
+  br
+  br
+
+  = link_to 'Add tokens to account', user_book_tokens_path(current_user), method: :post, class: 'btn btn-block btn-primary', 'data-dismiss' => 'popover'
+
+  hr
+
+  h4 Invites
+
+  span.strong No invites yet...
