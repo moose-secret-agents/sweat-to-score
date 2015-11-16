@@ -11,7 +11,8 @@ Rails.application.routes.draw do
 
   resources :users do
     resources :teams, shallow: true
-    resources :tokens, only: [:index]
+    get 'tokens/index', to: 'tokens#index', as: 'tokens'
+    post 'tokens/book', to: 'tokens#book', as: 'book_tokens'
     get 'leagues' => 'leagues#user_index', as: 'leagues'
   end
 

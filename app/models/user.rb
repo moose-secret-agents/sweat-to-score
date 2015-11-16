@@ -50,7 +50,7 @@ class User < ActiveRecord::Base
     proposal.refuse
   end
 
-  def available_tokens
+  def remote_tokens
     self.coach_user.subscriptions.flat_map(&:entries).map(&:rounds).sum
   end
 end

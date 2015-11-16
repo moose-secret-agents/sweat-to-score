@@ -15,7 +15,10 @@ dl
   br
 
   dt Available tokens:
-  dd= @user.available_tokens
+  dd= link_to @user.remote_tokens, user_book_tokens_path(current_user), method: :post
+
+  dt Booked tokens:
+  dd= @user.tokens
 
 
 == render '/teams/table'
