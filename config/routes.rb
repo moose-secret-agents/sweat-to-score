@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   get 'login' => 'user_sessions#new',       :as => 'show_login'
   post 'login' => 'user_sessions#create',   :as => 'login'
-  get 'logout' => 'user_sessions#destroy', :as => 'logout'
+  get 'logout' => 'user_sessions#destroy',  :as => 'logout'
   get 'signup' => 'users#new',              :as => 'signup'
 
   get 'news/index' => 'news#index', as: 'news'
