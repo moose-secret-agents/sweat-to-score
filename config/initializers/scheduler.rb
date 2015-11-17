@@ -3,20 +3,10 @@ require 'rufus-scheduler'
 require_relative '../../lib/tasks/task_helpers'
 
 rufus_sched = Rufus::Scheduler.singleton
-semaphore = Mutex.new
 
 rufus_sched.every '5m' do
-  semaphore.synchronize {
-    #puts "2"
-    SchedulingTasks.start_overdue_leagues
-  }
-end
-
-rufus_sched.every '5m' do
-  semaphore.synchronize {
-    #puts "1"
-    SchedulingTasks.end_finished_leagues
-  }
+  SchedulingTasks.start_overdue_leagues
+  SchedulingTasks.end_finished_leagues
 end
 
 class SchedulingTasks
