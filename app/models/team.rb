@@ -19,7 +19,7 @@ class Team < ActiveRecord::Base
     return if players.count > 0
 
     ActiveRecord::Base.transaction do
-      (11 + rand(14)).times do
+      (18 + rand(7)).times do
         Fabricate(:player, team: self)
       end
     end
