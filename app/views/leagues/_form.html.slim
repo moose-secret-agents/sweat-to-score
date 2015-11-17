@@ -2,6 +2,37 @@
   = f.text_field :name
   = f.number_field :level
 
+  = f.number_field :league_length, min: @min_length
+  = f.number_field :pause_length
+
+  //div class="form-inline"
+    = f.datetime_select :starts_at, order: [:day, :month, :year], layout: :inline
+  //div class="form-group"
+  =f.form_group "league[starts_at]", label: { text: "Starts at"} do
+    div class='input-group date' id='datetimepicker1'
+      input class="form-control" id="league_starts_at" name="league[starts_at]" type='text'
+        span class="input-group-addon"
+          span class="glyphicon glyphicon-calendar"
+  javascript:
+    $(function () {
+      $('#datetimepicker1').datetimepicker({
+        format: 'YYYY-MM-DD HH:mm:ss'
+      });
+    });
+
+  //div class="container"
+    div class="row"
+      div class='col-sm-6'
+        div class="form-group"
+          div class='input-group date' id='datetimepicker1'
+            input type='text' class="form-control" name=:starts_at
+            span class="input-group-addon"
+              span class="glyphicon glyphicon-calendar"
+      javascript:
+        $(function () {
+          $('#datetimepicker1').datetimepicker();
+        });
+
   .pull-right
     = link_to t('.cancel', :default => t("helpers.links.cancel")), new_league_path, :class => 'btn btn-default'
     '
