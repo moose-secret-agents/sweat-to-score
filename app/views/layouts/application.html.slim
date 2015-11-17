@@ -24,7 +24,8 @@ html lang="en"
       = menu_group pull: :right do
         - if logged_in?
           = menu_text 'Logged in as:'
-          = menu_item fa_icon(:user, text: current_user.name), user_path(current_user)
+          = menu_item fa_icon(:user, text: current_user.real_name), user_path(current_user)
+          = menu_item fa_icon('newspaper-o'), '#', title: 'Notifications', rel: 'popover', data: { toggle: 'popover', content: "#{render partial: 'layouts/notifications'}", placement: 'bottom' }
           = menu_item fa_icon('sign-out', text: 'Logout'), logout_path
         - else
           = menu_item fa_icon('sign-in', text: 'Login'), show_login_path

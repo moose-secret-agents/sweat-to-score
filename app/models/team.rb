@@ -29,4 +29,8 @@ class Team < ActiveRecord::Base
     self.name
   end
 
+  def train(tokens)
+    # TODO: Do something to team to increase its strenth
+  end
+
 end

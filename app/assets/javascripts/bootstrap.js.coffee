@@ -1,3 +1,8 @@
-jQuery ->
-  $("a[rel~=popover], .has-popover").popover()
-  $("a[rel~=tooltip], .has-tooltip").tooltip()
+ready =  ->
+
+  $('#datetimepicker1').datetimepicker
+    format: 'YYYY-MM-DD HH:mm:ss'
+
+
+$(document).ready(ready)
+$(document).on('page:load', ready)

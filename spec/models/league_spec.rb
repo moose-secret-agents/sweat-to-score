@@ -4,7 +4,7 @@ RSpec.describe League, type: :model do
 
   before(:all) do
     @league = League.create!(name: 'LoserLeague', level: 3)
-    @user=User.create(name: 'Owner')
+    @user = User.create(real_name: 'Owner')
     @team1 = @league.teams.create!(name: 'Test Team', strength: 55, teamable: @user)
     @team2 = @league.teams.create!(name: 'Test Team2', strength: 55, teamable: @user)
   end
@@ -69,8 +69,8 @@ RSpec.describe League, type: :model do
   end
 
   it 'can schedule a match between two teamables' do
-    user1 = Fabricate(:user, name:'User 1')
-    user2 = Fabricate(:user, name: 'User 2')
+    user1 = Fabricate(:user, real_name: 'User 1')
+    user2 = Fabricate(:user, real_name: 'User 2')
 
     team1 = user1.teams.create(name: 'Team 1')
     team2 = user2.teams.create(name: 'Team 2')

@@ -8,5 +8,5 @@ table class="table table-hover"
   tbody
     - @users.each do |user|
       tr
-        td= link_to user.name, user_path(user)
+        td= link_to user.real_name, user_path(user)
         td= (time_ago_in_words user.created_at) + ' ago'

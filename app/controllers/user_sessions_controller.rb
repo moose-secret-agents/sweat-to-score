@@ -6,21 +6,32 @@ class UserSessionsController < ApplicationController
   end
 
   def create
-    if (@user = login(user_session_params[:username], user_session_params[:password], true))
+    username = user_session_params[:username]
+    password = user_session_params[:password]
+
+    session[:password] = password
+
+    # Check Logging credentials against CyCo and local DB
+    if coach_client.users.authenticated?(username, password) && (@user = login(username, password, true))
       redirect_back_or_to(:root, notice: 'Login successful')
     else
-      flash.now[:alert] = 'Login failed'
-      render :new
+      fail_login
     end
   end
 
   def destroy
     logout
+    session[:password] = nil
     redirect_to(:root, notice: 'Logged out!')
   end
 
   private
     def user_session_params
       params.require(:user_session).permit(:username, :password)
+    end
+
+    def fail_login
+      flash.now[:alert] = 'Login failed'
+      render :new
     end
 end

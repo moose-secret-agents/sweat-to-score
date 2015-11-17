@@ -1,5 +1,5 @@
 h1
-  = "Teams of #{@user.name}"
+  = "Teams of #{@user.real_name}"
   .pull-right
     = link_to fa_icon(:users, text: 'Create new team'), new_user_team_path(@user), class: 'btn btn-default'
 hr
