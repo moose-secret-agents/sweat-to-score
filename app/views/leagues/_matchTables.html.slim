@@ -1,26 +1,58 @@
 br
 br
 
-div class="col-md-12"
+div class="container"
+  - count = 0
   -(0..@matches.length-1).each do |day|
-    div class="panel panel-default"
-      div class="panel-heading"
-        h4 class="panel-title"
-        /a data-toggle="collapse" data-parent="#accordion" href="#accordionOne" Collapsible Accordion 1
-        a data-toggle="collapse" href="#accordion#{day}" #{@matches[day][0].starts_at}
-        div id="accordion#{day}" class="panel-collapse collapse"
-          div class="panel-body"
-            table class="table table-default"
-              thead
-                tr
-                  /th= Match.human_attribute_name(:starts_at)
-                  th= Match.human_attribute_name(:Home)
-                  th= Match.human_attribute_name(:Guest)
-                  th= Match.human_attribute_name(:status)
-              tbody
-                - @matches[day].each do |match|
-                  tr
-                    /#td= match.starts_at
-                    td= match.teamA.name
-                    td= match.teamB.name
-                    td= match.status
+    ul.timeline
+      - @matches[day].each do |match|
+        - count = count+1
+        - if count % 2 != 0
+          li
+            .timeline-badge class="#{match.status}"
+              i.glyphicon class="#{match.glyphicon}"
+            .timeline-panel
+              .timeline-heading
+                h4.timeline-title #{match.starts_at.strftime("%A %b %d %Y at %H:%M")}
+                p
+                  small.text-muted
+                    i.glyphicon.glyphicon-time
+                      |  #{match.getTimeDifference(match.starts_at)}
+                      br
+                      i.glyphicon.glyphicon-info-sign
+                      |  #{match.status}
+              .timeline-body
+                table class="table table-hover"
+                  thead
+                    tr
+                      th.timeline-table-head= Match.human_attribute_name(:Home)
+                      th.timeline-table-head= Match.human_attribute_name(:Guest)
+                  tbody
+                    tr
+                      td.timeline-table-body= match.teamA.name
+                      td.timeline-table-body= match.teamB.name
+        - else
+          li
+            li.timeline-inverted
+              .timeline-badge class="#{match.status}"
+                i.glyphicon class="#{match.glyphicon}"
+              .timeline-panel
+                .timeline-heading
+                  h4.timeline-title #{match.starts_at.strftime("%A %b %d %Y at %H:%M")}
+                  p
+                    small.text-muted
+                      i.glyphicon.glyphicon-time
+                        |  #{match.getTimeDifference(match.starts_at)}
+                        br
+                        i.glyphicon.glyphicon-info-sign
+                        |  #{match.status}
+                .timeline-body
+                  table class="table table-hover"
+                    thead
+                      tr
+                        th.timeline-table-head= Match.human_attribute_name(:Home)
+                        th.timeline-table-head= Match.human_attribute_name(:Guest)
+                    tbody
+                      tr
+                        td.timeline-table-body= match.teamA.name
+                        td.timeline-table-body= match.teamB.name
