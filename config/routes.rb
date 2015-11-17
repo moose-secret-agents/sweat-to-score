@@ -10,7 +10,10 @@ Rails.application.routes.draw do
   get 'teams/show'
 
   resources :users do
-    resources :teams, shallow: true
+    resources :teams, shallow: true do
+      post 'train', to: 'tokens#train', on: :member
+    end
+
     get 'tokens', to: 'tokens#index', as: 'tokens'
     post 'tokens/book', to: 'tokens#book', as: 'book_tokens'
     get 'leagues' => 'leagues#user_index', as: 'leagues'

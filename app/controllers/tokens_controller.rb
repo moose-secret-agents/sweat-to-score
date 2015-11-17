@@ -1,9 +1,9 @@
 class TokensController < ApplicationController
 
   before_action :set_user, only: [:index, :book]
+  before_action :set_team, only: [:train]
 
   def index
-    # TODO: make this async, could be slow as hell
     @tokens = @user.coach_user.subscriptions.flat_map(&:entries)
   end
 
@@ -25,9 +25,21 @@ class TokensController < ApplicationController
     redirect_to :back
   end
 
+  def train
+    tokens = params[:training][:tokens]
+    @team.train tokens
+
+    flash[:success] = 'Successfully trained team'
+    redirect_to :back
+  end
+
   private
     def set_user
       @user = User.find(params[:user_id])
+    end
+
+    def set_team
+      @team = Team.find(params[:id])
     end
 
 end
