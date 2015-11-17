@@ -16,7 +16,7 @@ class League < ActiveRecord::Base
   end
 
   def start
-    unless starts_at.nil? || pause_length.nil? || pause_length.nil?
+    unless starts_at.nil? || pause_length.nil? || pause_length.nil? || teams.length<2
       Match.destroy_all(:status=> Match.statuses[:scheduled],:league=>self)
       sched=SchedulerDoubleRR.new
       sched.schedule_season(self)

@@ -88,14 +88,6 @@ RSpec.describe SchedulerDoubleRR, type: :model do
     expect(@league.matches.length).to eq(@league.teams.length*(@league.teams.length-1))
   end
 
-  it 'can schedule 8 teams' do
-    (1..8).each do
-      add_team_to_league
-    end
-    schedule=@scheduler.schedule_season(@league)
-    expect(@league.matches.length).to eq(@league.teams.length*(@league.teams.length-1))
-  end
-
   it 'should schedule matches on league activation' do
     (1..4).each do
       add_team_to_league

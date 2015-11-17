@@ -4,7 +4,9 @@ RSpec.describe League, type: :model do
 
   before(:all) do
     @league = League.create!(name: 'LoserLeague', level: 3)
-    @team = @league.teams.create!(name: 'Test Team', strength: 55, teamable: User.create(name: 'Owner'))
+    @user=User.create(name: 'Owner')
+    @team1 = @league.teams.create!(name: 'Test Team', strength: 55, teamable: @user)
+    @team2 = @league.teams.create!(name: 'Test Team2', strength: 55, teamable: @user)
   end
 
   it 'should have a name' do
@@ -29,8 +31,37 @@ RSpec.describe League, type: :model do
     league.update_attribute(:starts_at, Time.now)
     league.update_attribute(:league_length, 1)
     league.update_attribute(:pause_length, 1)
+
+    league.teams.create!(name: 'Test Team', strength: 55, teamable: @user)
+    league.teams.create!(name: 'Test Team2', strength: 55, teamable: @user)
     league.start
     expect(league.status).to eq ('active')
+  end
+
+  it 'cant be set active if attribute is missing' do
+    league=League.create!(name:'inac League', level:2)
+    league.update_attribute(:starts_at, Time.now)
+    league.update_attribute(:league_length, 1)
+    #league.update_attribute(:pause_length, 1)
+
+    league.teams.create!(name: 'Test Team', strength: 55, teamable: @user)
+    league.teams.create!(name: 'Test Team2', strength: 55, teamable: @user)
+    league.start
+
+    expect(league.status).to eq ('inactive')
+  end
+
+  it 'cant be set active if less than 2 teams' do
+    league=League.create!(name:'inac League', level:2)
+    league.update_attribute(:starts_at, Time.now)
+    league.update_attribute(:league_length, 1)
+    league.update_attribute(:pause_length, 1)
+
+    #league.teams.create!(name: 'Test Team', strength: 55, teamable: @user)
+    league.teams.create!(name: 'Test Team2', strength: 55, teamable: @user)
+    league.start
+
+    expect(league.status).to eq ('inactive')
   end
 
   it 'should have players through team' do
