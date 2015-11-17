@@ -44,10 +44,10 @@ class Match < ActiveRecord::Base
 
       player.fitness = 50
       player.stamina = 70
-      player.goalkeep = 10
-      player.defense = 10
-      player.midfield = 90
-      player.attack = 10
+      player.goalkeep = 40
+      player.defense = 40
+      player.midfield = 40
+      player.attack = 40
 
       player.save
 
@@ -64,10 +64,10 @@ class Match < ActiveRecord::Base
 
       player.fitness = 50
       player.stamina = 70
-      player.goalkeep = 10
-      player.defense = 10
-      player.midfield = 10
-      player.attack = 10
+      player.goalkeep = 40
+      player.defense = 40
+      player.midfield = 40
+      player.attack = 40
 
       player.save
 

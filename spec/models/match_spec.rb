@@ -30,6 +30,7 @@ RSpec.describe Match, type: :model do
         player.fieldX = -1
         player.fieldY = -1
       end
+      player.save
     end
     i = 0
     playersB.each do |player|
@@ -54,6 +55,7 @@ RSpec.describe Match, type: :model do
         player.fieldX = -1
         player.fieldY = -1
       end
+      player.save
     end
   end
   it "throws exception if match is not scheduled" do
