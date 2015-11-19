@@ -72,7 +72,7 @@ RSpec.describe Match, type: :model do
 
     @match.weather_fetcher = mock_fetcher
 
-    expect( @match.get_weather_string_and_temp[0] ).to eq 'overcast'
+    expect( @match.compute_weather_string_and_temp[0] ).to eq 'overcast'
   end
 
   it 'should be moderate snowfall when no sunshine, under 0deg and little precipitation' do
@@ -84,7 +84,7 @@ RSpec.describe Match, type: :model do
 
     @match.weather_fetcher = mock_fetcher
 
-    expect( @match.get_weather_string_and_temp[0] ).to eq 'moderate snowfall'
+    expect( @match.compute_weather_string_and_temp[0] ).to eq 'moderate snowfall'
   end
 
   it 'should be moderate rain when no sunshine, over 0deg and little precipitation' do
@@ -96,7 +96,7 @@ RSpec.describe Match, type: :model do
 
     @match.weather_fetcher = mock_fetcher
 
-    expect( @match.get_weather_string_and_temp[0] ).to eq 'moderate rain'
+    expect( @match.compute_weather_string_and_temp[0] ).to eq 'moderate rain'
   end
 
   it 'should be moderate rain when sunshine, over 0deg and little precipitation' do
@@ -108,7 +108,7 @@ RSpec.describe Match, type: :model do
 
     @match.weather_fetcher = mock_fetcher
 
-    expect( @match.get_weather_string_and_temp[0] ).to eq 'moderate rain'
+    expect( @match.compute_weather_string_and_temp[0] ).to eq 'moderate rain'
   end
 
   it 'should be sunny when sunshine and no precipitation' do
@@ -120,10 +120,19 @@ RSpec.describe Match, type: :model do
 
     @match.weather_fetcher = mock_fetcher
 
-    expect( @match.get_weather_string_and_temp[0] ).to eq 'sunny'
+    expect( @match.compute_weather_string_and_temp[0] ).to eq 'sunny'
   end
 
   it 'simulates match if match is scheduled' do
+
+    mock_fetcher = double("weather_fetcher")
+    allow(mock_fetcher).to receive_messages(
+                               :fetch_temp => 18.0,
+                               :fetch_precipitation => 0,
+                               :fetch_sunshine => 10)
+
+    @match.weather_fetcher = mock_fetcher
+
     @match.status = :scheduled
     RubyProf.start
     @match.rand = Random.new#(115032730400174366788466674494640623226)

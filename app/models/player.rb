@@ -16,10 +16,10 @@ class Player < ActiveRecord::Base
     @play_direction = play_dir
   end
 
-  def move(ball)
+  def move(ball, weather_factor)
     return if is_goalie
 
-    real_speed = scale_with_time( scale(self.speed)  )
+    real_speed = scale_with_time( scale(self.speed) * weather_factor )
 
     ball_direction = ball.position - @position
     home_direction = Vector[self.fieldX,self.fieldY] - @position
@@ -38,7 +38,7 @@ class Player < ActiveRecord::Base
 
     heading = heading.normalize if heading.r>1
 
-    self.stamina -= (heading.r / Match::PLAY_TIME_SCALE) * scale(self.stamina) * 0.4 * (1 - scale(self.fitness))
+    self.stamina -= (heading.r / Match::PLAY_TIME_SCALE) * scale(self.stamina) * 0.4 * (1 - scale(self.fitness)) * (1 + 2*(1-weather_factor))
     #puts self.stamina
 
     heading*=real_speed
@@ -48,14 +48,14 @@ class Player < ActiveRecord::Base
     #puts "walking with ball" if ball.carrier == self
   end
 
-  def try_save(ball)
+  def try_save(ball,weather_scale)
     dist = (ball.position - @position).r
     ball_speed = ball.roll_dir.r
     return if dist > 6
     #puts "#{self.team} trying save"
     distance_difficulty = dist / 6.0
     speed_difficulty = ball_speed / 3.0 / Match::PLAY_TIME_SCALE
-    difficulty = distance_difficulty * speed_difficulty
+    difficulty = distance_difficulty * speed_difficulty * (1+(1-weather_scale))
     #puts "#{self.team} trying save with difficulty #{difficulty}"
     #puts difficulty
     randval = @rand.rand(1.0) * scale(self.goalkeep)

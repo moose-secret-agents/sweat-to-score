@@ -50,7 +50,7 @@ class Match < ActiveRecord::Base
     raise BadStateException if self.status != "scheduled"
 
     self.status = "started"
-    self.weather_string, self.temperature = self.get_weather_string_and_temp
+    self.weather_string, self.temperature = self.compute_weather_string_and_temp
     @gif = Magick::ImageList.new
     self.scoreA = 0
     self.scoreB = 0
@@ -60,6 +60,8 @@ class Match < ActiveRecord::Base
     flip_team_b
     @rand = Random.new if @rand.nil?
     @ball = Ball.new(self)
+
+    @ball.slowdown = get_ball_slowdown
 
     @players_a = []
     @players_b = []
@@ -115,12 +117,12 @@ class Match < ActiveRecord::Base
     500.times do |i|
       @all_players.shuffle!(random: @rand)
       @actions.clear
-      @goalie_a.try_save(@ball)
-      @goalie_b.try_save(@ball)
+      @goalie_a.try_save(@ball, @ball.slowdown == 0.9 ? 1 : 0.7)
+      @goalie_b.try_save(@ball, @ball.slowdown == 0.9 ? 1 : 0.7)
 
       #conglomerate, randomize and kick direction
       @all_players.each do |player|
-        player.move(@ball)
+        player.move(@ball,@ball.slowdown > 0.8 ? 1 : 0.7)
       end
 
       @all_players.shuffle!(random: @rand)
@@ -154,14 +156,16 @@ class Match < ActiveRecord::Base
       end
       draw_pitch
     end
+    @all_players.each do |player|
+      player.save
+    end
     puts "result: #{self.scoreA}-#{self.scoreB}"
-    puts "weather: #{self.weather_string} at #{self.temperature}°C"
+    puts "weather: #{formatted_weather}"
     self.imgurLink = store_gif
     puts self.imgurLink
     self.status = 'ended'
     self.save
     flip_team_b
-
   end
 
   def check_goal(x,y,i)
@@ -223,7 +227,27 @@ class Match < ActiveRecord::Base
     true
   end
 
-  def get_weather_string_and_temp
+  def get_ball_slowdown
+    @weather_fetcher = WeatherFetcher.new if weather_fetcher.nil?
+    precipitation = @weather_fetcher.fetch_precipitation
+    temp = @weather_fetcher.fetch_temp
+    if precipitation > 0.0
+      if temp < 0
+        return 0.6
+      else
+        return 0.95
+      end
+    else
+      return 0.9
+    end
+
+  end
+
+  def formatted_weather
+    "#{self.weather_string} at #{self.temperature}°C"
+  end
+
+  def compute_weather_string_and_temp
     @weather_fetcher = WeatherFetcher.new if weather_fetcher.nil?
     weather_string = 'sunny'
     precipitation_string = @weather_fetcher.fetch_temp < 0.0 ? 'snowfall' : 'rain'
@@ -256,7 +280,7 @@ class Match < ActiveRecord::Base
 
   class Ball
     attr_accessor :carrier, :position, :roll_dir, :match
-    attr_accessor :count_no_touch
+    attr_accessor :count_no_touch, :slowdown
 
     def initialize(match)
       @match = match
@@ -287,7 +311,7 @@ class Match < ActiveRecord::Base
     def roll
       @count_no_touch += 1
       @position += @roll_dir
-      @roll_dir *= 0.9
+      @roll_dir *= @slowdown
       @roll_dir = 0.2*@roll_dir.normalize if @roll_dir.r<0.2 and @roll_dir.r >0
       if @count_no_touch > 40
         self.roll_dir = Vector[@match.rand.rand(2.0)-1,@match.rand.rand(2.0)-1] * 8
