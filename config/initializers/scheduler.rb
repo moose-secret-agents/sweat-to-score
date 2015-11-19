@@ -4,7 +4,7 @@ require_relative '../../lib/tasks/task_helpers'
 
 rufus_sched = Rufus::Scheduler.singleton
 
-rufus_sched.every '2m', :overlap => false do
+rufus_sched.every '30s', :overlap => false do
   SchedulingTasks.start_overdue_leagues
   SchedulingTasks.end_finished_leagues
   SchedulingTasks.start_overdue_matches

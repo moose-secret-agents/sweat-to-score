@@ -31,6 +31,10 @@ div class="container"
                     tr
                       td.timeline-table-body= match.teamA.name
                       td.timeline-table-body= match.teamB.name
+                -unless match.imgurLink.nil?
+                  img.matchgif src = "#{match.imgurLink}"
+
+
         - else
           li
             li.timeline-inverted
@@ -56,3 +60,5 @@ div class="container"
                       tr
                         td.timeline-table-body= match.teamA.name
                         td.timeline-table-body= match.teamB.name
+                  -unless match.imgurLink.nil?
+                    img.matchgif src = "#{match.imgurLink}"
