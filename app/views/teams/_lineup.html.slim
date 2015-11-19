@@ -1,0 +1,8 @@
+div
+  .players
+    - @team.players.each_with_index do |player, index|
+      .draggable.player.box.avatar-image id="player_#{player.id}" data-player-id="#{player.id}" data-talent="#{player.talent}" data-face="#{player.face.to_json}"
+  #field
+    = image_tag('field.svg')
+
+  = button_tag 'Save Line-Up', class: 'btn btn-primary', id: 'savePosition'

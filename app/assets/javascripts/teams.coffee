@@ -3,6 +3,17 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 ready = ->
+  $('#savePosition').on 'click', ->
+    savePlayerPositions()
+
+  initFaces()
+  initTabs()
+  initPlayers()
+
+$(document).ready(ready)
+$(document).on('page:load', ready)
+
+initFaces = ->
   $(".avatar-image").each (index, element) ->
     id = $(element).attr('id')
     face = $(element).data('face')
@@ -21,6 +32,26 @@ ready = ->
 
     faces.display(id, face)
 
-$(document).ready(ready)
-$(document).on('page:load', ready)
+initTabs = ->
+  tabs = $('.tab-content').children().hide()
+  $('#players-tab').show()
+  $("a[data-toggle='tab'").each (index, element) ->
+    $(element).on 'click', ->
+      tab_id = $(element).attr('href')
+      tabs.hide()
+      $(tab_id).show()
 
+initPlayers = ->
+  # Make players draggable
+  $('.draggable').draggable(containment: '#field')
+
+
+savePlayerPositions = ->
+  positions = {}
+  $('.player').each (index, element) ->
+    id = $(element).data('player-id')
+    pos =
+      top: $(element).offset().top - $('#field').offset().top
+      left: $(element).offset().left - $('#field').offset().left
+    positions[id] = pos
+  
