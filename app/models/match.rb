@@ -51,6 +51,7 @@ class Match < ActiveRecord::Base
     @gif = Magick::ImageList.new
     self.scoreA = 0
     self.scoreB = 0
+    self.save
     @actions = []
     @img_counter = 0
     flip_team_B
@@ -154,6 +155,7 @@ class Match < ActiveRecord::Base
     self.imgurLink = storeGif
     puts self.imgurLink
     self.status = "ended"
+    self.save
     flip_team_B
 
   end
