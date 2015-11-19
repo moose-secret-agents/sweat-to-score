@@ -27,7 +27,6 @@ class SchedulerDoubleRR
   end
 
   private
-    #error with only two teams, only one match is scheduled, error with 0 or 1 teams
     def assign_matches(t, season_length)
 
 
