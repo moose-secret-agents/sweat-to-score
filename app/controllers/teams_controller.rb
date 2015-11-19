@@ -1,5 +1,5 @@
 class TeamsController < ApplicationController
-  before_action :set_team, only: [:show, :edit, :update, :destroy]
+  before_action :set_team, only: [:show, :edit, :update, :destroy, :positions]
   before_action :set_user, only: [:index, :new, :create]
 
   def index
@@ -44,6 +44,18 @@ class TeamsController < ApplicationController
     owner = @team.teamable
     @team.destroy
     redirect_to user_teams_url(owner), notice: 'Team was successfully destroyed.'
+  end
+
+  def positions
+    positions = params[:positions]
+
+    positions.each do |key, value|
+      player = Player.find(key)
+      player.update_attributes(fieldX: value[:left], fieldY: value[:top])
+    end
+
+    flash[:success] = 'Saved player positions'
+    redirect_to team_path(@team)
   end
 
   private

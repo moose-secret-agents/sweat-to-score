@@ -45,6 +45,9 @@ initPlayers = ->
   # Make players draggable
   $('.draggable').draggable(containment: '#field')
 
+sendPositions = (positions) ->
+  team_id = $('#bank').data('team-id')
+  $.post("/teams/#{team_id}/positions", { positions: positions })
 
 savePlayerPositions = ->
   positions = {}
@@ -54,4 +57,5 @@ savePlayerPositions = ->
       top: $(element).offset().top - $('#field').offset().top
       left: $(element).offset().left - $('#field').offset().left
     positions[id] = pos
-  
+
+  sendPositions(positions)

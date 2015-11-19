@@ -1,5 +1,5 @@
 div
-  .players
+  #bank.players data-team-id="#{@team.id}"
     - @team.players.each_with_index do |player, index|
       .draggable.player.box.avatar-image id="player_#{player.id}" data-player-id="#{player.id}" data-talent="#{player.talent}" data-face="#{player.face.to_json}"
   #field
