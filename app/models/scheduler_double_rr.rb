@@ -35,7 +35,7 @@ class SchedulerDoubleRR
 
       if(teams.length==2)
         schedule[0]<<Pairing.new(teams[0],teams[1])
-        schedule[0]<<Pairing.new(teams[1],teams[0])
+        schedule[1]<<Pairing.new(teams[1],teams[0])
         return schedule
       end
 
