@@ -236,6 +236,7 @@ DEPENDENCIES
   fabrication
   faker
   font-awesome-rails
+  httparty
   imgur-api
   jquery-rails
   momentjs-rails (>= 2.9.0)
