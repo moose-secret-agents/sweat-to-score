@@ -1,5 +1,6 @@
-module MatchHelper
-  def glyphicon
+module MatchesHelper
+
+  def glyphicon(status)
     case status
       when 'scheduled'
         "glyphicon-pencil"
@@ -11,6 +12,7 @@ module MatchHelper
         "glyphicon-remove"
     end
   end
+
 
   def getTimeDifference(time)
     delta = (time - Time.now).abs

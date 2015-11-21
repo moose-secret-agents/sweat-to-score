@@ -40,7 +40,7 @@ class LeaguesController < ApplicationController
         @league.end
         redirect_to @league, notice: 'League ended'
       else
-        flash[:error] = "League is already {@league.status}"
+        flash[:error] = "League is already #{@league.status}"
         #redirect_to @league, notice: 'League is already #{@league.status}'
         redirect_to @league
       end
