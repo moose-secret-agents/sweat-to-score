@@ -12,19 +12,19 @@
     .stat
       strong.stat-label G:
       .stat-value
-        = bs_progress Faker::Number.between(0, 100)
+        = bs_progress team.stats(:G)
     .stat
       strong.stat-label D:
       .stat-value
-        = bs_progress Faker::Number.between(0, 100)
+        = bs_progress team.stats(:D)
     .stat
       strong.stat-label M:
       .stat-value
-        = bs_progress Faker::Number.between(0, 100)
+        = bs_progress team.stats(:M)
     .stat
       strong.stat-label O:
       .stat-value
-        = bs_progress Faker::Number.between(0, 100)
+        = bs_progress team.stats(:O)
     hr
 
     .team-score
@@ -33,7 +33,7 @@
         = tag_label("#{team.strength}%", :default)
 
   = p.footer do
-    small.pull-left= "managed by #{team.teamable.name}"
+    small.pull-left= teamable_name(team.teamable)
     .pull-right
       = link_to 'Edit', edit_team_path(team), class: 'btn btn-default btn-xs'
       '

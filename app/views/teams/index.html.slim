@@ -4,7 +4,18 @@
     .pull-right
       = link_to fa_icon(:users, text: 'Create new team'), new_user_team_path(@user), class: 'btn btn-default'
 
-- @teams.each_slice(3) do |slice|
+- @own_teams.each_slice(3) do |slice|
+  .row
+    - slice.each do |team|
+      .col-md-4
+        - unless team.nil?
+          = render partial: 'teams/team_card', locals: { team: team }
+
+.page-header
+  h1
+    = "Partnership Teams"
+
+- @partner_teams.each_slice(3) do |slice|
   .row
     - slice.each do |team|
       .col-md-4

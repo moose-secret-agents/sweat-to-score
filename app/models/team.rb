@@ -29,6 +29,16 @@ class Team < ActiveRecord::Base
     self.name
   end
 
+  def stats(line)
+    case line
+      when :G then players.map(&:goalkeep).sum / players.count
+      when :D then players.map(&:defense).sum / players.count
+      when :M then players.map(&:midfield).sum / players.count
+      when :O then players.map(&:attack).sum / players.count
+      else 0
+    end
+  end
+
   def train(tokens)
     # TODO: Do something to team to increase its strenth
   end
