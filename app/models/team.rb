@@ -29,6 +29,16 @@ class Team < ActiveRecord::Base
     self.name
   end
 
+  def stats(line)
+    case line
+      when :G then Faker::Number.between(0, 100)
+      when :D then Faker::Number.between(0, 100)
+      when :M then Faker::Number.between(0, 100)
+      when :O then Faker::Number.between(0, 100)
+      else 0
+    end
+  end
+
   def train(tokens)
     # TODO: Do something to team to increase its strenth
   end
