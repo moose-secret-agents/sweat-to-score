@@ -7,6 +7,7 @@ class Match < ActiveRecord::Base
   TEAM_A_DIR = Vector[1,0]
   TEAM_B_DIR = Vector[-1,0]
   IMG_FOLDER = Rails.root.join('resources', 'match-images')
+  BASE_PITCH = Rails.root.join('app', 'assets', 'images', 'soccerPitch.png')
 
   belongs_to :league
 
@@ -94,6 +95,12 @@ class Match < ActiveRecord::Base
     @actions = []
 
     500.times do |i|
+      if i == 250
+        15.times do draw_pitch i end
+        @ball.position = Vector[50 , 30]
+        @ball.roll_dir = Vector[0 , 0]
+        reset_players
+      end
       @all_players.shuffle!(random: @rand)
       @actions.clear
       @goalie_a.try_save(@ball, @ball.slowdown == 0.9 ? 1 : 0.7)
@@ -105,7 +112,6 @@ class Match < ActiveRecord::Base
       end
 
       @all_players.shuffle!(random: @rand)
-
 
       @all_players.each do |player|
         #puts player.team
@@ -133,8 +139,9 @@ class Match < ActiveRecord::Base
         @ball.roll_dir = Vector[0, 0]
         @ball.carrier = nil
       end
-      draw_pitch
+      draw_pitch i
     end
+    30.times do draw_pitch 500 end
     @all_players.each do |player|
       player.save
     end
@@ -147,14 +154,27 @@ class Match < ActiveRecord::Base
     flip_team_b
   end
 
+  def reset_players
+    @ball.carrier = nil
+    self.teamA.players.each do |player|
+      player.set_position(player.fieldX,player.fieldY,TEAM_A_DIR)
+    end
+    self.teamB.players.each do |player|
+      player.set_position(player.fieldX,player.fieldY,TEAM_B_DIR)
+    end
+  end
   def check_goal(x,y,i)
     if y < 36 and y > 24
       if x < 0.0
         self.scoreB += 1
+        15.times do draw_pitch i end
+        reset_players
         #puts "#{i}: B (#{teamB}) scored: #{@ball.position}"
       end
       if x > 100.0
         self.scoreA += 1
+        15.times do draw_pitch i end
+        reset_players
         #puts "#{i}: A (#{teamA}) scored: #{@ball.position}"
       end
     end
@@ -175,14 +195,20 @@ class Match < ActiveRecord::Base
     uploader.upload(IMG_FOLDER.join 'GIF.gif')
   end
 
-  def draw_pitch
+  def draw_pitch ( timestep )
     #@png = ChunkyPNG::Image.new(101, 61, ChunkyPNG::Color::WHITE)
-    png = Magick::Image.new(101,61)
+    #png = Magick::Image.new(FIELD_DIMS[0]*2+1,FIELD_DIMS[1]*2+1)
+    png = Magick::Image.read(BASE_PITCH).first
+
     @players_a.each do |player|
       #puts "Team A: X: #{player.fieldX}, Y: #{player.fieldY}"
       if is_in_bounds?(player.position[0].round, player.position[1].round)
         #@png[player.position[0].round,player.position[1].round] = ChunkyPNG::Color('red') if(is_in_bounds?(player.fieldX, player.fieldY))
-        png.pixel_color(player.position[0].round,player.position[1].round, 'red') if(is_in_bounds?(player.fieldX, player.fieldY))
+        #png.pixel_color((4*player.position[0]).round,(4*player.position[1]).round, 'red') if(is_in_bounds?(player.fieldX, player.fieldY))
+        gc = Magick::Draw.new
+        gc.stroke('red')
+        gc.ellipse((4*player.position[0]).round,(4*player.position[1]).round, 4 , 4, 0, 360) if(is_in_bounds?(player.fieldX, player.fieldY))
+        gc.draw(png)
       end
     end
 
@@ -190,11 +216,41 @@ class Match < ActiveRecord::Base
     @players_b.each do |player|
       #puts "Team B: X: #{player.fieldX}, Y: #{player.fieldY}"
       if is_in_bounds?(player.position[0].round, player.position[1].round)
-      png.pixel_color(player.position[0].round,player.position[1].round,'blue') if(is_in_bounds?(player.fieldX, player.fieldY))
+      #png.pixel_color((4*player.position[0]).round,(4*player.position[1]).round,'blue') if(is_in_bounds?(player.fieldX, player.fieldY))
+      gc = Magick::Draw.new
+      gc.stroke('blue')
+      gc.ellipse((4*player.position[0]).round,(4*player.position[1]).round, 4 , 4, 0, 360) if(is_in_bounds?(player.fieldX, player.fieldY))
+      gc.draw(png)
       end
     end
 
-    png.pixel_color(ball.position[0].round,ball.position[1].round,'green')
+    gc = Magick::Draw.new
+    gc.stroke('black')
+    gc.fill('white')
+    gc.ellipse((4*ball.position[0]).round,(4*ball.position[1]).round, 2 , 2, 0, 360) if(is_in_bounds?(ball.position[0], ball.position[1]))
+    gc.draw(png)
+
+
+    watermark_text = Magick::Draw.new
+    watermark_text.annotate(png, 400,20,0,241, "#{scoreA} - #{scoreB}") do
+      watermark_text.gravity = Magick::CenterGravity
+      self.pointsize = 18
+      self.font_family = 'Arial'
+      #self.font_weight = BoldWeight
+      self.stroke = 'none'
+      self.fill = 'white'
+    end
+    watermark_text.annotate(png, 400,20,1,241, "#{(timestep.to_f / 500.0 * 90).to_i}:00") do
+      watermark_text.gravity = Magick::WestGravity
+      self.pointsize = 18
+      self.font_family = 'Arial'
+      #self.font_weight = BoldWeight
+      self.stroke = 'none'
+      self.fill = 'white'
+    end
+    #watermark_text.draw(png)
+
+
     @gif << png
     out_path = IMG_FOLDER.join("pitch#{@img_counter}.png")
     #png.write(out_path)
@@ -228,7 +284,7 @@ class Match < ActiveRecord::Base
 
   def compute_weather_string_and_temp
     @weather_fetcher = WeatherFetcher.new if weather_fetcher.nil?
-    weather_string = 'sunny'
+    weather_string = 'clear'
     precipitation_string = @weather_fetcher.fetch_temp < 0.0 ? 'snowfall' : 'rain'
     sunshine = @weather_fetcher.fetch_sunshine
     if sunshine < 10 and sunshine > 5

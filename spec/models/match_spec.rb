@@ -120,7 +120,7 @@ RSpec.describe Match, type: :model do
 
     @match.weather_fetcher = mock_fetcher
 
-    expect( @match.compute_weather_string_and_temp[0] ).to eq 'sunny'
+    expect( @match.compute_weather_string_and_temp[0] ).to eq 'clear'
   end
 
   it 'simulates match if match is scheduled' do
