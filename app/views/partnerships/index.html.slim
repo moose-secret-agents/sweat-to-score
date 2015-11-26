@@ -10,9 +10,21 @@ table class="table table-hover"
       th= Partnership.human_attribute_name(:user_id)
       th= Partnership.human_attribute_name(:partner_id)
       th= Partnership.human_attribute_name(:status)
+      th=t '.actions', :default => t("helpers.actions")
   tbody
     - @partnerships.each do |partnership|
       tr
         td= partnership.user.username
         td= partnership.partner.username
         td= partnership.status
+        td
+          - if partnership.status == "accepted"
+            = link_to t('.cancel_partnership', :default => t("helpers.links.cancel_partnership")), cancel_partnership_path(partnership), :method => :put, :class => 'btn btn-xs btn-danger'
+          - elsif partnership.status == "refused" || partnership.status == "cancelled"
+            = link_to t('.destroy', :default => t("helpers.links.destroy")), partnership_path(partnership), :method => :delete, :data => {:confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?'))}, :class => 'btn btn-xs btn-default'
+          - elsif partnership.user.id == current_user.id && partnership.status == "proposed"
+            = link_to t('.cancel_request', :default => t("helpers.links.cancel_request")), cancel_partnership_path(partnership), :method => :put, :class => 'btn btn-xs btn-warning'
+          - else
+            = link_to t('.accept', :default => t("helpers.links.accept")), accept_partnership_path(partnership), :method => :put, :class => 'btn btn-xs btn-success'
+            '
+            = link_to t('.refuse', :default => t("helpers.links.refuse")), refuse_partnership_path(partnership), :method => :put, :class => 'btn btn-xs btn-danger'

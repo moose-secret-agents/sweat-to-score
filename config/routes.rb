@@ -6,8 +6,6 @@ Rails.application.routes.draw do
 
   get 'news/index' => 'news#index', as: 'news'
 
-  get 'partnerships/index'
-
   get 'teams/index'
   get 'teams/show'
 
@@ -27,7 +25,9 @@ Rails.application.routes.draw do
   end
 
   resources :partnerships do
-
+    put 'accept', to: 'partnerships#accept', on: :member
+    put 'refuse', to: 'partnerships#refuse', on: :member
+    put 'cancel', to: 'partnerships#cancel', on: :member
   end
 
   root to: 'welcome#home'

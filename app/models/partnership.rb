@@ -4,7 +4,7 @@ class Partnership < ActiveRecord::Base
   belongs_to :user, class_name: 'User', foreign_key: 'user_id'
   belongs_to :partner, class_name: 'User', foreign_key: 'partner_id'
 
-  enum status: { proposed: 0, accepted: 1, refused: 2 }
+  enum status: { proposed: 0, accepted: 1, refused: 2, cancelled: 3}
 
   def accept
     accepted!
@@ -12,6 +12,10 @@ class Partnership < ActiveRecord::Base
 
   def refuse
     refused!
+  end
+
+  def cancel
+    cancelled!
   end
 
 end

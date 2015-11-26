@@ -53,7 +53,12 @@ class LeaguesController < ApplicationController
         render :edit
       end
     end
+  end
 
+  def destroy
+    @league = League.find(params[:id])
+    @league.destroy
+    redirect_to user_leagues_path(current_user), notice: 'League was successfully destroyed.'
   end
 
   def user_index
