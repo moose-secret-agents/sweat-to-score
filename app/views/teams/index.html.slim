@@ -11,9 +11,9 @@
         - unless team.nil?
           = render partial: 'teams/team_card', locals: { team: team }
 
-h1
-  = "Partnership Teams"
-hr
+.page-header
+  h1
+    = "Partnership Teams"
 
 - @partner_teams.each_slice(3) do |slice|
   .row

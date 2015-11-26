@@ -31,10 +31,10 @@ class Team < ActiveRecord::Base
 
   def stats(line)
     case line
-      when :G then Faker::Number.between(0, 100)
-      when :D then Faker::Number.between(0, 100)
-      when :M then Faker::Number.between(0, 100)
-      when :O then Faker::Number.between(0, 100)
+      when :G then players.map(&:goalkeep).sum / players.count
+      when :D then players.map(&:defense).sum / players.count
+      when :M then players.map(&:midfield).sum / players.count
+      when :O then players.map(&:attack).sum / players.count
       else 0
     end
   end
