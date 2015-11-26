@@ -40,7 +40,7 @@ class LeaguesController < ApplicationController
         @league.end
         redirect_to @league, notice: 'League ended'
       else
-        flash[:error] = "League is already {@league.status}"
+        flash[:error] = "League is already #{@league.status}"
         #redirect_to @league, notice: 'League is already #{@league.status}'
         redirect_to @league
       end
@@ -53,10 +53,16 @@ class LeaguesController < ApplicationController
         render :edit
       end
     end
+  end
 
+  def destroy
+    @league = League.find(params[:id])
+    @league.destroy
+    redirect_to user_leagues_path(current_user), notice: 'League was successfully destroyed.'
   end
 
   def user_index
+    @user = current_user
     @leagues = current_user.leagues
     render :index
   end

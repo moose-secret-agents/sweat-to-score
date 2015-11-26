@@ -1,7 +1,7 @@
 br
 br
 
-div class="container"
+div class="col-md-12"
   ul.timeline
     - count = 0
     - @matches.each do |match|
@@ -9,14 +9,14 @@ div class="container"
       - if count % 2 != 0
         li
           .timeline-badge class="#{match.status}"
-            i.glyphicon class="#{match.glyphicon}"
+            i.glyphicon class="#{glyphicon(match.status)}"
           .timeline-panel
             .timeline-heading
               h4.timeline-title #{match.starts_at.strftime("%A %b %d %Y at %H:%M")}
               p
                 small.text-muted
                   i.glyphicon.glyphicon-time
-                    |  #{match.getTimeDifference(match.starts_at)}
+                    |  #{getTimeDifference(match.starts_at)}
                     br
                     i.glyphicon.glyphicon-info-sign
                     |  #{match.status}
@@ -34,14 +34,14 @@ div class="container"
         li
           li.timeline-inverted
             .timeline-badge class="#{match.status}"
-              i.glyphicon class="#{match.glyphicon}"
+              i.glyphicon class="#{glyphicon(match.status)}"
             .timeline-panel
               .timeline-heading
                 h4.timeline-title #{match.starts_at.strftime("%A %b %d %Y at %H:%M")}
                 p
                   small.text-muted
                     i.glyphicon.glyphicon-time
-                      |  #{match.getTimeDifference(match.starts_at)}
+                      |  #{getTimeDifference(match.starts_at)}
                       br
                       i.glyphicon.glyphicon-info-sign
                       |  #{match.status}

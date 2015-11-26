@@ -15,12 +15,12 @@ div class="page-header"
 
 ul.nav.nav-tabs
   li.active
-    a data-toggle="tab" href="#leagues-tab" Leagues
+    a data-toggle="tab" href="#teams-tab" Teams
   li
     a data-toggle="tab" href="#matches-tab" Matches
 
 .tab-content
-  #leagues-tab.tab-pane.fade.in.active
+  #teams-tab.tab-pane.fade.in.active
     - if @league.teams.any?
       == render 'leagueTable'
     - else

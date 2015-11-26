@@ -17,10 +17,17 @@ Rails.application.routes.draw do
     get 'tokens', to: 'tokens#index', as: 'tokens'
     post 'tokens/book', to: 'tokens#book', as: 'book_tokens'
     get 'leagues' => 'leagues#user_index', as: 'leagues'
+    get 'partnerships' => 'partnerships#user_index', as: 'partnerships'
   end
 
   resources :leagues do
     resources :matches, except: [:edit, :update], shallow: true
+  end
+
+  resources :partnerships do
+    put 'accept', to: 'partnerships#accept', on: :member
+    put 'refuse', to: 'partnerships#refuse', on: :member
+    put 'cancel', to: 'partnerships#cancel', on: :member
   end
 
   root to: 'welcome#home'
