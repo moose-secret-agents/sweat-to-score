@@ -62,6 +62,7 @@ class LeaguesController < ApplicationController
   end
 
   def user_index
+    @user = current_user
     @leagues = current_user.leagues
     render :index
   end

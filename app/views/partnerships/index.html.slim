@@ -1,8 +1,8 @@
-div class="page-header"
+.page-header
   h1
     = "Partnerships of #{current_user.real_name}"
     .pull-right
-      = link_to fa_icon(:users, text: 'Request new Partnership'), new_partnership_path, class: 'btn btn-default'
+      = link_to fa_icon(:odnoklassniki, text: 'Request new Partnership'), new_partnership_path, class: 'btn btn-default'
 
 table class="table table-hover"
   thead
