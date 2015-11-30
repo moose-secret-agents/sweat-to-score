@@ -7,7 +7,7 @@ RSpec.describe SchedulerDoubleRR, type: :model do
     User.delete_all
     Match.delete_all
     @league = League.create!(level: 2)
-    @league.update_attribute(:league_length, 3)
+    @league.update_attribute(:league_length, 0)
     @league.update_attribute(:pause_length, 3)
     @league.update_attribute(:starts_at, Time.now-1.day)
     @user = Fabricate(:user, username: 'User')
@@ -38,6 +38,9 @@ RSpec.describe SchedulerDoubleRR, type: :model do
     end
     schedule=@scheduler.schedule_season(@league)
     expect(@league.matches.length).to eq(@league.teams.length*(@league.teams.length-1))
+    (1..(schedule.size-1)).each do |i|
+      expect(schedule[i]).not_to be_empty
+    end
   end
 
   it 'can schedule 3 teams' do
@@ -46,6 +49,9 @@ RSpec.describe SchedulerDoubleRR, type: :model do
     end
     schedule=@scheduler.schedule_season(@league)
     expect(@league.matches.length).to eq(@league.teams.length*(@league.teams.length-1))
+    (1..(schedule.size-1)).each do |i|
+      expect(schedule[i]).not_to be_empty
+    end
   end
 
   it 'can schedule 4 teams' do
@@ -54,6 +60,9 @@ RSpec.describe SchedulerDoubleRR, type: :model do
     end
     schedule=@scheduler.schedule_season(@league)
     expect(@league.matches.length).to eq(@league.teams.length*(@league.teams.length-1))
+    (1..(schedule.size-1)).each do |i|
+      expect(schedule[i]).not_to be_empty
+    end
   end
 
   it 'can schedule 5 teams' do
@@ -62,6 +71,9 @@ RSpec.describe SchedulerDoubleRR, type: :model do
     end
     schedule=@scheduler.schedule_season(@league)
     expect(@league.matches.length).to eq(@league.teams.length*(@league.teams.length-1))
+    (1..(schedule.size-1)).each do |i|
+      expect(schedule[i]).not_to be_empty
+    end
   end
 
   it 'can schedule 6 teams' do
@@ -70,6 +82,9 @@ RSpec.describe SchedulerDoubleRR, type: :model do
     end
     schedule=@scheduler.schedule_season(@league)
     expect(@league.matches.length).to eq(@league.teams.length*(@league.teams.length-1))
+    (1..(schedule.size-1)).each do |i|
+      expect(schedule[i]).not_to be_empty
+    end
   end
 
   it 'can schedule 7 teams' do
@@ -78,6 +93,9 @@ RSpec.describe SchedulerDoubleRR, type: :model do
     end
     schedule=@scheduler.schedule_season(@league)
     expect(@league.matches.length).to eq(@league.teams.length*(@league.teams.length-1))
+    (1..(schedule.size-1)).each do |i|
+      expect(schedule[i]).not_to be_empty
+    end
   end
 
   it 'can schedule 8 teams' do
@@ -86,6 +104,68 @@ RSpec.describe SchedulerDoubleRR, type: :model do
     end
     schedule=@scheduler.schedule_season(@league)
     expect(@league.matches.length).to eq(@league.teams.length*(@league.teams.length-1))
+    (1..(schedule.size-1)).each do |i|
+      expect(schedule[i]).not_to be_empty
+    end
+  end
+
+  it 'can split rounds with 3 teams during 7 days' do
+    (1..3).each do
+      add_team_to_league
+    end
+    league_length=7
+    @league.update_attribute(:league_length, league_length)
+    schedule=@scheduler.schedule_season(@league)
+
+
+    (0..(schedule.size-1)).each do |i|
+      expect(schedule[i].size).to eq(1) unless i==3
+      expect(schedule[i].size).to eq(0) if i==3
+    end
+  end
+
+  it 'can split rounds with 3 teams during 8 days' do
+    (1..3).each do
+      add_team_to_league
+    end
+    league_length=8
+    @league.update_attribute(:league_length, league_length)
+    schedule=@scheduler.schedule_season(@league)
+
+
+    (0..(schedule.size-1)).each do |i|
+      expect(schedule[i].size).to eq(1) unless [3,4].include?(i)
+      expect(schedule[i].size).to eq(0) if [3,4].include?(i)
+    end
+  end
+
+  it 'can distribute matches for 8 teams over 56 days' do
+    (1..8).each do
+      add_team_to_league
+    end
+    league_length=56
+    @league.update_attribute(:league_length, league_length)
+    schedule=@scheduler.schedule_season(@league)
+
+
+    (0..(schedule.size-1)).each do |i|
+      expect(schedule[i].size).to eq(1)
+    end
+  end
+
+  it 'can distribute matches for 8 teams over 57 days' do
+    (1..8).each do
+      add_team_to_league
+    end
+    league_length=57
+    @league.update_attribute(:league_length, league_length)
+    schedule=@scheduler.schedule_season(@league)
+
+
+    (0..(schedule.size-1)).each do |i|
+      expect(schedule[i].size).to eq(1) unless i==28
+      expect(schedule[i].size).to eq(0) if i==28
+    end
   end
 
   it 'should schedule matches on league activation' do
@@ -116,7 +196,7 @@ RSpec.describe SchedulerDoubleRR, type: :model do
     next_starting_date=@league.reload.starts_at
 
     expect(@league.reload.status).to eq("active")
-    expect(next_starting_date).to eq(starting_date+@league.reload.league_length.day+@league.reload.pause_length.day)
+    expect(next_starting_date).to eq(starting_date+[@league.reload.league_length.day, 2.day].max+@league.reload.pause_length.day)
   end
 
   it 'should not start not overdue inactive league' do

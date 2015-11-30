@@ -1,13 +1,9 @@
 class SchedulerDoubleRR
   def schedule_season(league)
-    #puts 'scheduled'
-    #puts Date.beginning_of_week
     teams=league.teams
-    #season_start=1.week.from_now.beginning_of_week+20.hour
     season_start=league.starts_at
-    #season_length=decide_on_season_length(teams.size)
     season_length=actual_league_length(league)
-    schedule=assign_matches(teams,season_length)
+    schedule=assign_matches(teams,season_length,league)
 
     for i in 0..season_length-1
       date=season_start+i.day
@@ -27,7 +23,7 @@ class SchedulerDoubleRR
   end
 
   private
-    def assign_matches(t, season_length)
+    def assign_matches(t, season_length, league)
 
 
       schedule=Array.new(season_length){[]}
@@ -63,29 +59,59 @@ class SchedulerDoubleRR
 
       #delete pauses from match schedule
       schedule.each do |day|
-        day.compact
+        day.compact!
         day.delete_if{|match| match.contains_nil}
       end
 
+      schedule=split_rounds(schedule, league)
+
       #make sure more or less the same number of matches is scheduled each day
-      while (is_badly_distributed(schedule)) do
-        if(!redistribute(schedule))
+      #while (is_badly_distributed(schedule.take((schedule.size-schedule.size%2)/2))) do
+        #if(!redistribute(schedule.take((schedule.size-schedule.size%2)/2)))
+      while (is_badly_distributed(schedule.take((schedule.size-schedule.size%2)/2))) do
+        if(!redistribute(schedule.take((schedule.size-schedule.size%2)/2)))
           break
         end
       end
 
+      while (is_badly_distributed(schedule.last((schedule.size-schedule.size%2)/2))) do
+        if(!redistribute(schedule.last((schedule.size-schedule.size%2)/2)))
+          break
+        end
+      end
       schedule
+    end
+
+
+    def split_rounds(schedule, league)
+      schedule_split=Array.new(schedule.size){[]}
+      round_length=min_league_length(league)/2
+
+      (0..(round_length-1)).each do |i|
+        schedule_split[i]=schedule[i]
+      end
+
+      (0..(round_length-1)).each do |i|
+        schedule_split[schedule.size-round_length+i]=schedule[round_length+i]
+      end
+
+      schedule_split
     end
 
     #doesn't distribute perfectly
     def redistribute(schedule)
       max=schedule.max_by {|element| element.length}
 
+
+
       schedule.each do |day|
         if (day.length<max.length-1)
-          if(day.all?{|match| !match.contains_same_team(max.last)})
-            day<<max.pop
-            return true
+          max.each do |max_match|
+            if(day.all?{|match| !match.contains_same_team(max_match)})
+              max.delete(max_match)
+              day<<max_match
+              return true
+            end
           end
         end
       end
