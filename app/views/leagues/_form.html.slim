@@ -2,8 +2,8 @@
   = f.text_field :name
   = f.number_field :level
 
-  = f.number_field :league_length, min: @min_length
-  = f.number_field :pause_length
+  = f.number_field :league_length, min: @min_length, append: "Days"
+  = f.number_field :pause_length, append: "Days"
 
   =f.form_group "league[starts_at]", label: { text: "Starts at"} do
     div class='input-group date' id='datetimepicker1'
