@@ -101,16 +101,19 @@ class SchedulerDoubleRR
     #doesn't distribute perfectly
     def redistribute(schedule)
       max=schedule.max_by {|element| element.length}
+      max_days=schedule.select{|day| day.size==max.size}
 
-
-
-      schedule.each do |day|
-        if (day.length<max.length-1)
-          max.each do |max_match|
-            if(day.all?{|match| !match.contains_same_team(max_match)})
-              max.delete(max_match)
-              day<<max_match
-              return true
+      #tries to remove a match from any day with the max number of matches(maxDays) and adds that match(max_match)
+      #to a day that has at least 2 less matches than this max_day
+      max_days.each do |max_day|
+        schedule.each do |day|
+          if (day.length<max_day.length-1)
+            max_day.each do |max_match|
+              if(day.all?{|match| !match.contains_same_team(max_match)})
+                max_day.delete(max_match)
+                day<<max_match
+                return true
+              end
             end
           end
         end
