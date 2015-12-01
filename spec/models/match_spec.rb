@@ -125,13 +125,13 @@ RSpec.describe Match, type: :model do
 
   it 'simulates match if match is scheduled' do
 
-    mock_fetcher = double("weather_fetcher")
-    allow(mock_fetcher).to receive_messages(
-                               :fetch_temp => 18.0,
-                               :fetch_precipitation => 0,
-                               :fetch_sunshine => 10)
+    #mock_fetcher = double("weather_fetcher")
+    #allow(mock_fetcher).to receive_messages(
+    #                           :fetch_temp => 18.0,
+    #                           :fetch_precipitation => 0,
+    #                           :fetch_sunshine => 10)
 
-    @match.weather_fetcher = mock_fetcher
+    #@match.weather_fetcher = mock_fetcher
 
     @match.status = :scheduled
     RubyProf.start

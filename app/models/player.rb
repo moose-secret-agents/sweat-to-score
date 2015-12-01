@@ -25,8 +25,8 @@ class Player < ActiveRecord::Base
 
     ball_direction = ball.position - @position
     home_direction = Vector[self.fieldX,self.fieldY] - @position
-    goal_direction = @play_direction
-    goal_direction = Vector[50 + play_direction[0]*50,30] - @position if (@position[0] - (50 + play_direction[0]*50)).abs < 25
+    goal_direction = @play_direction + Vector[0, @rand.rand(1.0) - 0.5]
+    goal_direction = Vector[50 + @play_direction[0]*50,30] - @position if (@position[0] - (50 + @play_direction[0]*50)).abs < 25
 
     heading = home_direction*(home_direction.r/100)
     heading = ball_direction if ball_direction.r<Match::MAX_PLAYER_TO_BALL_DIST
