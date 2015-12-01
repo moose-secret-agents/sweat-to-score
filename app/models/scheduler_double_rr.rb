@@ -69,13 +69,13 @@ class SchedulerDoubleRR
       #while (is_badly_distributed(schedule.take((schedule.size-schedule.size%2)/2))) do
         #if(!redistribute(schedule.take((schedule.size-schedule.size%2)/2)))
       while (is_badly_distributed(schedule.take((schedule.size-schedule.size%2)/2))) do
-        if(!redistribute(schedule.take((schedule.size-schedule.size%2)/2)))
+        if(!redistribute(schedule.take((schedule.size-schedule.size%2)/2), false))
           break
         end
       end
 
       while (is_badly_distributed(schedule.last((schedule.size-schedule.size%2)/2))) do
-        if(!redistribute(schedule.last((schedule.size-schedule.size%2)/2)))
+        if(!redistribute(schedule.last((schedule.size-schedule.size%2)/2), true))
           break
         end
       end
@@ -99,12 +99,20 @@ class SchedulerDoubleRR
     end
 
     #doesn't distribute perfectly
-    def redistribute(schedule)
+    def redistribute(schedule, reverse)
       max=schedule.max_by {|element| element.length}
       max_days=schedule.select{|day| day.size==max.size}
 
       #tries to remove a match from any day with the max number of matches(maxDays) and adds that match(max_match)
       #to a day that has at least 2 less matches than this max_day
+      if(reverse)
+        schedule.reverse!
+      end
+
+      if(!reverse)
+        max_days.reverse!
+      end
+
       max_days.each do |max_day|
         schedule.each do |day|
           if (day.length<max_day.length-1)

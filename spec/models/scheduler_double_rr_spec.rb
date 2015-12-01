@@ -163,8 +163,38 @@ RSpec.describe SchedulerDoubleRR, type: :model do
 
 
     (0..(schedule.size-1)).each do |i|
-      expect(schedule[i].size).to eq(1) unless i==28
-      expect(schedule[i].size).to eq(0) if i==28
+      expect(schedule[i].size).to eq(1) unless 28==i
+      expect(schedule[i].size).to eq(0) if 28==i
+    end
+  end
+
+  it 'can distribute matches for 8 teams over 59 days' do
+    (1..8).each do
+      add_team_to_league
+    end
+    league_length=59
+    @league.update_attribute(:league_length, league_length)
+    schedule=@scheduler.schedule_season(@league)
+
+
+    (0..(schedule.size-1)).each do |i|
+      expect(schedule[i].size).to eq(1) unless [28,29,30].include?(i)
+      expect(schedule[i].size).to eq(0) if [28,29,30].include?(i)
+    end
+  end
+
+  it 'can distribute matches for 4 teams over 8 days' do
+    (1..4).each do
+      add_team_to_league
+    end
+    league_length=8
+    @league.update_attribute(:league_length, league_length)
+    schedule=@scheduler.schedule_season(@league)
+
+
+    (0..(schedule.size-1)).each do |i|
+      expect(schedule[i].size).to eq(2) unless [2,3,4,5].include?(i)
+      expect(schedule[i].size).to eq(1) if [2,3,4,5].include?(i)
     end
   end
 
