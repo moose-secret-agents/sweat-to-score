@@ -6,6 +6,8 @@ class Player < ActiveRecord::Base
   attr_accessor :is_goalie
   attr_accessor :rand
 
+  PLAYER_PROGRESSION_SCALE = 0.3
+
   def generate_face
     self.face = Face.new.generate
     self.save
@@ -23,8 +25,8 @@ class Player < ActiveRecord::Base
 
     ball_direction = ball.position - @position
     home_direction = Vector[self.fieldX,self.fieldY] - @position
-    goal_direction = @play_direction
-    goal_direction = Vector[50 + play_direction[0]*50,30] - @position if (@position[0] - (50 + play_direction[0]*50)).abs < 25
+    goal_direction = @play_direction + Vector[0, @rand.rand(1.0) - 0.5]
+    goal_direction = Vector[50 + @play_direction[0]*50,30] - @position if (@position[0] - (50 + @play_direction[0]*50)).abs < 25
 
     heading = home_direction*(home_direction.r/100)
     heading = ball_direction if ball_direction.r<Match::MAX_PLAYER_TO_BALL_DIST
@@ -38,7 +40,7 @@ class Player < ActiveRecord::Base
 
     heading = heading.normalize if heading.r>1
 
-    self.stamina -= (heading.r / Match::PLAY_TIME_SCALE) * scale(self.stamina) * 0.4 * (1 - scale(self.fitness)) * (1 + 2*(1-weather_factor))
+    self.stamina -= (heading.r / Match::PLAY_TIME_SCALE) * scale(self.stamina) * 0.6 * (1 - scale(self.fitness)) * (1 + 2*(1-weather_factor))
     #puts self.stamina
 
     heading*=real_speed
@@ -49,11 +51,13 @@ class Player < ActiveRecord::Base
   end
 
   def try_save(ball,weather_scale)
-    dist = (ball.position - @position).r
+    ydist = ((ball.position - @position)[1]).abs
+    xdist = ((ball.position - @position)[0]).abs
     ball_speed = ball.roll_dir.r
-    return if dist > 6
+    return if ydist > 7
+    return if xdist > 3
     #puts "#{self.team} trying save"
-    distance_difficulty = dist / 6.0
+    distance_difficulty = ydist / 6.0
     speed_difficulty = ball_speed / 3.0 / Match::PLAY_TIME_SCALE
     difficulty = distance_difficulty * speed_difficulty * (1+(1-weather_scale))
     #puts "#{self.team} trying save with difficulty #{difficulty}"
@@ -62,6 +66,7 @@ class Player < ActiveRecord::Base
     if randval > difficulty
       #puts "saved ball"
       ball.kick(@play_direction * 5 + Vector[0,@rand.rand(10.0)-5.0])
+      self.goalkeep += scale(self.talent)*(1-scale(self.goalkeep))*PLAYER_PROGRESSION_SCALE*@rand.rand(1.0)
     else
       ball.position+= @play_direction * -50
       #puts ball.position
@@ -79,8 +84,8 @@ class Player < ActiveRecord::Base
     dist = (ball.position - @position).r
 
     if ball.carrier == self
-      return Action.new(self,:kick_forward) if @rand.rand(1.0)>0.9
-      return Action.new(self,:shoot_at_goal) if @rand.rand(1.0)>0.75 and (Vector[@play_direction[0]*100,30] - @position).r<30
+      return Action.new(self,:kick_forward) if @rand.rand(1.0)>0.9 and (Vector[@play_direction[0]*100,30] - @position).r>30
+      return Action.new(self,:shoot_at_goal) if @rand.rand(1.0)>0.25 and (Vector[@play_direction[0]*100,30] - @position).r<30
       return nil
     elsif dist<1.5
       if ball.carrier.nil?
@@ -100,18 +105,25 @@ class Player < ActiveRecord::Base
 
   def shoot_at_goal(ball)
     #puts "shooting at goal"
-    goal_direction = Vector[@play_direction[0]*100,30 + (@rand.rand(12.0 * scale(self.attack))-6.0*scale(self.attack))] - @position
-    ball.kick(goal_direction.normalize * 1 * scale_with_time(scale(self.attack)))
+    y = 30 + (@rand.rand(12.0 * scale(self.attack))-6.0*scale(self.attack))
+    #puts "shooting at #{y}"
+    goal_direction = Vector[@play_direction[0]*100,y] - @position
+    ball.kick(goal_direction.normalize * 4 * scale_with_time(scale(self.attack)))
+    self.attack += scale(self.talent)*(1-scale(self.attack))*PLAYER_PROGRESSION_SCALE*@rand.rand(1.0)
   end
 
   def tackle(ball)
     #puts "trying tackle"
     randval = @rand.rand(1.0) * scale(self.defense)
     kick_forward(ball) if ball.try_take(self, randval) == :taken_from_player and @rand.rand(1.0)>0.6
+    self.defense += scale(self.talent)*(1-scale(self.defense))*PLAYER_PROGRESSION_SCALE*@rand.rand(1.0)
+    #puts self.defense
   end
 
   def defend_tackle
     randval = @rand.rand(1.0)*scale([self.defense, self.midfield, self.attack].max)
+    self.midfield += scale(self.talent)*(1-scale(self.midfield))*PLAYER_PROGRESSION_SCALE*@rand.rand(1.0)
+    #puts self.midfield
     randval
   end
 
