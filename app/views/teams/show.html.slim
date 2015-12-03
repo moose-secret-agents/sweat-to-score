@@ -19,6 +19,6 @@ ul.nav.nav-tabs
 
   #matches-tab.tab-pane.fade
     - if @matches.any?
-      == render 'matchTables'
+      = render partial: 'matches/timeline'
     - else
       h1 No matches available!

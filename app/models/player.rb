@@ -13,6 +13,12 @@ class Player < ActiveRecord::Base
     self.save
   end
 
+  def regenerate_stamina
+    #puts "previous stamina: #{self.stamina}"
+    self.stamina += (1-scale(self.stamina)) * 50 * scale(self.fitness)
+    #puts "new stamina: #{self.stamina}"
+  end
+
   def set_position(x,y, play_dir)
     @position = Vector[x,y]
     @play_direction = play_dir
@@ -21,7 +27,7 @@ class Player < ActiveRecord::Base
   def move(ball, weather_factor)
     return if is_goalie
 
-    real_speed = scale_with_time( scale(self.speed) * weather_factor )
+    real_speed = scale_with_time( scale(self.stamina) * weather_factor )
 
     ball_direction = ball.position - @position
     home_direction = Vector[self.fieldX,self.fieldY] - @position

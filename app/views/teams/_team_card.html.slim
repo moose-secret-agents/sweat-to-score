@@ -6,7 +6,7 @@
         = link_to team.name, team_path(team)
       .col-md-4
         .pull-right= link_to 'Train', '#', class: 'btn btn-xs btn-primary', rel: 'popover', title: 'Apply Training Tokens',
-          data: { toggle: 'popover', trigger: 'focus', content: "#{render partial: 'tokens/training', locals: { team: team } }" }
+          data: { toggle: 'popover', content: "#{render partial: 'tokens/training', locals: { team: team } }" }
 
   = p.body do
     .stat

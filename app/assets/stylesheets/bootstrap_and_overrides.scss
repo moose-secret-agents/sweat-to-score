@@ -1,9 +1,7 @@
 @import "bootstrap-sprockets";
+@import "_variables";
 @import "bootstrap";
-
-.panel-heading {
-  a { color: inherit; }
-}
+@import "_bootswatch";
 
 .btn i {
   margin: 0;
@@ -14,6 +12,10 @@ body {
 }
 
 .team-card, .player-card {
+  .panel-heading {
+    a { color: inherit; }
+  }
+
   .stat {
     overflow: hidden;
     .stat-label {
@@ -47,7 +49,7 @@ body {
 }
 
 .popover-title {
-  color: #565656 !important;
+  //color: #565656 !important;
 }
 
 .overflow-hidden {

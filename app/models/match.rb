@@ -143,6 +143,7 @@ class Match < ActiveRecord::Base
     end
     30.times do draw_pitch 500 end
     @all_players.each do |player|
+      player.regenerate_stamina
       player.save
     end
     puts "result: #{self.scoreA}-#{self.scoreB}"
