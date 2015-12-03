@@ -1,0 +1,36 @@
+= bs_panel context: :primary, class: 'player-card' do |p|
+
+  = p.header do
+    h3.panel-title.row
+      .col-md-8
+        = player.name
+
+  = p.body do
+    .stat
+      strong.stat-label G:
+      .stat-value
+        = bs_progress player.goalkeep
+    .stat
+      strong.stat-label D:
+      .stat-value
+        = bs_progress player.defense
+    .stat
+      strong.stat-label M:
+      .stat-value
+        = bs_progress player.midfield
+    .stat
+      strong.stat-label A:
+      .stat-value
+        = bs_progress player.attack
+    .stat
+      strong.stat-label F:
+      .stat-value
+        = bs_progress player.fitness
+    .stat
+      strong.stat-label S:
+      .stat-value
+        = bs_progress player.stamina
+    hr
+
+  = p.footer do
+    small.pull-left= 'G:Goalkeeper D:Defense M:MidField A:Attack F:Fitess S:Stamina'
