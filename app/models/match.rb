@@ -200,6 +200,7 @@ class Match < ActiveRecord::Base
   end
 
   def draw_pitch ( timestep )
+    puts timestep
     #@png = ChunkyPNG::Image.new(101, 61, ChunkyPNG::Color::WHITE)
     #png = Magick::Image.new(FIELD_DIMS[0]*2+1,FIELD_DIMS[1]*2+1)
     image = Magick::Image.read("app/assets/images/soccerPitch.png").first
@@ -257,8 +258,9 @@ class Match < ActiveRecord::Base
 
     #@gif << png
 
-    out_path = IMG_FOLDER.join("pitch#{@img_counter}.png")
+    out_path = IMG_FOLDER.join("pitch#{@img_counter}.jpg"){self.quality = 30}
     @images << out_path
+    image = image.minify
     image.write(out_path)
     @img_counter += 1
   end
