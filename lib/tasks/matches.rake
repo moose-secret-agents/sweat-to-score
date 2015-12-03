@@ -9,6 +9,6 @@ namespace :matches do
 
   desc 'generate GIF'
   task generate_gif: :environment do
-    TaskHelpers::encode_gif
+    TaskHelpers::encode_gif(Rails.root.join('resources','match-images'))
   end
 end

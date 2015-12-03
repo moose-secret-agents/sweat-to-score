@@ -193,9 +193,10 @@ class Match < ActiveRecord::Base
 
   def store_gif
     uploader = ImageUploader.new
-    @gif = Magick::ImageList.new(*@images)
-    @gif.write(IMG_FOLDER.join 'GIF.gif')
-    uploader.upload(IMG_FOLDER.join 'GIF.gif')
+    TaskHelpers::encode_gif(IMG_FOLDER)
+    #@gif = Magick::ImageList.new(*@images)
+    #@gif.write(IMG_FOLDER.join 'GIF.gif')
+    uploader.upload(IMG_FOLDER.join 'output.gif')
   end
 
   def draw_pitch ( timestep )
@@ -255,7 +256,7 @@ class Match < ActiveRecord::Base
 
 
     #@gif << png
-    image = image.minify
+
     out_path = IMG_FOLDER.join("pitch#{@img_counter}.png")
     @images << out_path
     image.write(out_path)
