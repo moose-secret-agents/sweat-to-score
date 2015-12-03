@@ -12,7 +12,11 @@ class UserSessionsController < ApplicationController
     session[:password] = password
 
     # Check Logging credentials against CyCo and local DB
-    if coach_client.users.authenticated?(username, password) && (@user = login(username, password, true))
+    if coach_client.users.authenticated?(username, password)
+        # create local account if not exists
+        User.create!(username: username, password: password, password_confirmation: password) unless User.find_by(username: username)
+
+      @user = login(username, password, true)
       redirect_back_or_to(:root, notice: 'Login successful')
     else
       fail_login
