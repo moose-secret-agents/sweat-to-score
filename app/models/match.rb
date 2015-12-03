@@ -258,7 +258,7 @@ class Match < ActiveRecord::Base
 
     #@gif << png
 
-    out_path = IMG_FOLDER.join("pitch#{@img_counter}.jpg"){self.quality = 30}
+    out_path = IMG_FOLDER.join("pitch#{@img_counter}.jpg")
     @images << out_path
     image = image.minify
     image.write(out_path)
