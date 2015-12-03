@@ -6,6 +6,9 @@ class Player < ActiveRecord::Base
   attr_accessor :is_goalie
   attr_accessor :rand
 
+  scope :bank, -> { where(fieldX: 0, fieldY: 0) }
+  scope :playing, -> { where.not(fieldX: 0, fieldY: 0) }
+
   def generate_face
     self.face = Face.new.generate
     self.save

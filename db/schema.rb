@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151116152521) do
+ActiveRecord::Schema.define(version: 20151119154354) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -65,8 +65,8 @@ ActiveRecord::Schema.define(version: 20151116152521) do
     t.datetime "updated_at",                null: false
     t.integer  "team_id"
     t.json     "face"
-    t.integer  "fieldX"
-    t.integer  "fieldY"
+    t.integer  "fieldX",     default: 0
+    t.integer  "fieldY",     default: 0
     t.float    "speed",      default: 10.0
     t.float    "stamina",    default: 10.0
     t.float    "fitness",    default: 10.0

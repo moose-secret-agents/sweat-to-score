@@ -3,8 +3,8 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 ready = ->
-  $('#savePosition').on 'click', ->
-    savePlayerPositions()
+  $('#savePosition').on 'click', (event) -> savePlayerPositions()
+  $('#markKeeper').on 'click', (event) -> markKeeper()
 
   initFaces()
   initTabs()
@@ -20,15 +20,12 @@ initFaces = ->
     talent = $(element).data('talent')
     face.fatness = talent
 
-    if(talent < 20)
-      face.mouth.id = 1
-    else if(talent < 40)
-      face.mouth.id = 2
-    else if(talent < 60)
-      face.mouth.id = 3
-    else if(talent < 80)
-      face.mouth.id = 4
-    else face.mouth.id = 5
+    face.mouth.id = switch
+      when talent < 20 then 1
+      when talent < 40 then 2
+      when talent < 60 then 3
+      when talent < 80 then 4
+      else 5
 
     faces.display(id, face)
 
@@ -45,8 +42,14 @@ initPlayers = ->
   # Make players draggable
   $('.draggable').draggable(containment: '#field')
 
+  # Update positions
+  $('.player').each (index, element) ->
+    pos = $(element).data('position')
+    $(element).css('left', pos[0])
+    $(element).css('top', pos[1])
+
 sendPositions = (positions) ->
-  team_id = $('#bank').data('team-id')
+  team_id = $('#football-field').data('team-id')
   $.post("/teams/#{team_id}/positions", { positions: positions })
 
 savePlayerPositions = ->
@@ -54,8 +57,10 @@ savePlayerPositions = ->
   $('.player').each (index, element) ->
     id = $(element).data('player-id')
     pos =
-      top: $(element).offset().top - $('#field').offset().top
-      left: $(element).offset().left - $('#field').offset().left
+      top: $(element).offset().top - $('#football-field').offset().top
+      left: $(element).offset().left - $('#football-field').offset().left
     positions[id] = pos
 
   sendPositions(positions)
+
+markKeeper = ->

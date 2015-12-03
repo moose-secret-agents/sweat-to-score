@@ -15,8 +15,8 @@ end
 Fabricator(:player) do
   name { Faker::Name.name }
   talent { Faker::Number.between(0, 100) }
-  fieldX {Faker::Number.between(0, 100)}
-  fieldY {Faker::Number.between(0 , 60)}
+  fieldX 0
+  fieldY 0
 end
 
 Fabricator(:team) do
