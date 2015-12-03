@@ -1,0 +1,29 @@
+br
+br
+ul.timeline
+  -@matches.each_with_index do |match, index|
+    li class=(index.odd? ? 'timeline-inverted' : '')
+      .timeline-badge class="#{match.status}"
+        i.glyphicon class="#{glyphicon(match.status)}"
+      .timeline-panel
+        .timeline-heading
+          h4.timeline-title #{match.starts_at.strftime("%A %b %d %Y at %H:%M")}
+          p
+            small.text-muted
+              i.glyphicon.glyphicon-time
+                |  #{getTimeDifference(match.starts_at)}
+                br
+                i.glyphicon.glyphicon-info-sign
+                |  #{match.status}
+        .timeline-body
+          table class="table table-hover"
+            thead
+              tr
+                th.timeline-table-head= Match.human_attribute_name(:Home)
+                th.timeline-table-head= Match.human_attribute_name(:Guest)
+            tbody
+              tr
+                td.timeline-table-body= match.teamA.name
+                td.timeline-table-body= match.teamB.name
+          -unless match.imgurLink.nil?
+            img.matchgif src = "#{match.imgurLink}"

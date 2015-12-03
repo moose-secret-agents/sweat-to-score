@@ -24,10 +24,7 @@ class LeaguesController < ApplicationController
   def show
 	  @teams = @league.teams.sort_by(&:rank_in_league)
 
-    matches=Hash.new{|h, k| h[k] = []}
-    @league.matches.each{|match| matches[match.starts_at]<<match}
-
-    @matches = matches.values
+    @matches = @league.matches.order(:starts_at)
   end
 
   def update
