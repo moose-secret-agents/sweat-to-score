@@ -5,7 +5,7 @@ ready =  ->
     format: 'YYYY-MM-DD HH:mm:ss'
 
   # Initialize Popovers and Tooltips
-  $("a[rel~=popover], .has-popover").popover(html: true)
+  $("a[rel~=popover], .has-popover").popover(html: true, container: 'body')
   $("a[rel~=tooltip], .has-tooltip").tooltip()
 
 

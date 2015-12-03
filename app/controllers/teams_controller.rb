@@ -10,9 +10,7 @@ class TeamsController < ApplicationController
   end
 
   def show
-    #matches=Hash.new{|h, k| h[k] = []}
-    #@team.matches.each{|match| matches[match.starts_at]<<match}
-    @matches = @team.matches
+    @matches = @team.matches.order(:starts_at)
   end
 
   def new
