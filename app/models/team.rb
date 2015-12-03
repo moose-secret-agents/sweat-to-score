@@ -9,6 +9,14 @@ class Team < ActiveRecord::Base
 
   after_create :assign_players
 
+  def averageSkill
+    skill=0
+    self.players.each do |player|
+      skill+=[player.goalkeep, player.defense, player.midfield, player.attack].max
+    end
+    skill/self.players.count
+  end
+
   def matches
     Match.where('"teamA_id" = ? or "teamB_id" = ?', id, id)
   end
