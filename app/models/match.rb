@@ -260,7 +260,7 @@ class Match < ActiveRecord::Base
 
     out_path = IMG_FOLDER.join("pitch#{@img_counter}.jpg")
     @images << out_path
-    image = image.minify
+    
     image.write(out_path)
     @img_counter += 1
   end
