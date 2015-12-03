@@ -1,4 +1,6 @@
 class Team < ActiveRecord::Base
+  DEFAULT_PLAYER_COUNT = 16
+
   has_many :players, dependent: :destroy
   belongs_to :league
   belongs_to :teamable, polymorphic: true
@@ -19,9 +21,7 @@ class Team < ActiveRecord::Base
     return if players.count > 0
 
     ActiveRecord::Base.transaction do
-      (18 + rand(7)).times do
-        Fabricate(:player, team: self)
-      end
+      DEFAULT_PLAYER_COUNT.times { Fabricate(:player, team: self) }
     end
   end
 

@@ -25,7 +25,7 @@ Fabricator(:team) do
   points { Faker::Number.between(0, 100) }
   teamable(fabricator: :user)
   league
-  players { (18..25).to_a.sample.times.map { Fabricate(:player) } }
+  players { Team::DEFAULT_PLAYER_COUNT.times.map { Fabricate(:player) } }
 end
 
 Fabricator(:match) do
