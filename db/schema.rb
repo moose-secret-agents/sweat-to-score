@@ -31,16 +31,18 @@ ActiveRecord::Schema.define(version: 20151119154354) do
   add_index "leagues", ["owner_id"], name: "index_leagues_on_owner_id", using: :btree
 
   create_table "matches", force: :cascade do |t|
-    t.integer  "status",     default: 0
+    t.integer  "status",         default: 0
     t.datetime "starts_at"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
     t.integer  "league_id"
     t.integer  "teamA_id"
     t.integer  "teamB_id"
-    t.integer  "scoreA",     default: 0
-    t.integer  "scoreB",     default: 0
+    t.integer  "scoreA",         default: 0
+    t.integer  "scoreB",         default: 0
     t.string   "imgurLink"
+    t.decimal  "temperature",    default: 20.0
+    t.string   "weather_string"
   end
 
   add_index "matches", ["league_id"], name: "index_matches_on_league_id", using: :btree

@@ -1,5 +1,6 @@
 class LeaguesController < ApplicationController
   before_action :set_user, only: [:new, :create]
+  before_action :set_league, only: [:show, :update, :destroy, :edit]
 
   def index
     @leagues = League.all
@@ -21,7 +22,6 @@ class LeaguesController < ApplicationController
   end
 
   def show
-    @league = League.find(params[:id])
 	  @teams = @league.teams.sort_by(&:rank_in_league)
 
     matches=Hash.new{|h, k| h[k] = []}
@@ -31,7 +31,6 @@ class LeaguesController < ApplicationController
   end
 
   def update
-    @league = League.find(params[:id])
     if params[:status]!=nil
       if params[:status]==League.statuses[:active].to_s&&League.statuses[@league.status]==League.statuses[:inactive]
         @league.start
@@ -40,7 +39,7 @@ class LeaguesController < ApplicationController
         @league.end
         redirect_to @league, notice: 'League ended'
       else
-        flash[:error] = "League is already {@league.status}"
+        flash[:error] = "League is already #{@league.status}"
         #redirect_to @league, notice: 'League is already #{@league.status}'
         redirect_to @league
       end
@@ -53,16 +52,20 @@ class LeaguesController < ApplicationController
         render :edit
       end
     end
+  end
 
+  def destroy
+    @league.destroy
+    redirect_to user_leagues_path(current_user), notice: 'League was successfully destroyed.'
   end
 
   def user_index
+    @user = current_user
     @leagues = current_user.leagues
     render :index
   end
 
   def edit
-    @league = League.find(params[:id])
     @min_length=@league.min_length
   end
 
@@ -73,5 +76,9 @@ class LeaguesController < ApplicationController
 
     def set_user
       @user = current_user
+    end
+
+    def set_league
+      @league = League.find(params[:id])
     end
 end

@@ -81,6 +81,8 @@ gem 'bootstrap3-datetimepicker-rails', '~> 4.17.37'
 gem 'rmagick'
 gem 'imgur-api', require: 'imgur'
 
+gem 'httparty'
+
 #profiling
 group :test do
   gem 'rspec-prof'

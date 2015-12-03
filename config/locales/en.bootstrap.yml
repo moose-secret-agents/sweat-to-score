@@ -18,6 +18,10 @@ en:
       edit: "Edit"
       start: "Start"
       end: "End"
+      accept: "Accept"
+      refuse: "Refuse"
+      cancel_request: "Cancel Request"
+      cancel_partnership: "Cancel Partnership"
     titles:
       edit: "Edit %{model}"
       save: "Save %{model}"

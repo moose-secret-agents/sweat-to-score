@@ -4,12 +4,12 @@ class TeamsController < ApplicationController
 
   def index
     @user = User.find(params[:user_id])
-    @teams = @user.teams
+    @own_teams = @user.teams
+    @partners = Partnership.all.where("user_id = ? OR partner_id = ?", current_user.id, current_user.id)
+    @partner_teams = @partners.map(&:teams).flatten
   end
 
   def show
-    @team = Team.find(params[:id])
-
     #matches=Hash.new{|h, k| h[k] = []}
     #@team.matches.each{|match| matches[match.starts_at]<<match}
     @matches = @team.matches

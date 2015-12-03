@@ -1,7 +1,7 @@
 br
 br
 
-div class="container"
+div class="col-md-12"
   - count = 0
   -(0..@matches.length-1).each do |day|
     ul.timeline
@@ -10,14 +10,14 @@ div class="container"
         - if count % 2 != 0
           li
             .timeline-badge class="#{match.status}"
-              i.glyphicon class="#{match.glyphicon}"
+              i.glyphicon class="#{glyphicon(match.status)}"
             .timeline-panel
               .timeline-heading
                 h4.timeline-title #{match.starts_at.strftime("%A %b %d %Y at %H:%M")}
                 p
                   small.text-muted
                     i.glyphicon.glyphicon-time
-                      |  #{match.getTimeDifference(match.starts_at)}
+                      |  #{getTimeDifference(match.starts_at)}
                       br
                       i.glyphicon.glyphicon-info-sign
                       |  #{match.status}
@@ -31,18 +31,21 @@ div class="container"
                     tr
                       td.timeline-table-body= match.teamA.name
                       td.timeline-table-body= match.teamB.name
+                -unless match.imgurLink.nil?
+                  img.matchgif src = "#{match.imgurLink}"
+
         - else
           li
             li.timeline-inverted
               .timeline-badge class="#{match.status}"
-                i.glyphicon class="#{match.glyphicon}"
+                i.glyphicon class="#{glyphicon(match.status)}"
               .timeline-panel
                 .timeline-heading
                   h4.timeline-title #{match.starts_at.strftime("%A %b %d %Y at %H:%M")}
                   p
                     small.text-muted
                       i.glyphicon.glyphicon-time
-                        |  #{match.getTimeDifference(match.starts_at)}
+                        |  #{getTimeDifference(match.starts_at)}
                         br
                         i.glyphicon.glyphicon-info-sign
                         |  #{match.status}
@@ -56,3 +59,5 @@ div class="container"
                       tr
                         td.timeline-table-body= match.teamA.name
                         td.timeline-table-body= match.teamB.name
+                  -unless match.imgurLink.nil?
+                    img.matchgif src = "#{match.imgurLink}"

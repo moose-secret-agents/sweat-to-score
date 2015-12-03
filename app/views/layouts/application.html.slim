@@ -21,6 +21,7 @@ html lang="en"
           = drop_down fa_icon(:wrench, text: 'Manage') do
             = menu_item 'My Teams', user_teams_path(current_user)
             = menu_item 'My Leagues', user_leagues_path(current_user)
+            = menu_item 'My Partners', user_partnerships_path(current_user)
       = menu_group pull: :right do
         - if logged_in?
           = menu_text 'Logged in as:'
