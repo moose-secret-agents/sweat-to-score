@@ -23,15 +23,16 @@ class Match < ActiveRecord::Base
   attr_accessor :actions
   attr_accessor :rand, :gif
   attr_accessor :weather_fetcher
+  attr_accessor :images
 
   FIELD_DIMS = [100,60]
 
   def simulate
     raise BadStateException if self.status != "scheduled"
-
+    @images = []
     self.status = "started"
     self.weather_string, self.temperature = self.compute_weather_string_and_temp
-    @gif = Magick::ImageList.new
+
     self.scoreA = 0
     self.scoreB = 0
     self.save
@@ -192,6 +193,7 @@ class Match < ActiveRecord::Base
 
   def store_gif
     uploader = ImageUploader.new
+    @gif = Magick::ImageList.new(*@images)
     @gif.write(IMG_FOLDER.join 'GIF.gif')
     uploader.upload(IMG_FOLDER.join 'GIF.gif')
   end
@@ -199,7 +201,7 @@ class Match < ActiveRecord::Base
   def draw_pitch ( timestep )
     #@png = ChunkyPNG::Image.new(101, 61, ChunkyPNG::Color::WHITE)
     #png = Magick::Image.new(FIELD_DIMS[0]*2+1,FIELD_DIMS[1]*2+1)
-    png = Magick::Image.read(BASE_PITCH).first
+    image = Magick::Image.read(BASE_PITCH).first
 
     @players_a.each do |player|
       #puts "Team A: X: #{player.fieldX}, Y: #{player.fieldY}"
@@ -209,7 +211,7 @@ class Match < ActiveRecord::Base
         gc = Magick::Draw.new
         gc.stroke('red')
         gc.ellipse((4*player.position[0]).round,(4*player.position[1]).round, 4 , 4, 0, 360) if(is_in_bounds?(player.fieldX, player.fieldY))
-        gc.draw(png)
+        gc.draw(image)
       end
     end
 
@@ -221,7 +223,7 @@ class Match < ActiveRecord::Base
       gc = Magick::Draw.new
       gc.stroke('blue')
       gc.ellipse((4*player.position[0]).round,(4*player.position[1]).round, 4 , 4, 0, 360) if(is_in_bounds?(player.fieldX, player.fieldY))
-      gc.draw(png)
+      gc.draw(image)
       end
     end
 
@@ -229,11 +231,11 @@ class Match < ActiveRecord::Base
     gc.stroke('black')
     gc.fill('white')
     gc.ellipse((4*ball.position[0]).round,(4*ball.position[1]).round, 2 , 2, 0, 360) if(is_in_bounds?(ball.position[0], ball.position[1]))
-    gc.draw(png)
+    gc.draw(image)
 
 
     watermark_text = Magick::Draw.new
-    watermark_text.annotate(png, 400,20,0,241, "#{scoreA} - #{scoreB}") do
+    watermark_text.annotate(image, 400,20,0,241, "#{scoreA} - #{scoreB}") do
       watermark_text.gravity = Magick::CenterGravity
       self.pointsize = 18
       self.font_family = 'Arial'
@@ -241,7 +243,7 @@ class Match < ActiveRecord::Base
       self.stroke = 'none'
       self.fill = 'white'
     end
-    watermark_text.annotate(png, 400,20,1,241, "#{(timestep.to_f / 500.0 * 90).to_i}:00") do
+    watermark_text.annotate(image, 400,20,1,241, "#{(timestep.to_f / 500.0 * 90).to_i}:00") do
       watermark_text.gravity = Magick::WestGravity
       self.pointsize = 18
       self.font_family = 'Arial'
@@ -252,9 +254,11 @@ class Match < ActiveRecord::Base
     #watermark_text.draw(png)
 
 
-    @gif << png
+    #@gif << png
+    image = image.minify
     out_path = IMG_FOLDER.join("pitch#{@img_counter}.png")
-    #png.write(out_path)
+    @images << out_path
+    image.write(out_path)
     @img_counter += 1
   end
 

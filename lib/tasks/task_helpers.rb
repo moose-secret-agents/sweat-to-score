@@ -33,4 +33,10 @@ module TaskHelpers
     end
   end
 
+  def self.encode_gif
+    Dir.chdir Rails.root.join('app','assets','Java') do
+      puts `java -jar gifEncoder.jar`
+    end
+  end
+
 end
