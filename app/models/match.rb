@@ -202,7 +202,7 @@ class Match < ActiveRecord::Base
   def draw_pitch ( timestep )
     #@png = ChunkyPNG::Image.new(101, 61, ChunkyPNG::Color::WHITE)
     #png = Magick::Image.new(FIELD_DIMS[0]*2+1,FIELD_DIMS[1]*2+1)
-    image = Magick::Image.read(BASE_PITCH).first
+    image = Magick::Image.read("app/assets/images/soccerPitch.png").first
 
     @players_a.each do |player|
       #puts "Team A: X: #{player.fieldX}, Y: #{player.fieldY}"
