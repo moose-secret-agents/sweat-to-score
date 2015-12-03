@@ -12,6 +12,7 @@ table class="table table-hover"
       th.text-center= '#Teams'
       th= League.human_attribute_name(:owner_id)
       th= League.human_attribute_name(:created_at)
+      th= League.human_attribute_name(:target)
       th=t '.actions', :default => t("helpers.actions")
   tbody
     - @leagues.each do |league|
@@ -21,6 +22,7 @@ table class="table table-hover"
         td.text-center= league.teams.count
         td= league.owner.real_name
         td= (time_ago_in_words league.created_at) + ' ago'
+        td.text-center= league.target
         td
           = link_to t('.edit', :default => t("helpers.links.edit")), edit_league_path(league), :class => 'btn btn-default btn-xs'
           '

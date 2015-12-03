@@ -1,7 +1,7 @@
 = bootstrap_form_for @league, layout: :horizontal do |f|
   = f.text_field :name
   = f.number_field :level
-
+  = f.number_field :target
   = f.number_field :league_length, min: @min_length, append: "Days"
   = f.number_field :pause_length, append: "Days"
 
@@ -10,6 +10,7 @@
       input class="form-control" id="league_starts_at" name="league[starts_at]" type='text'
         span class="input-group-addon"
           span class="glyphicon glyphicon-calendar"
+
 
   .pull-right
     = link_to 'Back', :back, class: 'btn btn-default'
