@@ -1,7 +1,7 @@
 = bootstrap_form_for @league, layout: :horizontal do |f|
   = f.text_field :name
   = f.number_field :level
-  = f.number_field :target
+  = f.number_field :target, label: "Max. Training Points"
   = f.number_field :league_length, min: @min_length, append: "Days"
   = f.number_field :pause_length, append: "Days"
 
