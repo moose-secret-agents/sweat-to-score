@@ -1,7 +1,7 @@
 = bootstrap_form_for [@user, @team] do |f|
   = f.text_field :name
-  = f.number_field :strength
-  = f.number_field :points
+  //= f.number_field :strength
+  //= f.number_field :points
 
   = f.collection_select(:league_id, League.all, :id, :name)
 
