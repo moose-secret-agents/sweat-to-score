@@ -1,0 +1,4 @@
+= bootstrap_form_for @invitation, url: league_invitations_path do |f|
+  = f.collection_select(:invitee_id, @invitees, :id, :username)
+  = f.hidden_field :league_id, value: league_id
+  = f.submit 'Invite!', class: 'btn btn-primary btn-block'

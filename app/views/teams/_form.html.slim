@@ -3,6 +3,9 @@
   //= f.number_field :strength
   //= f.number_field :points
 
-  = f.collection_select(:league_id, League.all, :id, :name)
+  -if params[:league_id].nil?
+    = f.collection_select(:league_id, League.all, :id, :name)
+  - else
+    = f.collection_select(:league_id, League.all, :id, :name, {:selected => params[:league_id]})
 
   = f.primary
