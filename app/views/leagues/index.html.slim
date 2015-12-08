@@ -24,4 +24,6 @@ table class="table table-hover"
         td
           = link_to t('.edit', :default => t("helpers.links.edit")), edit_league_path(league), :class => 'btn btn-default btn-xs'
           '
+          = link_to t('.invite', :default => t("helpers.links.invite")), '#', class: 'btn btn-xs btn-primary', rel: 'popover', title: "Invite a User to join #{league.name}", data: { toggle: 'popover', content: "#{render partial: 'invitations/new_league_form', locals: {league_id: league.id} }" }
+          '
           = link_to t('.destroy', :default => t("helpers.links.destroy")), league_path(league), :method => :delete, :data => {:confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?'))}, :class => 'btn btn-xs btn-danger'

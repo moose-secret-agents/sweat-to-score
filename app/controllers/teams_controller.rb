@@ -4,9 +4,13 @@ class TeamsController < ApplicationController
 
   def index
     @user = User.find(params[:user_id])
-    @own_teams = @user.teams
     @partners = Partnership.all.where("user_id = ? OR partner_id = ?", current_user.id, current_user.id)
+
+    @own_teams = @user.teams
     @partner_teams = @partners.map(&:teams).flatten
+
+    @invitees = User.all.where.not(id: current_user.id)
+    @invitation = @user.team_invitations.build
   end
 
   def show
@@ -48,7 +52,6 @@ class TeamsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_team
       @team = Team.find(params[:id])
     end
@@ -57,7 +60,6 @@ class TeamsController < ApplicationController
       @user = User.find(params[:user_id])
     end
 
-    # Only allow a trusted parameter "white list" through.
     def team_params
       params.require(:team).permit(:name, :strength, :league_id, :points)
     end

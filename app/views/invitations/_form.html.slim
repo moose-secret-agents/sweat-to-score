@@ -1,0 +1,8 @@
+= bootstrap_form_for @invitation, layout: :horizontal do |f|
+  = f.collection_select(:invitee_id, @invitees, :id, :username)
+  = f.hidden_field :league_id, value: @invitation.league_id
+
+  .pull-right
+    = link_to 'Back', :back, class: 'btn btn-default'
+    '
+    = f.primary

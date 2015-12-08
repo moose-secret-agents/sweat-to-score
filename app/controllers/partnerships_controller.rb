@@ -4,6 +4,7 @@ class PartnershipsController < ApplicationController
 
 
   def new
+    @partners = User.all.where.not(id: current_user.id)
     @partnership = @user.partnerships.build
   end
 
