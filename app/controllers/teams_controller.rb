@@ -3,7 +3,6 @@ class TeamsController < ApplicationController
   before_action :set_user, only: [:index, :new, :create]
 
   def index
-    @user = User.find(params[:user_id])
     @partners = Partnership.all.where("user_id = ? OR partner_id = ?", current_user.id, current_user.id)
 
     @own_teams = @user.teams

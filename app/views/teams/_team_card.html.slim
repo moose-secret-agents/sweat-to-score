@@ -2,14 +2,16 @@
 
   = p.header do
     h3.panel-title.row
-      .col-md-8
+      .col-md-7
         = link_to team.name, team_path(team)
-      .col-md-2
-        .pull-right= link_to 'Train', '#', class: 'btn btn-xs btn-primary', rel: 'popover', title: "Apply Training Tokens",
+      .col-md-5
+        .pull-right
+          = link_to 'Train', '#', class: 'btn btn-xs btn-primary', rel: 'popover', title: "Apply Training Tokens",
           data: { toggle: 'popover', content: "#{render partial: 'tokens/training', locals: { team: team } }" }
-      .col-md-2
-        .pull-right= link_to 'Invite', '#', class: 'btn btn-xs btn-primary', rel: 'popover', title: "Invite a User to join #{team.name}",
-        data: { toggle: 'popover', content: "#{render partial: 'invitations/new_team_form', locals: { team_id: team.id } }" }
+          - if team.teamable.is_a? User and !TeamInvitation.exists_for_user?(current_user, team)
+            '
+            = link_to 'Invite', '#', class: 'btn btn-xs btn-primary', rel: 'popover', title: "Invite a User to join #{team.name}",
+            data: { toggle: 'popover', content: "#{render partial: 'invitations/new_team_form', locals: { team_id: team.id } }" }
 
   = p.body do
     .stat

@@ -14,4 +14,7 @@ class TeamInvitation < ActiveRecord::Base
     refused!
   end
 
+  def self.exists_for_user?(user, team)
+    TeamInvitation.where(user: user, team: team).any?
+  end
 end

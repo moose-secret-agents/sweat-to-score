@@ -20,7 +20,12 @@ class TeamInvitationsController < ApplicationController
 
   def accept
     @invitation.accept
-    Partnership.create(:user_id => @invitation.user_id, :partner_id => @invitation.invitee_id, :status => 1)
+    partnership = Partnership.create(:user_id => @invitation.user_id, :partner_id => @invitation.invitee_id, :status => 1)
+
+    team = @invitation.team
+    team.teamable = partnership
+    team.save!
+
     redirect_to user_partnerships_path(current_user),
                 notice: "Team invitation successfully accepted. You are now Partner of #{@invitation.user.username}."
     destroy

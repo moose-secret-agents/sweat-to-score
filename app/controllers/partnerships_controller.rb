@@ -4,12 +4,16 @@ class PartnershipsController < ApplicationController
 
 
   def new
-    @partners = User.all.where.not(id: current_user.id)
+    partnerships = Partnership.all.where("user_id = ? OR partner_id = ?", current_user.id, current_user.id)
+    existing_partners = (partnerships.map(&:user) + partnerships.map(&:partner))
+
+    @partners = User.all - existing_partners
     @partnership = @user.partnerships.build
   end
 
   def create
-    @partnership = @user.partnerships.create(partnership_params)
+    partner = User.find(partnership_params[:partner_id])
+    @partnership = @user.propose_partnership(partner)
 
     if @partnership.save
       redirect_to user_partnerships_path(current_user), notice: 'Partnership request has been sent'
