@@ -13,41 +13,47 @@
   hr
 
   h4 Team Invites
-  - @invitations = TeamInvitation.all.where("invitee_id = ?", current_user.id) #change user_id to invitee_id and use status
-  table class="table table-hover"
-    thead
-      tr
-        th.col-sm-6= 'Team'
-        th.col-sm-3= 'Inviter'
-        th.col-sm-3= t '.actions', :default => t("helpers.actions")
-    tbody
-      - @invitations.each do |invitation|
+  - @invitations = TeamInvitation.all.where("invitee_id = ?", current_user.id)
+  - unless @invitations.any?
+    h5 No invitations yet
+  - else
+    table class="table table-hover"
+      thead
         tr
-          td.col-sm-6= invitation.team.name
-          td.col-sm-3= invitation.user.username
-          td.col-sm-3
-            = link_to t('.accept', :default => t("helpers.links.accept")), accept_team_invitation_path(invitation), :method => :put, :class => 'btn btn-xs btn-info'
-            '
-            = link_to t('.refuse', :default => t("helpers.links.refuse")), refuse_team_invitation_path(invitation), :method => :put, :class => 'btn btn-xs btn-danger'
+          th.col-sm-6= 'Team'
+          th.col-sm-3= 'Inviter'
+          th.col-sm-3=t '.actions', :default => t("helpers.actions")
+      tbody
+        - @invitations.each do |invitation|
+          tr
+            td.col-sm-6= invitation.team.name
+            td.col-sm-3= invitation.user.username
+            td.col-sm-3
+              = link_to t('.accept', :default => t("helpers.links.accept")), accept_team_invitation_path(invitation), :method => :put, :class => 'btn btn-xs btn-info'
+              '
+              = link_to t('.refuse', :default => t("helpers.links.refuse")), refuse_team_invitation_path(invitation), :method => :put, :class => 'btn btn-xs btn-danger'
 
 hr
 
   h4 League Invites
-  - @invitations = LeagueInvitation.all.where("invitee_id = ?", current_user.id) #also check whether invitee is already in the league
-  table class="table table-hover"
-    thead
-      tr
-        th.col-sm-6= 'League'
-        th.col-sm-3= 'Inviter'
-        th.col-sm-3= t '.actions', :default => t("helpers.actions")
-    tbody
-      - @invitations.each do |invitation|
+  - @invitations = LeagueInvitation.all.where("invitee_id = ?", current_user.id)
+  - unless @invitations.any?
+    h5 No invitations yet
+  - else
+    table class="table table-hover"
+      thead
         tr
-          td.col-sm-6= invitation.league.name
-          td.col-sm-3= invitation.user.username
-          td.col-sm-3
-            = link_to t('.accept', :default => t("helpers.links.accept")), accept_league_invitation_path(invitation), :method => :put, :class => 'btn btn-xs btn-info'
-            '
-            = link_to t('.refuse', :default => t("helpers.links.refuse")), refuse_league_invitation_path(invitation), :method => :put, :class => 'btn btn-xs btn-danger'
+          th.col-sm-6= 'League'
+          th.col-sm-3= 'Inviter'
+          th.col-sm-3=t '.actions', :default => t("helpers.actions")
+      tbody
+        - @invitations.each do |invitation|
+          tr
+            td.col-sm-6= invitation.league.name
+            td.col-sm-3= invitation.user.username
+            td.col-sm-3
+              = link_to t('.accept', :default => t("helpers.links.accept")), accept_league_invitation_path(invitation), :method => :put, :class => 'btn btn-xs btn-info'
+              '
+              = link_to t('.refuse', :default => t("helpers.links.refuse")), refuse_league_invitation_path(invitation), :method => :put, :class => 'btn btn-xs btn-danger'
 
 

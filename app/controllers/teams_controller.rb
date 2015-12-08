@@ -28,7 +28,6 @@ class TeamsController < ApplicationController
     @team.update_attribute(:points, 0)
     @team.update_attribute(:strength, 0)
 
-
     if @team.save
       redirect_to @team, notice: 'Team was successfully created.'
     else

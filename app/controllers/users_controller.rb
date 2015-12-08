@@ -46,6 +46,21 @@ class UsersController < ApplicationController
   end
 
   def destroy
+    user_partnerships = Partnership.all.where("user_id = ? OR partner_id = ?", current_user.id, current_user.id)
+    user_partnerships.each do |up|
+      up.destroy
+    end
+
+    user_team_invitations = TeamInvitation.all.where("user_id = ? OR invitee_id = ?", current_user.id, current_user.id)
+    user_team_invitations.each do |ti|
+      ti.destroy
+    end
+
+    user_league_invitations = LeagueInvitation.all.where("user_id = ? OR invitee_id = ?", current_user.id, current_user.id)
+    user_league_invitations.each do |li|
+      li.destroy
+    end
+
     @user.destroy
 
     coach_client.authenticated(@user.username, session[:password]) do
