@@ -7,12 +7,51 @@ hr
         'Recent Matches
         = link_to 'Show me', '#', class: 'btn btn-default btn-xs pull-right'
       = p.body do
-        p Some Sample Text
+          table class="table table-hover table-condensed"
+            thead
+              tr
+                th.col-md-2= Match.human_attribute_name(:Home)
+                th.col-md-2= Match.human_attribute_name(:Guest)
+                th.col-md-2= Match.human_attribute_name(:Score)
+                th.col-md-2= Match.human_attribute_name(:League)
+            tbody
+              - @matches.each do |match|
+                tr
+                  -if !match.teamA.nil?
+                    td.col-md-2= match.teamA.name
+                  -else
+                    td.col-md-2= 'Deleted'
+
+                  -if !match.teamB.nil?
+                    td.col-md-2= match.teamB.name
+                  -else
+                    td.col-md-2= 'Deleted'
+
+                  td.col-md-2= "#{match.scoreA} vs #{match.scoreB}"
+
+                  -if !match.league.nil?
+                    td.col-md-2= link_to match.league.name, league_path(match.league)
+                  -else
+                    td.col-md-2= 'Deleted'
+
+
   .col-sm-4
     = bs_panel do |p|
       = p.header heading: 'Recent Signups'
       = p.body do
-        p Some Sample Text
+        table class="table table-hover table-condensed"
+          thead
+            tr
+              th.col-md-2= Match.human_attribute_name(:UserName)
+              th.col-md-2= Match.human_attribute_name(:RegisteringDate)
+          tbody
+            - @users.each do |user|
+              tr
+                td.col-md-2= user.username
+                td.col-md-2= user.created_at.strftime("%A %b %d %Y at %H:%M")
+
+
+
   .col-sm-4
     = bs_panel do |p|
       = p.header heading: 'Twitter'
