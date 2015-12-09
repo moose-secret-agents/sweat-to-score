@@ -14,4 +14,8 @@ class Twitterer
     rescue
     end
   end
+
+  def latestTweets()
+      @client.user_timeline("HiddenDeerSpies").first(5)
+  end
 end

@@ -1,11 +1,11 @@
 h1 News
 hr
 .row
-  .col-sm-4
+  .col-sm-6
     = bs_panel do |p|
       = p.header do
         'Recent Matches
-        = link_to 'Show me', '#', class: 'btn btn-default btn-xs pull-right'
+        /= link_to 'Show me', '#', class: 'btn btn-default btn-xs pull-right'
       = p.body do
           table class="table table-hover table-condensed"
             thead
@@ -34,43 +34,33 @@ hr
                   -else
                     td.col-md-2= 'Deleted'
 
-
-  .col-sm-4
+  .col-sm-6
     = bs_panel do |p|
-      = p.header heading: 'Recent Signups'
+      = p.header heading: 'Latest Signups'
       = p.body do
         table class="table table-hover table-condensed"
           thead
             tr
               th.col-md-2= Match.human_attribute_name(:UserName)
-              th.col-md-2= Match.human_attribute_name(:RegisteringDate)
+              th.col-md-2= Match.human_attribute_name(:Time)
           tbody
             - @users.each do |user|
               tr
-                td.col-md-2= user.username
+                td.col-md-2= link_to user.username, user_path(user)
                 td.col-md-2= user.created_at.strftime("%A %b %d %Y at %H:%M")
 
-
-
-  .col-sm-4
-    = bs_panel do |p|
-      = p.header heading: 'Twitter'
-      = p.body do
-        p Some Sample Text
 .row
-  .col-sm-6
+  .col-sm-12
     = bs_panel do |p|
-      = p.header  do
-        = link_to 'hello', '#'
+      = p.header heading: 'Twitter Messages'
       = p.body do
-        = link_to 'Body', '#'
-      = p.footer do
-        = link_to 'Footer', '#'
-  .col-sm-6
-    = bs_panel do |p|
-      = p.header do
-        = link_to 'hello', '#'
-      = p.body do
-        = link_to 'Body', '#'
-      = p.footer do
-        = link_to 'Footer', '#'
+        table class="table table-hover table-condensed"
+          thead
+            tr
+              th.col-md-2= 'Message'
+              th.col-md-2= 'Time'
+          tbody
+            - @tweets.each do |tweet|
+              tr
+                td.col-md-2= tweet.text
+                td.col-md-2= tweet.created_at.strftime("%A %b %d %Y at %H:%M")
