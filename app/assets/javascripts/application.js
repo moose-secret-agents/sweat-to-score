@@ -16,6 +16,7 @@
 //= require jquery-ui/droppable
 //= require bootstrap-sprockets
 //= require turbolinks
+//= require underscore
 //= require faces
 //= require_tree .
 //= require moment
