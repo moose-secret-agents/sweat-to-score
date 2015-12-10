@@ -18,13 +18,14 @@ initFaces = ->
     id = $(element).attr('id')
     face = $(element).data('face')
     fitness = $(element).data('fitness')
+    stamina = $(element).data('stamina')
     face.fatness = fitness
 
     face.mouth.id = switch
-      when fitness < 20 then 1
-      when fitness < 40 then 2
-      when fitness < 60 then 3
-      when fitness < 80 then 4
+      when stamina < 20 then 1
+      when stamina < 40 then 2
+      when stamina < 60 then 3
+      when stamina < 80 then 4
       else 5
 
     faces.display(id, face)

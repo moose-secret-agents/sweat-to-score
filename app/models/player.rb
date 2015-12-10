@@ -160,6 +160,7 @@ class Player < ActiveRecord::Base
       @action = action
     end
   end
+
   class Face
     COUNT = { head: 1, eyebrow: 1, eye: 4, nose: 3, mouth: 5, hair: 5 }
 

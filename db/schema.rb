@@ -81,8 +81,8 @@ ActiveRecord::Schema.define(version: 20151205130121) do
     t.datetime "updated_at",                null: false
     t.integer  "team_id"
     t.json     "face"
-    t.integer  "fieldX"
-    t.integer  "fieldY"
+    t.integer  "fieldX",     default: 0
+    t.integer  "fieldY",     default: 0
     t.float    "speed",      default: 10.0
     t.float    "stamina",    default: 10.0
     t.float    "fitness",    default: 10.0

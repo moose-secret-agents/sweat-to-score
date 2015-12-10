@@ -11,10 +11,9 @@
           tr
             td.col-md-2= link_to player.name, '#', class: 'btn btn-xs', rel: 'popover', title: 'Player stats',
                                  data: {toggle: 'popover', trigger: 'focus', content: "#{render partial: 'player_card', locals: {player: player} }"}
-            //td.col-md-2= player.name
             td.col-md-2= bs_progress(player.fitness)
             td.col-md-2
-              .box.avatar-image id="image1#{index}" data-fitness="#{player.fitness}" data-face="#{player.face.to_json}"
+              .box.avatar-image id="image1#{index}" data-fitness="#{player.fitness}" data-stamina="#{player.stamina}" data-face="#{player.face.to_json}"
 
   div.player-table class="col-md-6"
     table class="table table-hover table-condensed"
@@ -30,4 +29,4 @@
                                  data: {toggle: 'popover', trigger: 'focus', content: "#{render partial: 'player_card', locals: {player: player} }"}
             td.col-md-2= bs_progress(player.fitness)
             td.col-md-2
-              .box.avatar-image id="image2#{index}" data-fitness="#{player.fitness}" data-face="#{player.face.to_json}"
+              .box.avatar-image id="image2#{index}" data-fitness="#{player.fitness}" data-stamina="#{player.stamina}" data-face="#{player.face.to_json}"

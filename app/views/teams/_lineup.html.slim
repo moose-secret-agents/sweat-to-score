@@ -2,11 +2,11 @@
   #bank
     - @team.players.each_with_index do |player, index|
       - if player.on_bank?
-        .draggable.player.player-box.avatar-image id="player_#{player.id}" data-position="[#{player.fieldX},#{player.fieldY}]" data-player-id="#{player.id}" data-fitness="#{player.fitness}" data-face="#{player.face.to_json}"
+        .draggable.player.player-box.avatar-image id="player_#{player.id}" data-position="[#{player.fieldX},#{player.fieldY}]" data-player-id="#{player.id}" data-fitness="#{player.fitness}" data-stamina="#{player.stamina}" data-face="#{player.face.to_json}"
   #field
     - @team.players.each_with_index do |player, index|
       - if player.on_field?
-        .draggable.player.player-box.avatar-image id="player_#{player.id}" data-position="[#{player.fieldX},#{player.fieldY}]" data-player-id="#{player.id}" data-fitness="#{player.fitness}" data-face="#{player.face.to_json}"
+        .draggable.player.player-box.avatar-image id="player_#{player.id}" data-position="[#{player.fieldX},#{player.fieldY}]" data-player-id="#{player.id}" data-fitness="#{player.fitness}" data-stamina="#{player.stamina}" data-face="#{player.face.to_json}"
     = image_tag('field.svg')
 
   .actions

@@ -56,7 +56,7 @@
     // Defines the range of fat/skinny, relative to the original width of the default head.
     function fatScale(fatness) {
         //return 0.75 + 0.25 * fatness;
-        return (1-fatness/100)*0.5 + 0.6;
+        return (1-fatness/100)*0.4 + 0.6;
     }
 
     head.push(function (paper, fatness, color) {
