@@ -4,20 +4,26 @@
     .pull-right
       = link_to fa_icon(:users, text: 'Create new team'), new_user_team_path(@user), class: 'btn btn-default'
 
-- @own_teams.each_slice(3) do |slice|
-  .row
-    - slice.each do |team|
-      .col-md-4
-        - unless team.nil?
-          = render partial: 'teams/team_card', locals: { team: team }
+- if @own_teams.any?
+  - @own_teams.each_slice(3) do |slice|
+    .row
+      - slice.each do |team|
+        .col-md-4
+          - unless team.nil?
+            = render partial: 'teams/team_card', locals: { team: team }
+- else
+  h4 You have no teams
+
 
 .page-header
   h1
     = "Partnership Teams"
-
-- @partner_teams.each_slice(3) do |slice|
-  .row
-    - slice.each do |team|
-      .col-md-4
-        - unless team.nil?
-          = render partial: 'teams/team_card', locals: { team: team }
+-if @partner_teams.any?
+  - @partner_teams.each_slice(3) do |slice|
+    .row
+      - slice.each do |team|
+        .col-md-4
+          - unless team.nil?
+            = render partial: 'teams/team_card', locals: { team: team }
+- else
+  h4 You have no teams managed by a partnership

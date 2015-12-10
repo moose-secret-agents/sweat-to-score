@@ -20,14 +20,14 @@
     table class="table table-hover"
       thead
         tr
-          th.col-sm-6= 'Team'
-          th.col-sm-3= 'Inviter'
-          th.col-sm-3=t '.actions', :default => t("helpers.actions")
+          th.col-sm-5= 'Team'
+          th.col-sm-4= 'Inviter'
+          th.col-sm-3=t 'Action'
       tbody
         - @invitations.each do |invitation|
           tr
-            td.col-sm-6= invitation.team.name
-            td.col-sm-3= invitation.user.username
+            td.col-sm-5= invitation.team.name
+            td.col-sm-4= invitation.user.username
             td.col-sm-3
               = link_to t('.accept', :default => t("helpers.links.accept")), accept_team_invitation_path(invitation), :method => :put, :class => 'btn btn-xs btn-info'
               '
@@ -43,14 +43,14 @@ hr
     table class="table table-hover"
       thead
         tr
-          th.col-sm-6= 'League'
-          th.col-sm-3= 'Inviter'
-          th.col-sm-3=t '.actions', :default => t("helpers.actions")
+          th.col-sm-5= 'League'
+          th.col-sm-4= 'Inviter'
+          th.col-sm-3=t 'Action'
       tbody
         - @invitations.each do |invitation|
           tr
-            td.col-sm-6= invitation.league.name
-            td.col-sm-3= invitation.user.username
+            td.col-sm-5= invitation.league.name
+            td.col-sm-4= invitation.user.username
             td.col-sm-3
               = link_to t('.accept', :default => t("helpers.links.accept")), accept_league_invitation_path(invitation), :method => :put, :class => 'btn btn-xs btn-info'
               '
