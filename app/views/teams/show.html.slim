@@ -9,16 +9,21 @@ ul.nav.nav-tabs
     a data-toggle="tab" href="#players-tab" Players
   li
     a data-toggle="tab" href="#matches-tab" Matches
+  li
+    a data-toggle="tab" href="#lineup-tab" Line-Up
 
 .tab-content
-  #players-tab.tab-pane.fade.in.active
+  #players-tab
     - if @team.players.any?
-      == render 'playersTable'
+      = render partial: 'teams/playersTable'
     - else
       h1 No players in this team!
 
-  #matches-tab.tab-pane.fade
+  #matches-tab
     - if @matches.any?
       = render partial: 'matches/timeline'
     - else
       h1 No matches available!
+
+  #lineup-tab
+    = render partial: 'teams/lineup'
