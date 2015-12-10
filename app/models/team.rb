@@ -29,7 +29,9 @@ class Team < ActiveRecord::Base
     return if players.count > 0
 
     ActiveRecord::Base.transaction do
-      DEFAULT_PLAYER_COUNT.times { Fabricate(:player, team: self) }
+      positionsX = [1,20,20,20,20,45,45,45,45,75,75,0,0,0,0,0]
+      positionsY = [30,12,24,36,48,12,24,36,48,24,36,0,0,0,0,0]
+      DEFAULT_PLAYER_COUNT.times.map do |i| Fabricate(:player, {team: self,fieldX: positionsX[i], fieldY: positionsY[i]}) end
     end
   end
 
