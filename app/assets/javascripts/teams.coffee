@@ -62,6 +62,13 @@ sendPositions = (positions) ->
 
 savePlayerPositions = ->
   positions = {}
+  $('#bank > .player').each (index, element) ->
+    id = $(element).data('player-id')
+    pos =
+      top: 0
+      left: 0
+    positions[id] = pos
+
   $('#field > .player').each (index, element) ->
     id = $(element).data('player-id')
     pos =
