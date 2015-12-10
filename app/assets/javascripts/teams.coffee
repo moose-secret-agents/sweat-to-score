@@ -43,7 +43,10 @@ initPlayers = ->
   $('.draggable').draggable(revert: 'invalid')
   $('#field').droppable
     accept: '.player'
-    drop: onDrop
+    drop: onDropField
+  $('#bank').droppable
+    accept: '.player'
+    drop: onDropBank
 
   # Update positions
   $('#field > .player').each (index, element) ->
@@ -69,7 +72,7 @@ savePlayerPositions = ->
   sendPositions(positions)
 
 markKeeper = ->
-onDrop = (e, ui) ->
+onDropField = (e, ui) ->
   $draggable = ui.draggable
   $field = $('#field')
 
@@ -85,3 +88,11 @@ onDrop = (e, ui) ->
     position: 'absolute'
     top: posPrev.top
     left: posPrev.left
+
+onDropBank = (e, ui) ->
+  $draggable = ui.draggable
+  $draggable.appendTo(this)
+  $draggable.css
+    position: 'relative'
+    top: 0
+    left: 0
