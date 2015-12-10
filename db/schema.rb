@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 20151205130121) do
     t.datetime "starts_at"
     t.integer  "league_length"
     t.integer  "pause_length"
+    t.integer  "target"
   end
 
   add_index "leagues", ["owner_id"], name: "index_leagues_on_owner_id", using: :btree
