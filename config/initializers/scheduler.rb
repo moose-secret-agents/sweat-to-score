@@ -10,6 +10,10 @@ rufus_sched.every '30s', :overlap => false do
   SchedulingTasks.start_overdue_matches
 end
 
+rufus_sched.cron '0 0 * * mon', :overlap => false do
+  SchedulingTasks.clear_weekly_tokens
+end
+
 class SchedulingTasks
   def self.start_overdue_leagues
     #semaphore.synchronize {
@@ -24,6 +28,12 @@ class SchedulingTasks
   def self.start_overdue_matches
     #semaphore.synchronize s{
     TaskHelpers::start_overdue_matches
+    #}
+  end
+
+  def self.clear_weekly_tokens
+    #semaphore.synchronize s{
+    TaskHelpers::clear_tokens
     #}
   end
 

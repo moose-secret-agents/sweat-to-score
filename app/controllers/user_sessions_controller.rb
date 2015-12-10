@@ -13,10 +13,17 @@ class UserSessionsController < ApplicationController
 
     # Check Logging credentials against CyCo and local DB
     if coach_client.users.authenticated?(username, password)
-        # create local account if not exists
-        User.create!(username: username, password: password, password_confirmation: password) unless User.find_by(username: username)
-
+      # create local account if not exists
+      User.create!(username: username, password: password, password_confirmation: password) unless User.find_by(username: username)
       @user = login(username, password, true)
+      # Subscribe to running and cycling
+      coach_client.authenticated(username, password) do
+
+        @coach_user = @user.coach_user
+        @coach_user.set_client(coach_client)
+        @coach_user.subscribe_to :cycling
+        @coach_user.subscribe_to :running
+      end
       redirect_back_or_to(:root, notice: 'Login successful')
     else
       fail_login

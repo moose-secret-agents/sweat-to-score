@@ -85,12 +85,6 @@ class UsersController < ApplicationController
       # Create CyCo user unless already exists
       cyco_user = coach_client.users.create(username, user_attrs_to_coach(attributes))
 
-      # Subscribe to running and cycling
-      coach_client.authenticated(username, session[:password]) do
-        cyco_user.subscribe_to :cycling
-        cyco_user.subscribe_to :running
-      end
-
       cyco_user
     end
 

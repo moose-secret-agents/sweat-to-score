@@ -53,6 +53,8 @@ class User < ActiveRecord::Base
   end
 
   def remote_tokens
-    self.coach_user.subscriptions.flat_map(&:entries).map(&:rounds).sum
+    puts "on cybercoach: " + self.coach_user.subscriptions.flat_map(&:entries).map(&:rounds).sum.to_s
+    puts "here: " + (self.coach_user.subscriptions.flat_map(&:entries).map(&:rounds).sum / 10).to_i.to_s
+    (self.coach_user.subscriptions.flat_map(&:entries).map(&:rounds).sum / 10).to_i
   end
 end

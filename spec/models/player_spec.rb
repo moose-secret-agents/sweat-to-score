@@ -19,4 +19,10 @@ RSpec.describe Player, type: :model do
   it 'should raise error if talent out of range' do
     expect(Player.create(name: 'Test', talent: 101)).to_not be_valid
   end
+
+  it 'should improve when trained' do
+    prev = player.fitness
+    1.times do player.train(1) end
+    expect(player.fitness).to be > prev
+  end
 end
