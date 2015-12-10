@@ -19,3 +19,22 @@
   }
 }
 
+.player-box {
+  width: 100px;
+  height: 100px;
+  overflow:hidden;
+  display: inline-block;
+  z-index: 9999;
+  //position: absolute;
+}
+
+#field {
+  img {
+    width: 100%;
+  }
+  position: relative;
+}
+
+#bank {
+  min-height: 100px;
+}

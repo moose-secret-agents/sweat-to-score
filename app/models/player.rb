@@ -6,7 +6,18 @@ class Player < ActiveRecord::Base
   attr_accessor :is_goalie
   attr_accessor :rand
 
+  scope :bank, -> { where(fieldX: 0, fieldY: 0) }
+  scope :playing, -> { where.not(fieldX: 0, fieldY: 0) }
+
   PLAYER_PROGRESSION_SCALE = 0.3
+
+  def on_field?
+    fieldX > 0 and fieldY > 0
+  end
+
+  def on_bank?
+    !on_field?
+  end
 
   def generate_face
     self.face = Face.new.generate

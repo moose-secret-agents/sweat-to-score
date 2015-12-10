@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   resources :users do
     resources :teams, shallow: true do
       post 'train', to: 'tokens#train', on: :member
+      post 'positions', to: 'teams#positions', on: :member
     end
 
     get 'tokens', to: 'tokens#index', as: 'tokens'

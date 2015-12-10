@@ -40,8 +40,13 @@ body {
   }
 }
 
+
 #notification {
-  min-width: 200px;
+  min-width: 20px;
+  th, td {
+    display: inline-block;
+    word-wrap: break-word;
+  }
 }
 
 .training-form {
