@@ -1,29 +1,28 @@
 div class="page-header"
-  h1=t '.title', :default => User.model_name.human.titleize
+  h1= t '.title', :default => User.model_name.human.titleize
+.row
+  .col-lg-4
+    dl
+      dt= User.human_attribute_name(:name) + ':'
+      dd= @user.real_name
+      br
 
-dl
-  dt= User.human_attribute_name(:name) + ':'
-  dd= @user.real_name
-  br
+      dt= User.human_attribute_name(:email) + ':'
+      dd= @user.email
+      br
 
-  dt= User.human_attribute_name(:email) + ':'
-  dd= @user.email
-  br
+      dt= User.human_attribute_name(:joined) + ':'
+      dd= (time_ago_in_words @user.created_at) + ' ago'
+      br
 
-  dt= User.human_attribute_name(:joined) + ':'
-  dd= (time_ago_in_words @user.created_at) + ' ago'
-  br
+      dt Available tokens:
+      dd= @user.remote_tokens
 
-  dt Available tokens:
-  dd= @user.remote_tokens
-
-  dt Booked tokens:
-  dd= @user.tokens
-
-
-== render '/teams/table'
-
-
+      dt Booked tokens:
+      dd= @user.tokens
+  .col-lg-8
+    h2 Teams of user
+    == render '/teams/table'
 = link_to t('.back', :default => t("helpers.links.back")), users_path,  :class => 'btn btn-default'
 '
 -if (@user.id==current_user.id)
