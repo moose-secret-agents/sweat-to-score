@@ -11,6 +11,7 @@ class LeaguesController < ApplicationController
   def new
     @league = @user.leagues.build
     @min_length=@league.min_length
+    #@max_target=@league.max_target
   end
 
   def create
@@ -70,7 +71,7 @@ class LeaguesController < ApplicationController
 
   private
     def league_params
-      params.require(:league).permit(:name, :level, :league_length, :pause_length, :starts_at)
+      params.require(:league).permit(:name, :level, :league_length, :pause_length, :starts_at, :target )
     end
 
     def set_user
