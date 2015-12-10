@@ -22,10 +22,7 @@
 .player-box {
   width: 100px;
   height: 100px;
-  overflow:hidden;
-  display: inline-block;
-  z-index: 9999;
-  //position: absolute;
+  overflow: hidden;
 }
 
 #field {
@@ -37,4 +34,21 @@
 
 #bank {
   min-height: 100px;
+  background: #406737;
+  padding: 8px;
+}
+
+.player {
+  display: inline-block;
+  z-index: 9999;
+  &.keeper {
+    border: 5px solid red;
+    border-radius: 100px;
+  }
+}
+
+.gdma {
+  margin-top: -5px;
+  color: white;
+  font-size: 10px;
 }

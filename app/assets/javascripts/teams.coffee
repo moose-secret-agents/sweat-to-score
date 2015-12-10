@@ -52,9 +52,10 @@ initPlayers = ->
   $('#field > .player').each (index, element) ->
     $el = $(element)
     pos = $el.data('position')
-    $el.css('position', 'absolute')
-    $el.css('left', pos[0])
-    $el.css('top', pos[1])
+    $el.css
+      position: 'absolute'
+      left: pos[0]
+      top: pos[1]
 
 sendPositions = (positions) ->
   team_id = $('#football-field').data('team-id')
@@ -72,13 +73,12 @@ savePlayerPositions = ->
   $('#field > .player').each (index, element) ->
     id = $(element).data('player-id')
     pos =
-      top: $(element).position().top
       left: $(element).position().left
+      top: $(element).position().top
     positions[id] = pos
 
   sendPositions(positions)
 
-markKeeper = ->
 onDropField = (e, ui) ->
   $draggable = ui.draggable
   $field = $('#field')
@@ -96,6 +96,8 @@ onDropField = (e, ui) ->
     top: posPrev.top
     left: posPrev.left
 
+  markKeeper()
+
 onDropBank = (e, ui) ->
   $draggable = ui.draggable
   $draggable.appendTo(this)
@@ -103,3 +105,19 @@ onDropBank = (e, ui) ->
     position: 'relative'
     top: 0
     left: 0
+
+  markKeeper()
+
+markKeeper = ->
+  $field = $('#field')
+  $players = $('#field > .player')
+  $players.removeClass('keeper')
+
+  lefts = _.map $players, (e) ->
+    $(e).position().left
+
+  min = _.min lefts
+
+  $players.each (i, e) ->
+    if ($(e).position().left == min)
+      $(e).addClass('keeper')
