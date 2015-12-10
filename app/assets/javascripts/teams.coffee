@@ -40,6 +40,11 @@ initTabs = ->
       $(tab_id).show()
 
 initPlayers = ->
+  $field = $('#field')
+
+  simFieldDim = [100, 60]
+  fieldDim = [$field.width(), $field.height()]
+
   # Make players draggable
   $('.draggable').draggable(revert: 'invalid')
   $('#field').droppable
@@ -55,14 +60,19 @@ initPlayers = ->
     pos = $el.data('position')
     $el.css
       position: 'absolute'
-      left: pos[0]
-      top: pos[1]
+      left: pos[0] / simFieldDim[0] * fieldDim[0]
+      top: pos[1] / simFieldDim[1] * fieldDim[1]
 
 sendPositions = (positions) ->
   team_id = $('#football-field').data('team-id')
   $.post("/teams/#{team_id}/positions", { positions: positions })
 
 savePlayerPositions = ->
+  $field = $('#field')
+
+  simFieldDim = [100, 60]
+  fieldDim = [$field.width(), $field.height()]
+
   positions = {}
   $('#bank > .player').each (index, element) ->
     id = $(element).data('player-id')
@@ -74,8 +84,8 @@ savePlayerPositions = ->
   $('#field > .player').each (index, element) ->
     id = $(element).data('player-id')
     pos =
-      left: $(element).position().left
-      top: $(element).position().top
+      left: $(element).position().left / fieldDim[0] * simFieldDim[0]
+      top: $(element).position().top / fieldDim[1] * simFieldDim[1]
     positions[id] = pos
 
   sendPositions(positions)
