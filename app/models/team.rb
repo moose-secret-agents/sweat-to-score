@@ -48,7 +48,17 @@ class Team < ActiveRecord::Base
   end
 
   def train(tokens)
-    # TODO: Do something to team to increase its strenth
+    available_tokens = self.league.target - self.spent_tokens
+    return false if tokens > available_tokens
+    self.spent_tokens += tokens
+    self.teamable
+    factor = tokens / league.target
+    self.players.each do |player|
+      player.train(factor)
+      player.save
+    end
+    true
+    self.save
   end
 
 end
