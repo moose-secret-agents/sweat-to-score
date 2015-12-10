@@ -11,6 +11,14 @@ class Player < ActiveRecord::Base
 
   PLAYER_PROGRESSION_SCALE = 0.3
 
+  def on_field?
+    fieldX > 0 and fieldY > 0
+  end
+
+  def on_bank?
+    !on_field?
+  end
+
   def generate_face
     self.face = Face.new.generate
     self.save

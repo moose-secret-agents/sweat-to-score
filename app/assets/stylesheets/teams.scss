@@ -24,10 +24,14 @@
   height: 100px;
   overflow:hidden;
   display: inline-block;
-  position: absolute;
+  z-index: 9999;
+  //position: absolute;
 }
 
-#football-field {
+#field {
+  img {
+    width: 100%;
+  }
   position: relative;
 }
 

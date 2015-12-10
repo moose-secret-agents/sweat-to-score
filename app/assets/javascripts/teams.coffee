@@ -21,10 +21,10 @@ initFaces = ->
     face.fatness = fitness
 
     face.mouth.id = switch
-      when talent < 20 then 1
-      when talent < 40 then 2
-      when talent < 60 then 3
-      when talent < 80 then 4
+      when fitness < 20 then 1
+      when fitness < 40 then 2
+      when fitness < 60 then 3
+      when fitness < 80 then 4
       else 5
 
     faces.display(id, face)
@@ -40,13 +40,18 @@ initTabs = ->
 
 initPlayers = ->
   # Make players draggable
-  $('.draggable').draggable(containment: '#field')
+  $('.draggable').draggable(revert: 'invalid')
+  $('#field').droppable
+    accept: '.player'
+    drop: onDrop
 
   # Update positions
-  $('.player').each (index, element) ->
-    pos = $(element).data('position')
-    $(element).css('left', pos[0])
-    $(element).css('top', pos[1])
+  $('#field > .player').each (index, element) ->
+    $el = $(element)
+    pos = $el.data('position')
+    $el.css('position', 'absolute')
+    $el.css('left', pos[0])
+    $el.css('top', pos[1])
 
 sendPositions = (positions) ->
   team_id = $('#football-field').data('team-id')
@@ -54,13 +59,29 @@ sendPositions = (positions) ->
 
 savePlayerPositions = ->
   positions = {}
-  $('.player').each (index, element) ->
+  $('#field > .player').each (index, element) ->
     id = $(element).data('player-id')
     pos =
-      top: $(element).offset().top - $('#football-field').offset().top
-      left: $(element).offset().left - $('#football-field').offset().left
+      top: $(element).position().top
+      left: $(element).position().left
     positions[id] = pos
 
   sendPositions(positions)
 
 markKeeper = ->
+onDrop = (e, ui) ->
+  $draggable = ui.draggable
+  $field = $('#field')
+
+  parent = $draggable.parent()
+
+  fieldPos = $field.offset()
+
+  posPrev = { top: $draggable.offset().top - fieldPos.top, left: $draggable.offset().left - fieldPos.left }
+
+  $draggable.appendTo(this)
+
+  $draggable.css
+    position: 'absolute'
+    top: posPrev.top
+    left: posPrev.left

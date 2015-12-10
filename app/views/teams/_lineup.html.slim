@@ -1,13 +1,15 @@
 #football-field data-team-id="#{@team.id}"
   #bank
-  - @team.players.each_with_index do |player, index|
-    .draggable.player.player-box.avatar-image id="player_#{player.id}" data-position="[#{player.fieldX},#{player.fieldY}]" data-player-id="#{player.id}" data-talent="#{player.talent}" data-face="#{player.face.to_json}"
-      p G: xx%
-      p D: xx%
-      p M: xx%
-      p O: xx%
-  = image_tag('field.svg')
+    - @team.players.each_with_index do |player, index|
+      - if player.on_bank?
+        .draggable.player.player-box.avatar-image id="player_#{player.id}" data-position="[#{player.fieldX},#{player.fieldY}]" data-player-id="#{player.id}" data-fitness="#{player.fitness}" data-face="#{player.face.to_json}"
+  #field
+    - @team.players.each_with_index do |player, index|
+      - if player.on_field?
+        .draggable.player.player-box.avatar-image id="player_#{player.id}" data-position="[#{player.fieldX},#{player.fieldY}]" data-player-id="#{player.id}" data-fitness="#{player.fitness}" data-face="#{player.face.to_json}"
+    = image_tag('field.svg')
 
-  = button_tag 'Save Line-Up', class: 'btn btn-primary', id: 'savePosition'
-  '
-  = button_tag 'Mark as Keeper', class: 'btn btn-default', id: 'markKeeper'
+  .actions
+    = button_tag 'Save Line-Up', class: 'btn btn-primary', id: 'savePosition'
+    '
+    = button_tag 'Mark as Keeper', class: 'btn btn-default', id: 'markKeeper'
