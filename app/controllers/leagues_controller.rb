@@ -1,9 +1,11 @@
 class LeaguesController < ApplicationController
-  before_action :set_user, only: [:new, :create]
+  before_action :set_user, only: [:index, :user_index, :new, :create]
   before_action :set_league, only: [:show, :update, :destroy, :edit]
 
   def index
     @leagues = League.all
+    @invitees = User.all.where.not(id: current_user.id)
+    @invitation = @user.league_invitations.build
   end
 
   def new
@@ -23,11 +25,7 @@ class LeaguesController < ApplicationController
 
   def show
 	  @teams = @league.teams.sort_by(&:rank_in_league)
-
-    matches=Hash.new{|h, k| h[k] = []}
-    @league.matches.each{|match| matches[match.starts_at]<<match}
-
-    @matches = matches.values
+    @matches = @league.matches.order(:starts_at)
   end
 
   def update
@@ -60,8 +58,9 @@ class LeaguesController < ApplicationController
   end
 
   def user_index
-    @user = current_user
     @leagues = current_user.leagues
+    @invitees = User.all.where.not(id: current_user.id)
+    @invitation = @user.league_invitations.build
     render :index
   end
 

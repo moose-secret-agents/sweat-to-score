@@ -1,10 +1,7 @@
-User.delete_all
-League.delete_all
-Team.delete_all
-Player.delete_all
+# Delete all
+[User, League, Team, Player, Partnership, TeamInvitation, LeagueInvitation].each(&:delete_all)
 
 # Seed data
-
 4.times do
   Fabricate(:user, password: 'pass', password_confirmation: 'pass')
 end

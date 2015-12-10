@@ -13,7 +13,7 @@ html lang="en"
     = javascript_include_tag 'application'
 
   body
-    = nav_bar fixed: :static, brand: fa_icon('soccer-ball-o', text: 'Sweat to Score'), responsive: true do
+    = nav_bar fixed: :static, inverse: true, brand: fa_icon('soccer-ball-o', text: 'Sweat to Score'), responsive: true do
       = menu_group do
         = menu_item fa_icon('newspaper-o', text: 'News'), news_path
         = menu_item fa_icon('gamepad', text: 'Leagues'), leagues_path
@@ -33,15 +33,6 @@ html lang="en"
 
     .container
       .row
-        .col-lg-9
+        .col-lg-12
           = bootstrap_flash
           = yield
-        .col-lg-3
-          = bs_panel do |p|
-            = p.header do
-              .text-center Actions
-            = p.body do
-              = link_to 'Hello', '#', class: 'btn btn-default btn-block'
-              = link_to 'Hello', '#', class: 'btn btn-default btn-block'
-              = link_to 'Hello', '#', class: 'btn btn-default btn-block'
-            = p.footer do

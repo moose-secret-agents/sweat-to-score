@@ -1,0 +1,5 @@
+.training-form
+  = bootstrap_form_for @invitation, url: team_invitations_path do |f|
+    = f.collection_select(:invitee_id, @invitees, :id, :username)
+    = f.hidden_field :team_id, value: team_id
+    = f.submit 'Invite!', class: 'btn btn-primary btn-block'

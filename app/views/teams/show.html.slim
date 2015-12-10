@@ -21,7 +21,7 @@ ul.nav.nav-tabs
 
   #matches-tab
     - if @matches.any?
-      = render 'matchTables'
+      = render partial: 'matches/timeline'
     - else
       h1 No matches available!
 

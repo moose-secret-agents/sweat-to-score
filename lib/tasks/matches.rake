@@ -7,4 +7,8 @@ namespace :matches do
     TaskHelpers::start_overdue_matches
   end
 
+  desc 'generate GIF'
+  task generate_gif: :environment do
+    TaskHelpers::encode_gif(Rails.root.join('resources','match-images'))
+  end
 end

@@ -18,6 +18,7 @@ en:
       edit: "Edit"
       start: "Start"
       end: "End"
+      invite: "Invite User"
       accept: "Accept"
       refuse: "Refuse"
       cancel_request: "Cancel Request"

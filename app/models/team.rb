@@ -1,4 +1,6 @@
 class Team < ActiveRecord::Base
+  DEFAULT_PLAYER_COUNT = 16
+
   has_many :players, dependent: :destroy
   belongs_to :league
   belongs_to :teamable, polymorphic: true
@@ -6,6 +8,14 @@ class Team < ActiveRecord::Base
   validates_presence_of :league, :teamable, :name
 
   after_create :assign_players
+
+  def averageSkill
+    skill=0
+    self.players.each do |player|
+      skill+=[player.goalkeep, player.defense, player.midfield, player.attack].max
+    end
+    skill/self.players.count
+  end
 
   def matches
     Match.where('"teamA_id" = ? or "teamB_id" = ?', id, id)
@@ -19,9 +29,7 @@ class Team < ActiveRecord::Base
     return if players.count > 0
 
     ActiveRecord::Base.transaction do
-      (18 + rand(7)).times do
-        Fabricate(:player, team: self)
-      end
+      DEFAULT_PLAYER_COUNT.times { Fabricate(:player, team: self) }
     end
   end
 

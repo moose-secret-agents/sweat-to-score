@@ -17,8 +17,8 @@ initFaces = ->
   $(".avatar-image").each (index, element) ->
     id = $(element).attr('id')
     face = $(element).data('face')
-    talent = $(element).data('talent')
-    face.fatness = talent
+    fitness = $(element).data('fitness')
+    face.fatness = fitness
 
     face.mouth.id = switch
       when talent < 20 then 1

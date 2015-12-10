@@ -4,6 +4,8 @@ class User < ActiveRecord::Base
   include Teamable
 
   has_many :partnerships
+  has_many :team_invitations
+  has_many :league_invitations
   has_many :leagues, foreign_key: 'owner_id', dependent: :destroy
 
   validates :username, uniqueness: true, presence: true

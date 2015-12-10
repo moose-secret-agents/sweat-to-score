@@ -3,16 +3,17 @@ class TeamsController < ApplicationController
   before_action :set_user, only: [:index, :new, :create]
 
   def index
-    @user = User.find(params[:user_id])
-    @own_teams = @user.teams
     @partners = Partnership.all.where("user_id = ? OR partner_id = ?", current_user.id, current_user.id)
+
+    @own_teams = @user.teams
     @partner_teams = @partners.map(&:teams).flatten
+
+    @invitees = User.all.where.not(id: current_user.id)
+    @invitation = @user.team_invitations.build
   end
 
   def show
-    #matches=Hash.new{|h, k| h[k] = []}
-    #@team.matches.each{|match| matches[match.starts_at]<<match}
-    @matches = @team.matches
+    @matches = @team.matches.order(:starts_at)
   end
 
   def new
@@ -24,6 +25,8 @@ class TeamsController < ApplicationController
 
   def create
     @team = @user.teams.create(team_params)
+    @team.update_attribute(:points, 0)
+    @team.update_attribute(:strength, 0)
 
     if @team.save
       redirect_to @team, notice: 'Team was successfully created.'
@@ -59,7 +62,6 @@ class TeamsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_team
       @team = Team.find(params[:id])
     end
@@ -68,7 +70,6 @@ class TeamsController < ApplicationController
       @user = User.find(params[:user_id])
     end
 
-    # Only allow a trusted parameter "white list" through.
     def team_params
       params.require(:team).permit(:name, :strength, :league_id, :points)
     end

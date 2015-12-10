@@ -31,5 +31,15 @@ Rails.application.routes.draw do
     put 'cancel', to: 'partnerships#cancel', on: :member
   end
 
+  resources :team_invitations do
+    put 'accept', to: 'team_invitations#accept', on: :member
+    put 'refuse', to: 'team_invitations#refuse', on: :member
+  end
+
+  resources :league_invitations do
+    put 'accept', to: 'league_invitations#accept', on: :member
+    put 'refuse', to: 'league_invitations#refuse', on: :member
+  end
+
   root to: 'welcome#home'
 end
