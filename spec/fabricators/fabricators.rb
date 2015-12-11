@@ -10,7 +10,8 @@ end
 Fabricator(:league) do
   name  { "#{Faker::Team.name} League" }
   level { Faker::Number.between(1, 3) }
-  target {100}
+  target { 100 }
+  pause_length { 7 }
   owner(fabricator: :user)
 end
 
