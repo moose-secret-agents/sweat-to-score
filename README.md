@@ -3,9 +3,9 @@
 ###### [http://sweat-to-score.herokuapp.com/](http://sweat-to-score.herokuapp.com/)
 ---
 
-Sweat To Score! Found your own team, manage your tactics ans sweat your way to fame and glory!
+Sweat To Score! Found your own team, manage your tactics and sweat your way to fame and glory!
 
-Sweat To Score is a web application developed for the course "Advanced Software Engineering" at the University of Fribourg. It aims to motivate users to get their behinds out of their comfortable chairs and do some exercise! The application features a fantasy soccer system which enables users to manage their teams alone or in pairs. The fitness of the user's players increases when you do exercise and track it using our Android application found here:
+Sweat To Score is a web application developed for the course "Advanced Software Engineering" at the University of Fribourg. It aims to motivate users to get their behinds out of their comfortable chairs and do some exercise! The application features a fantasy soccer system which enables users to manage their teams alone or in pairs. The fitness of the user's players increases when you exercise and track it using our Android application found here:
 
 [Sweat to Score Android App](https://github.com/moose-secret-agents/activity-tracker-2)
 
@@ -30,7 +30,7 @@ Please follow the following instructions in order to make the application run lo
 
 ## System Architecture
 The System features the following subsystems:
-* Sweat To Score webserver: Hosts the web-app, schedules and simulates matches, and allows access to management of teams
+* Sweat To Score webserver: Hosts the web-app, schedules and simulates matches, and allows to manage teams
 * Sweat To Score Android App: Tracks the user's activity and sends it to the Activity Tracking Server
 * Sweat To Score Activity Server: Receives the workout data from the Android app and computes useful metrics, which are then inserted to Cybercoach and made available to the user for training
 * Cybercoach: Provides User management and storage of workout data. Is slow.
