@@ -38,6 +38,7 @@ The System features the following subsystems:
 See below for links to the other parts of the system
 
 ## Links:
+* Twitter Account: [https://twitter.com/HiddenDeerSpies](https://twitter.com/HiddenDeerSpies)
 * Documentation: [https://github.com/moose-secret-agents/Documentation](https://github.com/moose-secret-agents/Documentation)
 * ActivityServer: [https://github.com/moose-secret-agents/ActivityServer](https://github.com/moose-secret-agents/ActivityServer)
 * ActivityTracker2: [https://github.com/moose-secret-agents/activity-tracker-2](https://github.com/moose-secret-agents/activity-tracker-2)
