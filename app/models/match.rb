@@ -49,10 +49,10 @@ class Match < ActiveRecord::Base
     @all_players = []
     player_count = 0
     self.teamA.players.each do |player|
-      player_count += 1
+      #player_count += 1
       player.rand = @rand
       player.set_position(player.fieldX,player.fieldY,TEAM_A_DIR)
-      next if player_count > 11
+      #next if player_count > 11
       @players_a<<player unless player.position[0] == -1
       @all_players<<player unless player.position[0] == -1
       player.is_goalie = false
@@ -66,10 +66,10 @@ class Match < ActiveRecord::Base
 
     player_count = 0
     self.teamB.players.each do |player|
-      player_count += 1
+      #player_count += 1
       player.rand = @rand
       player.set_position(player.fieldX,player.fieldY,TEAM_B_DIR)
-      next if player_count > 11
+      #next if player_count > 11
       @players_b<<player unless player.position[0] == -1
       @all_players<<player unless player.position[0] == -1
       player.is_goalie = false
