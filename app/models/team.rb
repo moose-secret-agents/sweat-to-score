@@ -5,6 +5,8 @@ class Team < ActiveRecord::Base
   belongs_to :league
   belongs_to :teamable, polymorphic: true
 
+  before_destroy :forfeit_all_matches
+
   validates_presence_of :league, :teamable, :name
 
   after_create :assign_players
@@ -63,4 +65,19 @@ class Team < ActiveRecord::Base
     self.save
   end
 
+  def forfeit_all_matches
+    matches_to_play=self.matches.scheduled
+    matches_to_play.each do |match|
+      if(match.teamA==self.id)
+        match.scoreA=0
+        match.scoreB=3
+        match.status = 'ended'
+      else
+        match.scoreA=3
+        match.scoreB=0
+        match.status = 'ended'
+      end
+      match.save
+    end
+  end
 end
