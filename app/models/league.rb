@@ -6,7 +6,7 @@ class League < ActiveRecord::Base
   belongs_to :owner, class_name: 'User'
 
   validates_presence_of :name, :target, :pause_length
-  validate :starts_at_cannot_be_in_the_past
+  validate :starts_at_cannot_be_in_the_past, on: :create
 
   scope :overdue, -> { League.inactive.where('starts_at < ?', Time.now) }
   scope :should_finish, -> {League.active-League.active.includes(:matches).where(:matches=>{status: [Match.statuses[:running], Match.statuses[:scheduled]]})}

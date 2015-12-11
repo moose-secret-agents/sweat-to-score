@@ -1,6 +1,6 @@
 class LeaguesController < ApplicationController
   before_action :set_user, only: [:index, :user_index, :new, :create]
-  before_action :set_league, only: [:show, :update, :destroy, :edit]
+  before_action :set_league, only: [:show, :update, :destroy, :edit, :start, :stop]
 
   def index
     @leagues = League.all
@@ -32,28 +32,36 @@ class LeaguesController < ApplicationController
   def update
     authorize @league
 
-    if params[:status]!=nil
-      if params[:status]==League.statuses[:active].to_s&&League.statuses[@league.status]==League.statuses[:inactive]
-        @league.start
+    @league.update_attribute :starts_at, params[:league][:starts_at]
 
-        redirect_to @league, notice: 'League started'
-      elsif params[:status]==League.statuses[:inactive].to_s&&League.statuses[@league.status]==League.statuses[:active]
-        @league.end
-
-        redirect_to @league, notice: 'League ended'
-      else
-        flash[:error] = "League is already #{@league.status}"
-        #redirect_to @league, notice: 'League is already #{@league.status}'
-        redirect_to @league
-      end
+    if @league.update(league_params)
+      redirect_to @league, notice: 'League was successfully updated.'
     else
-      @league.update_attribute :starts_at, params[:league][:starts_at]
+      render :edit
+    end
+  end
 
-      if @league.update(league_params)
-        redirect_to @league, notice: 'League was successfully updated.'
-      else
-        render :edit
-      end
+  def start
+    authorize @league
+
+    if @league.inactive?
+      @league.start
+      redirect_to @league, notice: 'League started'
+    else
+      flash[:error] = "League is already #{@league.status}"
+      redirect_to @league
+    end
+  end
+
+  def stop
+    authorize @league
+
+    if @league.active?
+      @league.end
+      redirect_to @league, notice: 'League ended'
+    else
+      flash[:error] = "League is already #{@league.status}"
+      redirect_to @league
     end
   end
 

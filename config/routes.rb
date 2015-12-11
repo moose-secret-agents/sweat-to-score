@@ -22,6 +22,8 @@ Rails.application.routes.draw do
   end
 
   resources :leagues do
+    put 'start', to: 'leagues#start', on: :member
+    put 'stop', to: 'leagues#stop', on: :member
     resources :matches, except: [:edit, :update], shallow: true
   end
 

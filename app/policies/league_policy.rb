@@ -7,6 +7,14 @@ class LeaguePolicy < ApplicationPolicy
     is_league_owner?
   end
 
+  def start?
+    is_league_owner?
+  end
+
+  def stop?
+    is_league_owner?
+  end
+
   def destroy?
     is_league_owner?
   end
