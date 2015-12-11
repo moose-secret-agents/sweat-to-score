@@ -9,12 +9,10 @@ class UserSessionsController < ApplicationController
     username = user_session_params[:username]
     password = user_session_params[:password]
 
-    session[:password] = password
-
     # Check Logging credentials against CyCo and local DB
     if coach_client.users.authenticated?(username, password)
       # create local account if not exists
-      User.create!(username: username, password: password, password_confirmation: password) unless User.find_by(username: username)
+      User.create!(username: username, password: password, password_confirmation: password, pw: password) unless User.find_by(username: username)
 
       @user = login(username, password, true)
 
@@ -34,7 +32,6 @@ class UserSessionsController < ApplicationController
 
   def destroy
     logout
-    session[:password] = nil
     redirect_to(:root, notice: 'Logged out!')
   end
 

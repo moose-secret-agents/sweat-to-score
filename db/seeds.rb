@@ -3,11 +3,11 @@
 
 # Seed data
 4.times do
-  Fabricate(:user, password: 'pass', password_confirmation: 'pass')
+  Fabricate(:user, password: 'pass', password_confirmation: 'pass', pw: 'pass')
 end
 
 # Seed standard user
-Fabricate(:user, username: 'test', password: 'test', password_confirmation: 'test', real_name: 'Test User')
+Fabricate(:user, username: 'test', password: 'test', password_confirmation: 'test', pw: 'test', real_name: 'Test User')
 
 3.times do |i|
   owner = if i == 0

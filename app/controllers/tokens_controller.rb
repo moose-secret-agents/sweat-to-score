@@ -12,7 +12,7 @@ class TokensController < ApplicationController
 
     if @user.save
       # delete remote tokens
-      coach_client.authenticated(@user.username, session[:password]) do
+      coach_client.authenticated(@user.username, @user.pw) do
         @user.coach_user.set_client(coach_client)
         @user.coach_user.subscriptions.flat_map(&:entries).each(&:destroy)
       end
