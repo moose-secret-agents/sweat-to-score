@@ -1,5 +1,5 @@
 # Delete all
-[User, League, Team, Player, Partnership, TeamInvitation, LeagueInvitation].each(&:delete_all)
+[User, League, Team, Player, Partnership, TeamInvitation, LeagueInvitation, Match].each(&:delete_all)
 
 # Seed admin
 admin = Fabricate(:user, username: 'stsadmin', password: 'stsadmin', password_confirmation: 'stsadmin', pw: 'stsadmin')
