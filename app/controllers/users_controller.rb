@@ -71,7 +71,7 @@ class UsersController < ApplicationController
 
     def update_params
       p = params.require(:user).permit(:username, :password, :password_confirmation, :real_name, :email)
-      p[:username] = p[:username].downcase
+      p[:username] = p[:username].downcase if p[:username]
       p
     end
 
@@ -85,8 +85,11 @@ class UsersController < ApplicationController
     end
 
     def user_attrs_to_coach(attributes)
-      cyco_attributes = attributes.slice(:username, :password, :email)
-      cyco_attributes[:email] = "generic@email.com" if cyco_attributes[:email].blank?
-      cyco_attributes.merge(realname: attributes[:real_name], publicvisible: 2)
+      cyco_attributes = attributes.slice(:username, :password)
+
+      email = attributes[:email].blank? ? 'generic@email.com' : attributes[:email]
+      realname = attributes[:real_name].blank? ? 'Generic Name' : attributes[:real_name]
+
+      cyco_attributes.merge(email: email, realname: realname, publicvisible: 2)
     end
 end
