@@ -54,7 +54,7 @@ class TeamsController < ApplicationController
 
     positions.each do |key, value|
       player = Player.find(key)
-      player.update_attributes(fieldX: value[:left], fieldY: value[:top])
+      player.update_attributes(fieldX: value[:left].to_i, fieldY: value[:top].to_i)
     end
 
     flash[:success] = 'Saved player positions'

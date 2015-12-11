@@ -60,8 +60,8 @@ initPlayers = ->
     pos = $el.data('position')
     $el.css
       position: 'absolute'
-      left: pos[0] / simFieldDim[0] * fieldDim[0] - 50
-      top: pos[1] / simFieldDim[1] * fieldDim[1] - 50
+      left: (pos[0] / simFieldDim[0] * fieldDim[0]) - 50
+      top: (pos[1] / simFieldDim[1] * fieldDim[1]) - 50
 
 sendPositions = (positions) ->
   team_id = $('#football-field').data('team-id')
