@@ -30,6 +30,8 @@ class LeaguesController < ApplicationController
   end
 
   def update
+    authorize @league
+
     if params[:status]!=nil
       if params[:status]==League.statuses[:active].to_s&&League.statuses[@league.status]==League.statuses[:inactive]
         @league.start
@@ -56,6 +58,8 @@ class LeaguesController < ApplicationController
   end
 
   def destroy
+    authorize @league
+
     @league.destroy
     redirect_to user_leagues_path(current_user), notice: 'League was successfully destroyed.'
   end
@@ -68,6 +72,8 @@ class LeaguesController < ApplicationController
   end
 
   def edit
+    authorize @league
+
     @min_length=@league.min_length
   end
 

@@ -8,10 +8,10 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.create(user_params)
+    @user = User.create(create_params)
 
     if @user.save
-      @coach_user = create_cybercoach_user(@user.username, user_params)
+      @coach_user = create_cybercoach_user(@user.username, create_params)
 
       auto_login(@user, true)
       redirect_to @user, notice: 'User profile created'
@@ -30,14 +30,16 @@ class UsersController < ApplicationController
   end
 
   def edit
+    authorize @user
   end
 
   def update
-    if @user.update(user_params)
+    authorize @user
+    if @user.update(update_params)
 
-      coach_client.authenticated(@user.username, session[:password]) do
+      coach_client.authenticated(@user.username, @user.pw) do
         @user.coach_user.set_client coach_client
-        @user.coach_user.update(user_attrs_to_coach(user_params))
+        @user.coach_user.update(user_attrs_to_coach(update_params))
       end
       redirect_to @user, notice: 'User profile was successfully updated.'
     else
@@ -46,24 +48,9 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    user_partnerships = Partnership.all.where("user_id = ? OR partner_id = ?", current_user.id, current_user.id)
-    user_partnerships.each do |up|
-      up.destroy
-    end
-
-    user_team_invitations = TeamInvitation.all.where("user_id = ? OR invitee_id = ?", current_user.id, current_user.id)
-    user_team_invitations.each do |ti|
-      ti.destroy
-    end
-
-    user_league_invitations = LeagueInvitation.all.where("user_id = ? OR invitee_id = ?", current_user.id, current_user.id)
-    user_league_invitations.each do |li|
-      li.destroy
-    end
-
     @user.destroy
 
-    coach_client.authenticated(@user.username, session[:password]) do
+    coach_client.authenticated(@user.username, @user.pw) do
       @user.coach_user.set_client coach_client
       @user.coach_user.destroy
     end
@@ -76,7 +63,13 @@ class UsersController < ApplicationController
       @user = User.find(params[:id])
     end
 
-    def user_params
+    def create_params
+      p = update_params
+      p[:pw] ||= p[:password]
+      p
+    end
+
+    def update_params
       params.require(:user).permit(:username, :password, :password_confirmation, :real_name, :email)
     end
 

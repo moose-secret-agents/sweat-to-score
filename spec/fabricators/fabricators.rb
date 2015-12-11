@@ -4,6 +4,7 @@ Fabricator(:user) do
   email { Faker::Internet.email }
   password { Faker::Internet.password }
   password_confirmation { |u| u[:password] }
+  pw { |u| u[:pasword] }
 end
 
 Fabricator(:league) do

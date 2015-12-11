@@ -8,6 +8,8 @@ class User < ActiveRecord::Base
   has_many :league_invitations
   has_many :leagues, foreign_key: 'owner_id', dependent: :destroy
 
+  before_destroy :destroy_dependants
+
   validates :username, uniqueness: true, presence: true
 
   validates :password, length: { minimum: 3 }, if: -> { new_record? || changes['password'] }
@@ -53,6 +55,7 @@ class User < ActiveRecord::Base
   end
 
   def remote_tokens
+    return 0 unless self.coach_user
     (self.coach_user.subscriptions.flat_map(&:entries).map { |e| e.rounds || 0 }.sum / 10).to_i
   end
 
@@ -61,6 +64,12 @@ class User < ActiveRecord::Base
     league_invitations = LeagueInvitation.all.where("invitee_id = ?", self.id)
 
     team_invitations.count + league_invitations.count + (self.remote_tokens == 0 ? 0 : 1)
+  end
+
+  def destroy_dependants
+    Partnership.all.where("user_id = ? OR partner_id = ?", self.id, self.id).destroy_all
+    TeamInvitation.all.where("user_id = ? OR invitee_id = ?", self.id, self.id).destroy_all
+    LeagueInvitation.all.where("user_id = ? OR invitee_id = ?", self.id, self.id).destroy_all
   end
 
 end
