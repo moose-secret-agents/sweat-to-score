@@ -23,7 +23,13 @@ ul.timeline
                 th.timeline-table-head= Match.human_attribute_name(:Guest)
             tbody
               tr
-                td.timeline-table-body= match.teamA.name
-                td.timeline-table-body= match.teamB.name
+                -if !match.teamA.nil?
+                  td.timeline-table-body=match.teamA.name
+                -else
+                  td.timeline-table-body= 'deleted'
+                -if !match.teamB.nil?
+                  td.timeline-table-body=match.teamB.name
+                -else
+                  td.timeline-table-body= 'deleted'
           -unless match.imgurLink.nil?
             img.matchgif src = "#{match.imgurLink}"

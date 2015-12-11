@@ -21,10 +21,10 @@ div class="col-md-12"
   = link_to t('.back', :default => t("helpers.links.back")), leagues_path, :class => 'btn btn-default'
   '
   = link_to t('.edit', :default => t("helpers.links.edit")), edit_league_path(@league), :class => 'btn btn-default'
-  -if(@league.status == League.statuses[:inactive])
+  -if(League.statuses[@league.status] == League.statuses[:inactive])
     '
     = link_to t('.start', :default => t("helpers.links.start")), league_path(@league,:status => League.statuses[:active]),:method=>"put", :class => 'btn btn-primary'
-  -if (@league.status == League.statuses[:active])
+  -if (League.statuses[@league.status] == League.statuses[:active])
     '
     = link_to t('.stop', :default => t("helpers.links.stop")), league_path(@league,:status => League.statuses[:inactive]),:method=>"put", :class => 'btn btn-primary'
   '
