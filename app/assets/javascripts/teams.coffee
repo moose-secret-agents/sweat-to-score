@@ -18,13 +18,14 @@ initFaces = ->
     id = $(element).attr('id')
     face = $(element).data('face')
     fitness = $(element).data('fitness')
+    stamina = $(element).data('stamina')
     face.fatness = fitness
 
     face.mouth.id = switch
-      when fitness < 20 then 1
-      when fitness < 40 then 2
-      when fitness < 60 then 3
-      when fitness < 80 then 4
+      when stamina < 20 then 1
+      when stamina < 40 then 2
+      when stamina < 60 then 3
+      when stamina < 80 then 4
       else 5
 
     faces.display(id, face)
@@ -39,6 +40,11 @@ initTabs = ->
       $(tab_id).show()
 
 initPlayers = ->
+  $field = $('#field')
+
+  simFieldDim = [100, 60]
+  fieldDim = [940, 598]
+
   # Make players draggable
   $('.draggable').draggable(revert: 'invalid')
   $('#field').droppable
@@ -52,15 +58,21 @@ initPlayers = ->
   $('#field > .player').each (index, element) ->
     $el = $(element)
     pos = $el.data('position')
-    $el.css('position', 'absolute')
-    $el.css('left', pos[0])
-    $el.css('top', pos[1])
+    $el.css
+      position: 'absolute'
+      left: (pos[0] / simFieldDim[0] * fieldDim[0]) - 50
+      top: (pos[1] / simFieldDim[1] * fieldDim[1]) - 50
 
 sendPositions = (positions) ->
   team_id = $('#football-field').data('team-id')
   $.post("/teams/#{team_id}/positions", { positions: positions })
 
 savePlayerPositions = ->
+  $field = $('#field')
+
+  simFieldDim = [100, 60]
+  fieldDim = [940, 598]
+
   positions = {}
   $('#bank > .player').each (index, element) ->
     id = $(element).data('player-id')
@@ -72,13 +84,20 @@ savePlayerPositions = ->
   $('#field > .player').each (index, element) ->
     id = $(element).data('player-id')
     pos =
-      top: $(element).position().top
-      left: $(element).position().left
+      left: ($(element).position().left + 50) / fieldDim[0] * simFieldDim[0]
+      top: ($(element).position().top + 50) / fieldDim[1] * simFieldDim[1]
     positions[id] = pos
 
-  sendPositions(positions)
+  [res, confirm, msg] = validatePlayers(positions)
 
-markKeeper = ->
+  if !res and !confirm
+    alert msg
+  else if !res and confirm
+    if window.confirm(msg)
+      sendPositions(positions)
+  else
+    sendPositions(positions)
+
 onDropField = (e, ui) ->
   $draggable = ui.draggable
   $field = $('#field')
@@ -96,6 +115,8 @@ onDropField = (e, ui) ->
     top: posPrev.top
     left: posPrev.left
 
+  markKeeper()
+
 onDropBank = (e, ui) ->
   $draggable = ui.draggable
   $draggable.appendTo(this)
@@ -103,3 +124,26 @@ onDropBank = (e, ui) ->
     position: 'relative'
     top: 0
     left: 0
+
+  markKeeper()
+
+markKeeper = ->
+  $field = $('#field')
+  $players = $('#field > .player')
+
+  lefts = _.map $players, (e) ->
+    $(e).position().left
+
+  min = _.min lefts
+
+  $players.each (i, e) ->
+    if ($(e).position().left == min)
+      $players.removeClass('keeper')
+      $(e).addClass('keeper')
+
+validatePlayers = (positions) ->
+  fieldPlayers = $('#field > .player')
+
+  return [false, false, 'Cannot have more than 11 players on the field!'] if fieldPlayers.size() > 11
+  return [false, true, 'Do you really want to play with less than 11 players?'] if fieldPlayers.size() < 11
+  return [true, false, 'Everything ok']

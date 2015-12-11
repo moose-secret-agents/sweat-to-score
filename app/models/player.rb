@@ -79,11 +79,11 @@ class Player < ActiveRecord::Base
     difficulty = distance_difficulty * speed_difficulty * (1+(1-weather_scale))
     #puts "#{self.team} trying save with difficulty #{difficulty}"
     #puts difficulty
-    randval = @rand.rand(1.0) * scale(self.goalkeep)
+    randval = @rand.rand(1.0) * scale_with_stamina(self.goalkeep)
     if randval > difficulty
       #puts "saved ball"
       ball.kick(@play_direction * 5 + Vector[0,@rand.rand(10.0)-5.0])
-      self.goalkeep += scale(self.talent)*(1-scale(self.goalkeep))*PLAYER_PROGRESSION_SCALE*@rand.rand(1.0)
+      self.goalkeep += scale_with_stamina(self.talent)*(1-scale(self.goalkeep))*PLAYER_PROGRESSION_SCALE*@rand.rand(1.0)
     else
       ball.position+= @play_direction * -50
       #puts ball.position
@@ -122,34 +122,42 @@ class Player < ActiveRecord::Base
 
   def shoot_at_goal(ball)
     #puts "shooting at goal"
-    y = 30 + (@rand.rand(12.0 * scale(self.attack))-6.0*scale(self.attack))
+    y = 30 + (@rand.rand(12.0 * scale_with_stamina(self.attack))-6.0*scale_with_stamina(self.attack))
     #puts "shooting at #{y}"
     goal_direction = Vector[@play_direction[0]*100,y] - @position
-    ball.kick(goal_direction.normalize * 4 * scale_with_time(scale(self.attack)))
+    ball.kick(goal_direction.normalize * 4 * scale_with_time(scale_with_stamina(self.attack)))
     self.attack += scale(self.talent)*(1-scale(self.attack))*PLAYER_PROGRESSION_SCALE*@rand.rand(1.0)
   end
 
   def tackle(ball)
     #puts "trying tackle"
-    randval = @rand.rand(1.0) * scale(self.defense)
+    randval = @rand.rand(1.0) * scale_with_stamina(self.defense)
     kick_forward(ball) if ball.try_take(self, randval) == :taken_from_player and @rand.rand(1.0)>0.6
     self.defense += scale(self.talent)*(1-scale(self.defense))*PLAYER_PROGRESSION_SCALE*@rand.rand(1.0)
     #puts self.defense
   end
 
   def defend_tackle
-    randval = @rand.rand(1.0)*scale([self.defense, self.midfield, self.attack].max)
+    randval = @rand.rand(1.0)*scale_with_stamina([self.defense, self.midfield, self.attack].max)
     self.midfield += scale(self.talent)*(1-scale(self.midfield))*PLAYER_PROGRESSION_SCALE*@rand.rand(1.0)
     #puts self.midfield
     randval
   end
 
   def scale(param)
+    (1 - (1-param/100.0)**1.75)
+  end
+
+  def scale_with_stamina(param)
     (1 - (1-param/100.0)**1.75) * (1 - (1-self.stamina/100.0)**1.75)
   end
 
   def scale_with_time (param)
     param * Match::PLAY_TIME_SCALE
+  end
+
+  def train(factor)
+    self.fitness += factor * (1-scale(self.fitness)) * 5 * scale(self.stamina)
   end
 
   class Action
@@ -160,6 +168,7 @@ class Player < ActiveRecord::Base
       @action = action
     end
   end
+
   class Face
     COUNT = { head: 1, eyebrow: 1, eye: 4, nose: 3, mouth: 5, hair: 5 }
 

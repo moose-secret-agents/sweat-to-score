@@ -83,19 +83,15 @@ class UsersController < ApplicationController
     def create_cybercoach_user(username, attributes={})
       return nil if coach_client.users.exists? username
       # Create CyCo user unless already exists
-      cyco_user = coach_client.users.create(username, user_attrs_to_coach(attributes))
 
-      # Subscribe to running and cycling
-      coach_client.authenticated(username, session[:password]) do
-        cyco_user.subscribe_to :cycling
-        cyco_user.subscribe_to :running
-      end
+      cyco_user = coach_client.users.create(username, user_attrs_to_coach(attributes))
 
       cyco_user
     end
 
     def user_attrs_to_coach(attributes)
       cyco_attributes = attributes.slice(:username, :password, :email)
+      cyco_attributes[:email] = "generic@email.com" if cyco_attributes[:email].blank?
       cyco_attributes.merge(realname: attributes[:real_name], publicvisible: 2)
     end
 end

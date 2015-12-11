@@ -27,10 +27,17 @@ class TokensController < ApplicationController
 
   def train
     tokens = params[:training][:tokens]
-    @team.train tokens
 
-    flash[:success] = 'Successfully trained team'
-    redirect_to :back
+    if @team.train tokens.to_i
+      current_user.tokens -= tokens.to_i
+      current_user.save
+      flash[:success] = 'Successfully trained team'
+      redirect_to :back
+    else
+      flash[:error] = 'Invalid number of tokens'
+      redirect_to :back
+    end
+
   end
 
   private

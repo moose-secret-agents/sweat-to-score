@@ -29,7 +29,9 @@ class Team < ActiveRecord::Base
     return if players.count > 0
 
     ActiveRecord::Base.transaction do
-      DEFAULT_PLAYER_COUNT.times { Fabricate(:player, team: self) }
+      positionsX = [1,20,20,20,20,45,45,45,45,75,75,0,0,0,0,0]
+      positionsY = [30,12,24,36,48,12,24,36,48,24,36,0,0,0,0,0]
+      DEFAULT_PLAYER_COUNT.times.map do |i| Fabricate(:player, {team: self,fieldX: positionsX[i], fieldY: positionsY[i]}) end
     end
   end
 
@@ -48,7 +50,17 @@ class Team < ActiveRecord::Base
   end
 
   def train(tokens)
-    # TODO: Do something to team to increase its strenth
+    available_tokens = self.league.target - self.spent_tokens
+    return false if tokens > available_tokens
+    self.spent_tokens += tokens
+    self.teamable
+    factor = tokens / league.target
+    self.players.each do |player|
+      player.train(factor)
+      player.save
+    end
+    true
+    self.save
   end
 
 end

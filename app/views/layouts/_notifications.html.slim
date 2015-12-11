@@ -13,8 +13,8 @@
   hr
 
   h4 Team Invites
-  - @invitations = TeamInvitation.all.where("invitee_id = ?", current_user.id)
-  - unless @invitations.any?
+  - team_invites = TeamInvitation.all.where("invitee_id = ?", current_user.id)
+  - if team_invites.empty?
     h5 No invitations yet
   - else
     table class="table table-hover"
@@ -24,7 +24,7 @@
           th.col-sm-4= 'Inviter'
           th.col-sm-3=t 'Action'
       tbody
-        - @invitations.each do |invitation|
+        - team_invites.each do |invitation|
           tr
             td.col-sm-5= invitation.team.name
             td.col-sm-4= invitation.user.username
@@ -36,8 +36,8 @@
 hr
 
   h4 League Invites
-  - @invitations = LeagueInvitation.all.where("invitee_id = ?", current_user.id)
-  - unless @invitations.any?
+  - league_invites = LeagueInvitation.all.where("invitee_id = ?", current_user.id)
+  - if league_invites.empty?
     h5 No invitations yet
   - else
     table class="table table-hover"
@@ -47,7 +47,7 @@ hr
           th.col-sm-4= 'Inviter'
           th.col-sm-3=t 'Action'
       tbody
-        - @invitations.each do |invitation|
+        - league_invites.each do |invitation|
           tr
             td.col-sm-5= invitation.league.name
             td.col-sm-4= invitation.user.username

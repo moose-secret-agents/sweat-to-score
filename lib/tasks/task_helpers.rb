@@ -41,4 +41,12 @@ module TaskHelpers
     end
   end
 
+  def self.clear_tokens
+    Rails.logger.debug "Resetting token allocation"
+    Team.all.each do |player|
+      player.spent_tokens = 0
+      player.save
+    end
+  end
+
 end

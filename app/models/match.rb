@@ -47,11 +47,14 @@ class Match < ActiveRecord::Base
     @players_a = []
     @players_b = []
     @all_players = []
+    player_count = 0
     self.teamA.players.each do |player|
+      player_count += 1
       player.rand = @rand
       player.set_position(player.fieldX,player.fieldY,TEAM_A_DIR)
-      @players_a<<player unless player.position[0] == -1
-      @all_players<<player unless player.position[0] == -1
+      next if player_count > 11
+      @players_a<<player unless player.position[0] == 0
+      @all_players<<player unless player.position[0] == 0
       player.is_goalie = false
 
       player.fitness = 50
@@ -67,11 +70,14 @@ class Match < ActiveRecord::Base
 
     @players_a.sort!{|a,b| a.fieldX <=> b.fieldX}
 
+    player_count = 0
     self.teamB.players.each do |player|
+      player_count += 1
       player.rand = @rand
       player.set_position(player.fieldX,player.fieldY,TEAM_B_DIR)
-      @players_b<<player unless player.position[0] == -1
-      @all_players<<player unless player.position[0] == -1
+      next if player_count > 11
+      @players_b<<player unless player.position[0] == 0
+      @all_players<<player unless player.position[0] == 0
       player.is_goalie = false
 
       player.fitness = 50
