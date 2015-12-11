@@ -8,13 +8,10 @@ ul.timeline
       .timeline-panel
         .timeline-heading
           h4.timeline-title #{match.starts_at.strftime("%A %b %d %Y at %H:%M")}
-          p
-            small.text-muted
-              i.glyphicon.glyphicon-time
-                |  #{getTimeDifference(match.starts_at)}
-                br
-                i.glyphicon.glyphicon-info-sign
-                |  #{match.status}
+          .text-small.text-muted
+            span.match-info= fa_icon('clock-o', text: getTimeDifference(match.starts_at))
+            span.match-info= fa_icon('info-circle', text:  match.status)
+            span.match-info= fa_icon('flash', text: match.formatted_weather) if match.ended?
         .timeline-body
           table class="table table-hover"
             thead

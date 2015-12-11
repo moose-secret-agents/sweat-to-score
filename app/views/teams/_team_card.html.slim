@@ -35,7 +35,7 @@
     .team-score
       span Average Skill Level
       span.pull-right
-        = tag_label("#{team.averageSkill}%", :default)
+        = tag_label("#{team.averageSkill.round(2)}%", :default)
 
   = p.footer do
     small.pull-left= teamable_name(team.teamable)
