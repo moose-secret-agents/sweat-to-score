@@ -6,10 +6,15 @@ class League < ActiveRecord::Base
   belongs_to :owner, class_name: 'User'
 
   validates_presence_of :name, :target, :pause_length
+  validate :starts_at_cannot_be_in_the_past
 
   scope :overdue, -> { League.inactive.where('starts_at < ?', Time.now) }
   scope :should_finish, -> {League.active-League.active.includes(:matches).where(:matches=>{status: [Match.statuses[:running], Match.statuses[:scheduled]]})}
   enum status: { inactive: 0, active: 1 }
+
+  def starts_at_cannot_be_in_the_past
+    errors.add(:starts_at, "Can't be in the past") if !starts_at.blank? and starts_at < Time.now
+  end
 
   def min_length
     SchedulerDoubleRR.new.min_league_length(self)
