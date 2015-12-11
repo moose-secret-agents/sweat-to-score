@@ -7,6 +7,8 @@ class LeagueInvitationsController < ApplicationController
   def create
     @invitation = @user.league_invitations.create(invitation_params)
 
+    authorize @invitation
+
     if @invitation.save
       redirect_to :back, notice: "Invitation request has been sent to #{@invitation.invitee.username}."
     else

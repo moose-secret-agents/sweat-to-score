@@ -41,5 +41,5 @@ Rails.application.routes.draw do
     put 'refuse', to: 'league_invitations#refuse', on: :member
   end
 
-  root to: 'welcome#home'
+  root to: 'news#index'
 end
