@@ -21,6 +21,7 @@ class TeamsController < ApplicationController
   end
 
   def edit
+    authorize @team
   end
 
   def create
@@ -36,6 +37,8 @@ class TeamsController < ApplicationController
   end
 
   def update
+    authorize @team
+
     if @team.update(team_params)
       redirect_to @team, notice: 'Team was successfully updated.'
     else
@@ -44,12 +47,16 @@ class TeamsController < ApplicationController
   end
 
   def destroy
+    authorize @team
+
     owner = @team.teamable
     @team.destroy
     redirect_to user_teams_url(owner), notice: 'Team was successfully destroyed.'
   end
 
   def positions
+    authorize @team
+
     positions = params[:positions]
 
     positions.each do |key, value|
