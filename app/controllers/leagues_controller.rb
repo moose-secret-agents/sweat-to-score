@@ -33,11 +33,11 @@ class LeaguesController < ApplicationController
     if params[:status]!=nil
       if params[:status]==League.statuses[:active].to_s&&League.statuses[@league.status]==League.statuses[:inactive]
         @league.start
-        Twitterer.new.tweet(" The league #{(@league.name)} has been started.")
+
         redirect_to @league, notice: 'League started'
       elsif params[:status]==League.statuses[:inactive].to_s&&League.statuses[@league.status]==League.statuses[:active]
         @league.end
-        Twitterer.new.tweet(" The league #{(@league.name)} has been ended.")
+
         redirect_to @league, notice: 'League ended'
       else
         flash[:error] = "League is already #{@league.status}"
