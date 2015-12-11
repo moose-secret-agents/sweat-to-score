@@ -155,6 +155,11 @@ class Match < ActiveRecord::Base
     self.status = 'ended'
     self.save
     flip_team_b
+    if(self.scoreA!=self.scoreB)
+      Twitterer.new.tweet("#{self.teamA.name} #{self.scoreA>self.scoreB ? 'won against':'lost against'} #{self.teamB.name} #{self.scoreA} vs #{self.scoreB}")
+    else
+      Twitterer.new.tweet("#{self.teamA.name} tied with #{self.teamB.name} #{self.scoreA} vs #{self.scoreB}")
+    end
   end
 
   def reset_players

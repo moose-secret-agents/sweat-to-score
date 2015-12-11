@@ -27,9 +27,11 @@ module TaskHelpers
     count = to_start.count
     Rails.logger.debug "Starting #{count} overdue matches now"
 
+
     to_start.each do |match|
+      Rails.logger.debug "+++Started Match: #{match.teamA.name} vs #{match.teamB.name}+++++"
       match.simulate
-      Rails.logger.debug "Started Match: #{match.teamA.name} vs #{match.teamB.name}"
+      Rails.logger.debug "+++ended Match: #{match.teamA.name} vs #{match.teamB.name}+++++"
     end
   end
 

@@ -16,18 +16,20 @@ class League < ActiveRecord::Base
   end
 
   def start
-    unless starts_at.nil? || pause_length.nil? || pause_length.nil? || teams.length<2
+    unless starts_at.nil? || pause_length.nil? || teams.length<2
       Match.destroy_all(:status=> Match.statuses[:scheduled],:league=>self)
       sched=SchedulerDoubleRR.new
       sched.schedule_season(self)
       active!
       update! starts_at: starts_at+sched.actual_league_length(self).days+pause_length.days
+      Twitterer.new.tweet(" The league #{(self.name)} has been started.")
     end
   end
 
   def end
     Match.destroy_all(:status=> Match.statuses[:scheduled],:league=>self)
     inactive!
+    Twitterer.new.tweet(" The league #{(self.name)} has been ended.")
   end
 
   def schedule_match(team_a, team_b, time=1.day.from_now)
