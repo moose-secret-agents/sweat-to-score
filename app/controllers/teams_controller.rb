@@ -55,16 +55,21 @@ class TeamsController < ApplicationController
   end
 
   def positions
-    authorize @team
+    begin
+      authorize @team
 
-    positions = params[:positions]
+      positions = params[:positions]
 
-    positions.each do |key, value|
-      player = Player.find(key)
-      player.update_attributes(fieldX: value[:left].to_i, fieldY: value[:top].to_i)
+      positions.each do |key, value|
+        player = Player.find(key)
+        player.update_attributes(fieldX: value[:left].to_i, fieldY: value[:top].to_i)
+      end
+
+      render text: 'Successfully updated positions', status: :ok
+    rescue Pundit::NotAuthorizedError
+      render text: 'You are not allowed to edit player positions of other teams', status: :unauthorized
     end
 
-    render text: 'Successfully updated positions', status: :ok
   end
 
   private

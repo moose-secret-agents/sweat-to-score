@@ -19,17 +19,12 @@ ul.timeline
           table class="table table-hover"
             thead
               tr
-                th.timeline-table-head= Match.human_attribute_name(:Home)
-                th.timeline-table-head= Match.human_attribute_name(:Guest)
+                th.timeline-table-head.col-md-6= match.teamA ? link_to(match.teamA.name, team_path(match.teamA)) : 'deleted'
+                th.timeline-table-head.col-md-6= match.teamB ? link_to(match.teamB.name, team_path(match.teamB)) : 'deleted'
             tbody
               tr
-                -if !match.teamA.nil?
-                  td.timeline-table-body=match.teamA.name
-                -else
-                  td.timeline-table-body= 'deleted'
-                -if !match.teamB.nil?
-                  td.timeline-table-body=match.teamB.name
-                -else
-                  td.timeline-table-body= 'deleted'
-          -unless match.imgurLink.nil?
+                - if match.ended?
+                td.timeline-table-body= match.scoreA
+                td.timeline-table-body= match.scoreB
+          - if match.ended?
             img.matchgif src = "#{match.imgurLink}"

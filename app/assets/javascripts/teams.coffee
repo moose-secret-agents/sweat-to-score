@@ -64,7 +64,7 @@ initPlayers = ->
 
 sendPositions = (positions) ->
   team_id = $('#football-field').data('team-id')
-  $.post("/teams/#{team_id}/positions", { positions: positions })
+  $.post("/teams/#{team_id}/positions", { positions: positions }).success(() -> alert("Positions updated...")).fail(() -> alert("Not allowed to update positions"))
 
 savePlayerPositions = ->
   $field = $('#field')

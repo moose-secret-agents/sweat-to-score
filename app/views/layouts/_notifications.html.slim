@@ -1,14 +1,14 @@
 #notification
   h4 Tokens
-
+  - r_tokens = current_user.remote_tokens
   div.overflow-hidden
     span.strong Available Tokens:
-    p.pull-right= badge(current_user.remote_tokens)
+    p.pull-right= badge(r_tokens)
   div.overflow-hidden
     span.strong Banked Tokens:
     p.pull-right= badge(current_user.tokens)
-
-  = link_to 'Add tokens to account', user_book_tokens_path(current_user), method: :post, class: 'btn btn-block btn-primary', 'data-dismiss' => 'popover'
+  - if r_tokens > 0
+    = link_to 'Add tokens to account', user_book_tokens_path(current_user), method: :post, class: 'btn btn-block btn-primary', 'data-dismiss' => 'popover'
 
   hr
 
