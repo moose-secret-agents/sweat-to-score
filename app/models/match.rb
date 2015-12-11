@@ -57,12 +57,6 @@ class Match < ActiveRecord::Base
       @all_players<<player unless player.position[0] == 0
       player.is_goalie = false
 
-      player.fitness = 50
-      player.stamina = 70
-      player.goalkeep = 40
-      player.defense = 40
-      player.midfield = 40
-      player.attack = 40
 
       player.save
 
@@ -80,13 +74,6 @@ class Match < ActiveRecord::Base
       @all_players<<player unless player.position[0] == 0
       player.is_goalie = false
 
-      player.fitness = 50
-      player.stamina = 70
-      player.goalkeep = 40
-      player.defense = 40
-      player.midfield = 40
-      player.attack = 40
-
       player.save
 
     end
@@ -95,6 +82,14 @@ class Match < ActiveRecord::Base
 
     @goalie_a = @players_a[0]
     @goalie_b = @players_b[0]
+
+    @goalie_a.fieldX = 1
+    @goalie_a.fieldY = 30
+    @goalie_a.set_position(@goalie_a.fieldX , @goalie_a.fieldY, TEAM_A_DIR)
+    @goalie_b.fieldX = 99
+    @goalie_b.fieldY = 30
+    @goalie_b.set_position(@goalie_b.fieldX , @goalie_b.fieldY, TEAM_B_DIR)
+
 
     @goalie_a.is_goalie = true
     @goalie_b.is_goalie = true
