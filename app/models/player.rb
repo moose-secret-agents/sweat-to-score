@@ -82,7 +82,7 @@ class Player < ActiveRecord::Base
     randval = @rand.rand(1.0) * scale_with_stamina(self.goalkeep)
     if randval > difficulty
       #puts "saved ball"
-      ball.kick(@play_direction * 5 + Vector[0,@rand.rand(10.0)-5.0])
+      ball.kick(@play_direction * 5 + Vector[0,@rand.rand(20.0)-10.0])
       self.goalkeep += scale_with_stamina(self.talent)*(1-scale(self.goalkeep))*PLAYER_PROGRESSION_SCALE*@rand.rand(1.0)
     else
       ball.position+= @play_direction * -50
@@ -101,8 +101,8 @@ class Player < ActiveRecord::Base
     dist = (ball.position - @position).r
 
     if ball.carrier == self
-      return Action.new(self,:kick_forward) if @rand.rand(1.0)>0.9 and (Vector[@play_direction[0]*100,30] - @position).r>30
-      return Action.new(self,:shoot_at_goal) if @rand.rand(1.0)>0.25 and (Vector[@play_direction[0]*100,30] - @position).r<30
+      return Action.new(self,:kick_forward) if @rand.rand(1.0)>0.9 and (Vector[50 + @play_direction[0]*50,30] - @position).r>30
+      return Action.new(self,:shoot_at_goal) if @rand.rand(1.0)>0.25 and (Vector[50 + @play_direction[0]*50,30] - @position).r<30
       return nil
     elsif dist<1.5
       if ball.carrier.nil?
