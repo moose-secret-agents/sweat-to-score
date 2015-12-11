@@ -53,6 +53,14 @@ class User < ActiveRecord::Base
   end
 
   def remote_tokens
-    (self.coach_user.subscriptions.flat_map(&:entries).map(&:rounds).sum / 10).to_i
+    (self.coach_user.subscriptions.flat_map(&:entries).map { |e| e.rounds || 0 }.sum / 10).to_i
   end
+
+  def notification_count
+    team_invitations = TeamInvitation.all.where("invitee_id = ?", self.id)
+    league_invitations = LeagueInvitation.all.where("invitee_id = ?", self.id)
+
+    team_invitations.count + league_invitations.count + (self.remote_tokens == 0 ? 0 : 1)
+  end
+
 end
