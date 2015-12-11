@@ -12,7 +12,7 @@ class Player < ActiveRecord::Base
   PLAYER_PROGRESSION_SCALE = 0.3
 
   def on_field?
-    fieldX > 0 and fieldY > 0
+    fieldX > -1 and fieldY > -1
   end
 
   def on_bank?
