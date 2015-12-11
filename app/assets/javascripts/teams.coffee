@@ -92,7 +92,7 @@ savePlayerPositions = ->
 
   if !res and !confirm
     alert msg
-  if !res and confirm
+  else if !res and confirm
     if window.confirm(msg)
       sendPositions(positions)
   else
@@ -130,7 +130,6 @@ onDropBank = (e, ui) ->
 markKeeper = ->
   $field = $('#field')
   $players = $('#field > .player')
-  $players.removeClass('keeper')
 
   lefts = _.map $players, (e) ->
     $(e).position().left
@@ -139,6 +138,7 @@ markKeeper = ->
 
   $players.each (i, e) ->
     if ($(e).position().left == min)
+      $players.removeClass('keeper')
       $(e).addClass('keeper')
 
 validatePlayers = (positions) ->
@@ -146,3 +146,4 @@ validatePlayers = (positions) ->
 
   return [false, false, 'Cannot have more than 11 players on the field!'] if fieldPlayers.size() > 11
   return [false, true, 'Do you really want to play with less than 11 players?'] if fieldPlayers.size() < 11
+  return [true, false, 'Everything ok']
