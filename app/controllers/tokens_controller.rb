@@ -8,6 +8,8 @@ class TokensController < ApplicationController
   end
 
   def book
+    raise Pundit::NotAuthorizedError unless TokenPolicy.new(current_user, @user).book?
+
     @user.tokens += @user.remote_tokens
 
     if @user.save
@@ -26,6 +28,8 @@ class TokensController < ApplicationController
   end
 
   def train
+    raise Pundit::NotAuthorizedError unless TokenPolicy.new(current_user, @team).train?
+
     tokens = params[:training][:tokens]
 
     if @team.train tokens.to_i

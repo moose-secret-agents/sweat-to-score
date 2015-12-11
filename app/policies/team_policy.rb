@@ -19,7 +19,7 @@ class TeamPolicy < ApplicationPolicy
   def user_is_owner?
     if record.teamable.is_a? User
       user == record.teamable
-    elsif record.teambable.is_a? Partnership
+    elsif record.teamable.is_a? Partnership
       partnership = record.teamable
       partnership.user == user || partnership.partner == user
     else
