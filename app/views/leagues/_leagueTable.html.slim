@@ -5,27 +5,12 @@ div class="col-md-12"
   table class="table table-hover"
     thead
       tr
-        th.text-center.col-md-3= 'Rank'
-        th.text-center.col-md-3= 'Points'
-        th.col-md-3= 'Team Name'
-        th.text-center.col-md-3= '#Players'
+        th.text-center.col-md-1= 'Rank'
+        th.text-center.col-md-1= 'Points'
+        th.col-md-10= 'Team Name'
     tbody
       - @teams.each do |team|
         tr
           td.ranking= team.rank_in_league
           td.text-center= team.points
           td= link_to team.name, team_path(team)
-          td.text-center= team.players.count
-
-
-  = link_to t('.back', :default => t("helpers.links.back")), leagues_path, :class => 'btn btn-default'
-  '
-  = link_to t('.edit', :default => t("helpers.links.edit")), edit_league_path(@league), :class => 'btn btn-default'
-  -if(League.statuses[@league.status] == League.statuses[:inactive])
-    '
-    = link_to t('.start', :default => t("helpers.links.start")), league_path(@league,:status => League.statuses[:active]),:method=>"put", :class => 'btn btn-primary'
-  -if (League.statuses[@league.status] == League.statuses[:active])
-    '
-    = link_to t('.stop', :default => t("helpers.links.stop")), league_path(@league,:status => League.statuses[:inactive]),:method=>"put", :class => 'btn btn-primary'
-  '
-  = link_to t('.destroy', :default => t("helpers.links.destroy")), league_path(@league), :method => "delete", :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }, :class => 'btn btn-danger'

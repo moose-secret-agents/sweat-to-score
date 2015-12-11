@@ -32,6 +32,7 @@ initFaces = ->
 initTabs = ->
   tabs = $('.tab-content').children().hide()
   $('#players-tab').show()
+  $('#teams-tab').show()
   $("a[data-toggle='tab'").each (index, element) ->
     $(element).on 'click', ->
       tab_id = $(element).attr('href')

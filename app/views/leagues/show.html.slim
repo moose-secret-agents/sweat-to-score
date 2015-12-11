@@ -1,17 +1,38 @@
 - model_class = League
 div class="page-header"
-  h1
-    | #{@league.name}
-    br
-    small Owner: #{@league.owner.real_name}
-    br
-    small StartsAt: #{@league.starts_at}
-    br
-    small Max. Training Points: #{@league.target}
-    br
-    small PreferredSeasonLength: #{@league.league_length}
-    br
-    small PauseLength: #{@league.pause_length}
+  h1= @league.name
+
+div
+  dl
+    dt Owner:
+    dd= @league.owner.real_name
+
+    dt Starts at:
+    dd= @league.starts_at
+
+    dt Max. Training Points:
+    dd= @league.target
+
+    dt Preferred Season Length:
+    dd= @league.league_length
+
+    dt Pause Length:
+    dd= @league.pause_length
+
+div
+  = link_to t('.back', :default => t("helpers.links.back")), leagues_path, :class => 'btn btn-default'
+  '
+  = link_to t('.edit', :default => t("helpers.links.edit")), edit_league_path(@league), :class => 'btn btn-default'
+  - if (League.statuses[@league.status] == League.statuses[:inactive])
+    '
+    = link_to t('.start', :default => t("helpers.links.start")), league_path(@league, :status => League.statuses[:active]), :method => "put", :class => 'btn btn-primary'
+  - if (League.statuses[@league.status] == League.statuses[:active])
+    '
+    = link_to t('.stop', :default => t("helpers.links.stop")), league_path(@league, :status => League.statuses[:inactive]), :method => "put", :class => 'btn btn-primary'
+  '
+  = link_to t('.destroy', :default => t("helpers.links.destroy")), league_path(@league), :method => "delete", :data => {:confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?'))}, :class => 'btn btn-danger'
+
+hr
 
 ul.nav.nav-tabs
   li.active
