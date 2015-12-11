@@ -7,7 +7,7 @@ module TaskHelpers
 
     to_start.each do |league|
       league.start
-      Rails.logger.debug "Activated League: #{league.name}"
+      Rails.logger.debug "Activated League: #{league.try(:name, 'Deleted')}"
     end
   end
 
@@ -18,7 +18,7 @@ module TaskHelpers
 
     to_finish.each do |league|
       league.end
-      Rails.logger.debug "Ended League: #{league.name}"
+      Rails.logger.debug "Ended League: #{league.try(:name) || 'Deleted'}"
     end
   end
 
@@ -29,9 +29,9 @@ module TaskHelpers
 
 
     to_start.each do |match|
-      Rails.logger.debug "+++Started Match: #{match.teamA.name} vs #{match.teamB.name}+++++"
+      Rails.logger.debug "+++Started Match: #{match.teamA.try(:name) || 'Deleted'} vs #{match.teamB.try(:name) || 'Deleted'}+++++"
       match.simulate
-      Rails.logger.debug "+++ended Match: #{match.teamA.name} vs #{match.teamB.name}+++++"
+      Rails.logger.debug "+++ended Match: #{match.teamA.try(:name) || 'Deleted'} vs #{match.teamB.try(:name) || 'Deleted'}+++++"
     end
   end
 
