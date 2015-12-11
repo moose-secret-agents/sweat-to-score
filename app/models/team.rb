@@ -68,7 +68,7 @@ class Team < ActiveRecord::Base
   def forfeit_all_matches
     matches_to_play=self.matches.scheduled
     matches_to_play.each do |match|
-      if(match.teamA==self.id)
+      if(match.teamA==self)
         match.scoreA=0
         match.scoreB=3
         match.status = 'ended'
