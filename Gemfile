@@ -64,6 +64,7 @@ gem 'bootstrap_form'
 
 # functional JS tool-belt library
 gem 'underscore-rails'
+gem 'nprogress-rails'
 
 # Gem to interface with cybercoach
 gem 'coach_assist', '~> 0.2.2'

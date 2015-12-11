@@ -3,6 +3,13 @@
 @import "bootstrap";
 @import "_bootswatch";
 
+$nprogress-color: #96f111;
+$nprogress-height: 4px;
+$nprogress-zindex: 10100;
+
+@import 'nprogress';
+@import 'nprogress-bootstrap';
+
 .btn i {
   margin: 0;
 }

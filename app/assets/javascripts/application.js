@@ -17,6 +17,8 @@
 //= require bootstrap-sprockets
 //= require turbolinks
 //= require underscore
+//= require nprogress
+//= require nprogress-turbolinks
 //= require faces
 //= require_tree .
 //= require moment
