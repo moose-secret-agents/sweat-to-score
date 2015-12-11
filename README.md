@@ -28,6 +28,15 @@ Please follow the following instructions in order to make the application run lo
 
 <br>
 
+## System Architecture
+The System features the following subsystems:
+* Sweat To Score webserver: Hosts the web-app, schedules and simulates matches, and allows access to management of teams
+* Sweat To Score Android App: Tracks the user's activity and sends it to the Activity Tracking Server
+* Sweat To Score Activity Server: Receives the workout data from the Android app and computes useful metrics, which are then inserted to Cybercoach and made available to the user for training
+* Cybercoach: Provides User management and storage of workout data. Is slow.
+
+See below for links to the other parts of the system
+
 ## Links:
 * Documentation: [https://github.com/moose-secret-agents/Documentation](https://github.com/moose-secret-agents/Documentation)
 * ActivityServer: [https://github.com/moose-secret-agents/ActivityServer](https://github.com/moose-secret-agents/ActivityServer)
