@@ -157,9 +157,21 @@ class Match < ActiveRecord::Base
     self.save
     if(self.scoreA!=self.scoreB)
       Twitterer.new.tweet("#{self.teamA.name} #{self.scoreA>self.scoreB ? 'won against':'lost against'} #{self.teamB.name} #{self.scoreA} vs #{self.scoreB}")
+      if self.scoreA > self.scoreB
+        self.teamA.points += 3
+        puts "#{self.teamA.name} was awarded 3 points"
+      else
+        self.teamB.points += 3
+        puts "#{self.teamB.name} was awarded 3 points"
+      end
     else
+      self.teamA.points += 1
+      self.teamB.points += 1
+      puts "both teams were awarded 1 point"
       Twitterer.new.tweet("#{self.teamA.name} tied with #{self.teamB.name} #{self.scoreA} vs #{self.scoreB}")
     end
+    self.teamA.save
+    self.teamB.save
   end
 
   def reset_players

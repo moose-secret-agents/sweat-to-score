@@ -31,7 +31,7 @@ end
 Fabricator(:team) do
   name { Faker::Team.name }
   strength { Faker::Number.between(0, 100) }
-  points { Faker::Number.between(0, 100) }
+  points {0}
   teamable(fabricator: :user)
   league
   positionsX = [1,20,20,20,20,45,45,45,45,75,75,-1,-1,-1,-1,-1]
