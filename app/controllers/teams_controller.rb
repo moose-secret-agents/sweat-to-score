@@ -64,8 +64,7 @@ class TeamsController < ApplicationController
       player.update_attributes(fieldX: value[:left].to_i, fieldY: value[:top].to_i)
     end
 
-    flash[:success] = 'Saved player positions'
-    redirect_to team_path(@team)
+    render text: 'Successfully updated positions', status: :ok
   end
 
   private
