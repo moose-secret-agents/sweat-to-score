@@ -144,6 +144,7 @@ class Match < ActiveRecord::Base
       draw_pitch i
     end
     30.times do draw_pitch 500 end
+    flip_team_b
     @all_players.each do |player|
       player.regenerate_stamina
       player.save
@@ -154,7 +155,6 @@ class Match < ActiveRecord::Base
     puts self.imgurLink
     self.status = 'ended'
     self.save
-    flip_team_b
     if(self.scoreA!=self.scoreB)
       Twitterer.new.tweet("#{self.teamA.name} #{self.scoreA>self.scoreB ? 'won against':'lost against'} #{self.teamB.name} #{self.scoreA} vs #{self.scoreB}")
     else
