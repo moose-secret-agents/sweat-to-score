@@ -1,8 +1,8 @@
 = bootstrap_form_for @league, layout: :horizontal do |f|
   = f.text_field :name
-  = f.number_field :level
-  = f.number_field :target, label: "Max. Training Points"
-  = f.number_field :league_length, :value=>0, min: @min_length, append: "Days"
+  /= f.number_field :level
+  = f.number_field :target, label: 'Max. Training Points', help: 'Sets the maximum amount of training tokens that can be applied per week, 1 point ≈ 10m running'
+  = f.number_field :league_length, label: 'Preferred League Length', min: @min_length, append: 'Days', help: 'Wont be used if smaller than the min number of days required, is optional'
   = f.number_field :pause_length, :value=>7, append: "Days"
 
   =f.form_group "league[starts_at]", label: { text: "Starts at"} do

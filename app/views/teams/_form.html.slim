@@ -10,3 +10,5 @@
       = f.collection_select(:league_id, League.all, :id, :name, {:selected => params[:league_id]})
 
   = f.primary
+  '
+  = link_to 'Back', :back, class: 'btn btn-default'
