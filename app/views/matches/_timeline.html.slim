@@ -24,4 +24,5 @@ ul.timeline
                 td.timeline-table-body= match.scoreA
                 td.timeline-table-body= match.scoreB
           - if match.ended?
-            img.matchgif src = "#{match.imgurLink}"
+            button.gif-button.btn.btn-primary.btn-block data-url="#{match.imgurLink}" data-target_id="match-#{match.id}" Display match summary
+            div.matchgif id="match-#{match.id}"
