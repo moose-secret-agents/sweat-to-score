@@ -3,8 +3,11 @@
 ###### [http://sweat-to-score.herokuapp.com/](http://sweat-to-score.herokuapp.com/)
 ---
 
-SweatToScore is a web application ...
-ToDo
+Sweat To Score! Found your own team, manage your tactics ans sweat your way to fame and glory!
+
+Sweat To Score is a web application developed for the course "Advanced Software Engineering" at the University of Fribourg. It aims to motivate users to get their behinds out of their comfortable chairs and do some exercise! The application features a fantasy soccer system which enables users to manage their teams alone or in pairs. The fitness of the user's players increases when you do exercise and track it using our Android application found here:
+
+[Sweat to Score Android App](https://github.com/moose-secret-agents/activity-tracker-2)
 
 <br>
 
