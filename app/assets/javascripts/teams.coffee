@@ -88,7 +88,15 @@ savePlayerPositions = ->
       top: ($(element).position().top + 50) / fieldDim[1] * simFieldDim[1]
     positions[id] = pos
 
-  sendPositions(positions)
+  [res, confirm, msg] = validatePlayers(positions)
+
+  if !res and !confirm
+    alert msg
+  if !res and confirm
+    if window.confirm(msg)
+      sendPositions(positions)
+  else
+    sendPositions(positions)
 
 onDropField = (e, ui) ->
   $draggable = ui.draggable
@@ -132,3 +140,9 @@ markKeeper = ->
   $players.each (i, e) ->
     if ($(e).position().left == min)
       $(e).addClass('keeper')
+
+validatePlayers = (positions) ->
+  fieldPlayers = $('#field > .player')
+
+  return [false, false, 'Cannot have more than 11 players on the field!'] if fieldPlayers.size() > 11
+  return [false, true, 'Do you really want to play with less than 11 players?'] if fieldPlayers.size() < 11
