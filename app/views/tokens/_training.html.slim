@@ -3,3 +3,6 @@
   = bootstrap_form_for :training, url: train_team_path(team) do |f|
     = f.number_field :tokens, value: 0, append: "of #{max}", min: 0, max: max, hide_label: true
     = f.submit 'Train team', class: 'btn btn-primary btn-block'
+
+  hr
+  p Trains the players in this team with the specified amount of tokens. The player's fitness will be greatly improved, increasing the chance of victory.

@@ -3,3 +3,5 @@
     = f.collection_select(:invitee_id, @invitees, :id, :username)
     = f.hidden_field :team_id, value: team_id
     = f.submit 'Invite!', class: 'btn btn-primary btn-block'
+  hr
+  p The user will be notified about your invitation and a partnership will be proposed, which the invitee can either reject or accept

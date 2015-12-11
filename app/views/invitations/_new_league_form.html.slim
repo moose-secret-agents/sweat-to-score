@@ -2,3 +2,5 @@
   = f.collection_select(:invitee_id, @invitees, :id, :username)
   = f.hidden_field :league_id, value: league_id
   = f.submit 'Invite!', class: 'btn btn-primary btn-block'
+  hr
+  p The user will be notified about your invitation and be prompted to create a team within this very league
