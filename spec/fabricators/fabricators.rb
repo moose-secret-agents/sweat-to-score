@@ -33,8 +33,8 @@ Fabricator(:team) do
   points { Faker::Number.between(0, 100) }
   teamable(fabricator: :user)
   league
-  positionsX = [1,20,20,20,20,45,45,45,45,75,75,0,0,0,0,0]
-  positionsY = [30,12,24,36,48,12,24,36,48,24,36,0,0,0,0,0]
+  positionsX = [1,20,20,20,20,45,45,45,45,75,75,-1,-1,-1,-1,-1]
+  positionsY = [30,12,24,36,48,12,24,36,48,24,36,-1,-1,-1,-1,-1]
   players { Team::DEFAULT_PLAYER_COUNT.times.map do |i| Fabricate(:player, {fieldX: positionsX[i], fieldY: positionsY[i]}) end }
 end
 
