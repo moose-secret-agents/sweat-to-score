@@ -4,7 +4,6 @@
 
 ready = ->
   $('#savePosition').on 'click', (event) -> savePlayerPositions()
-  $('#markKeeper').on 'click', (event) -> markKeeper()
 
   initFaces()
   initTabs()
