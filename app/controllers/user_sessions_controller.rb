@@ -6,7 +6,7 @@ class UserSessionsController < ApplicationController
   end
 
   def create
-    username = user_session_params[:username]
+    username = user_session_params[:username].downcase
     password = user_session_params[:password]
 
     # Check Logging credentials against CyCo and local DB

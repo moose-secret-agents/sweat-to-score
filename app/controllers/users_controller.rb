@@ -70,7 +70,9 @@ class UsersController < ApplicationController
     end
 
     def update_params
-      params.require(:user).permit(:username, :password, :password_confirmation, :real_name, :email)
+      p = params.require(:user).permit(:username, :password, :password_confirmation, :real_name, :email)
+      p[:username] = p[:username].downcase
+      p
     end
 
     def create_cybercoach_user(username, attributes={})
